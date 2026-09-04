@@ -239,6 +239,29 @@
   }
 </style>
 
+<style>
+  .archive { margin-top: 8px; }
+  .a-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; grid-template-columns: 1fr; gap: 2px; }
+  .a-list a {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    padding: 10px 4px; text-decoration: none; color: var(--ink);
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s;
+  }
+  .a-list a:hover { color: var(--accent-ink); border-color: var(--accent-wash-edge); }
+  .a-list .a-date {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; letter-spacing: .08em; color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: .96rem; color: var(--ink-soft);
+    text-align: right;
+  }
+  .a-list a:hover .a-date, .a-list a:hover .a-zh { color: var(--accent-ink); }
+</style>
+
+
 <div class="wrap">
 
   <header class="plate">
@@ -461,6 +484,19 @@
     <div>AI BUILDERS DIGEST · 2026-09-04 · 中文主稿 / EN 原文引用</div>
     <div>Generated through the Follow Builders skill · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
   </footer>
+
+<section class="archive">
+  <div class="sec-head">
+    <span class="lbl"><span class="zh-lbl">往期</span>Archive</span>
+    <span class="rule"></span><span class="count">3 期</span>
+  </div>
+  <ul class="a-list">
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+  </ul>
+</section>
+
 
 </div>
 
