@@ -1,0 +1,441 @@
+<title>AI Builders Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="plate">
+    <div class="plate-top">
+      <span class="signal"><span class="dot"></span>Signal Dispatch · 每日速递</span>
+      <button class="toggle" id="themeToggle" type="button" aria-label="切换深浅色">主题</button>
+    </div>
+
+    <div class="masthead">
+      <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
+      <p class="tagline">追踪真正在造东西的人，而不是复读的意见领袖。</p>
+    </div>
+
+    <div class="dateline">
+      <span><b>周四 · 2026年8月20日</b></span>
+      <span>追踪 <span class="num">19</span> 位 builder</span>
+      <span><span class="num">32</span> 条动态</span>
+      <span><span class="num">1</span> 期播客</span>
+      <span>中文 · EN 原文</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">今日主线 · Today's Signal</p>
+  <h2>前沿实验室罕见地在同一天把「安全与可控」摆到了能力扩张前面：OpenAI 暂停部分前沿 RL 训练，Anthropic 公开怎么给 Claude 划定 <span class="mark">爆炸半径</span>，Codex 补上会误删用户文件的破坏性操作，Vercel 拿出 100 万美元公开悬赏沙箱越狱。决定进度的，不再只是模型多强，而是护栏够不够硬。</h2>
+</section>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">动态</span>X / Twitter</span>
+  <span class="rule"></span><span class="count">11 位有料</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CEO</span></div>
+    <p class="name">Sam Altman <span>— CEO, OpenAI</span></p>
+  </div>
+  <p class="zh">OpenAI CEO Sam Altman 宣布暂停部分前沿强化学习训练，理由是要先确保对齐、安全和监控能跟上「眼前这批新能力」的水平。他说模型进步现在极快，而 OpenAI 一直承诺：一旦觉得能力跑在了安全前面，就会踩刹车。随后他补了一句，这只影响更远期的发布，近期仍会照常推出新模型。另外他还转发感谢黄仁勋，预告与 Nvidia 的进一步合作。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"We expect confidence in safety to increasingly set the pace of AI progress."</p></div>
+  <div class="receipts"><a href="https://x.com/sama/status/2089787807611195475">暂停 RL 公告</a><a href="https://x.com/sama/status/2089805495783813196">补充说明</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CODEX</span></div>
+    <p class="name">Thibault Sottiaux <span>— Codex &amp; ChatGPT, OpenAI</span></p>
+  </div>
+  <p class="zh">OpenAI Codex 负责人 Thibault Sottiaux 复盘了过去几周针对「破坏性操作」的一系列修复。起因是少数报告显示 GPT-5.6 在 Codex 里会做出用户没要求的破坏动作，最严重的一类是：本想清理临时文件，却因为复用了 $HOME 这类系统环境变量、清理命令写坏，反而指向真正的主目录、可能删掉用户文件。修复分多层：明确要求模型先检查删除目标、用全新临时目录、不挪用系统环境变量、优先可恢复操作、范围不清就停手；同时强化高危删除命令的拦截与人工复核，并把 Full access 设得更难被误开。他给用户的两条建议：保持 Codex 更新，尽量用「Ask for approval」或「Approve for me」沙箱模式。（那条「收到一个很花哨的新 reset 按钮」的梗图，正是在自嘲这次误删事件。）</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"The most serious pattern we found was a command meant to clean up temporary work that could instead delete the user files. This should obviously not happen."</p></div>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2089891927659585918">修复复盘</a><a href="https://x.com/thsottiaux/status/2089941380336644295">reset 梗图</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · ANTHROPIC <span class="ch">· PRODUCT</span></div>
+    <p class="name">Claude <span>— Anthropic</span></p>
+  </div>
+  <p class="zh">Anthropic 给 Claude 连上了 Google 工作区：现在 Claude 能在 Gmail 里收发邮件、在 Google Drive 里管理文件。你让它回复某个邮件线程，它就能起草并发送，什么时候需要你点头由你控制，从连接器菜单接入即可，所有付费方案可用。同一天，Claude Cowork 也在移动端和网页端向所有付费用户开放。</p>
+  <div class="receipts"><a href="https://x.com/claudeai/status/2089806039088517356">Gmail / Drive</a><a href="https://x.com/claudeai/status/2089756371570900999">Cowork 上移动端</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · BOX <span class="ch">· CEO</span></div>
+    <p class="name">Aaron Levie <span>— CEO, Box</span></p>
+  </div>
+  <p class="zh">Box CEO Aaron Levie 说，越来越多案例证明，「模型」和「最终用户工作流」之间能创造的价值，比很多人以为的大得多。模型能力当然在挑大梁，但把 AI 真正扩散进企业还有大量活要干。他列了应用层的六件事：让 agent 在关键流程里跟人协作（有时是聊天，有时是后台确定性工作流）；接入千差万别的企业系统和数据（生命科学、金融、法律各不相同）；做垂直行业的变更管理（在银行和在律所落地方式完全不同）；用多模型能力按成本和性能调优、甚至为特定任务做后训练；做领域专属的 evals；以及用符合行业消费习惯的定价模型，而不只是按 token 计费。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"AI is basically not useful if it can't be evaluated."</p></div>
+  <div class="receipts"><a href="https://x.com/levie/status/2089921630650925170">应用层六件事</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · VERCEL <span class="ch">· CEO</span></div>
+    <p class="name">Guillermo Rauch <span>— CEO, Vercel</span></p>
+  </div>
+  <p class="zh">Vercel CEO Guillermo Rauch 一天里抛了三条。其一，他把一个新的编程 CLI 当成主力工具，说它比主流编程 CLI 小 10 到 20 倍、启动瞬时、能通过 WebAssembly 嵌到任何地方（包括浏览器），开源且模型无关，用起来「更像 zsh，而不是终端里的 IDE」。其二，他主张「软件工厂应该是一个 monorepo」，把设计、市场、销售、工程、客服等全公司上下文放一处，供 agent 在其上构建。其三，Vercel 拿出 100 万美元、公开验证 Vercel Sandbox 的安全性，欢迎用世界上任意模型来找越狱漏洞，发现了就修、迭代，并把发现分享给社区。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"It feels more like using zsh than an IDE in your terminal. It's embeddable anywhere, even your browser via WebAssembly."</p></div>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2089831055373316274">新 CLI</a><a href="https://x.com/rauchg/status/2089804717337817514">monorepo</a><a href="https://x.com/rauchg/status/2089747453004468339">$1M 沙箱悬赏</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · ANTHROPIC <span class="ch">· CLAUDE CODE</span></div>
+    <p class="name">Thariq <span>— Claude Code, Anthropic</span></p>
+  </div>
+  <p class="zh">Anthropic Claude Code 团队的 Thariq 抛了个反直觉观察：眼前明明有个「赚大钱」的按钮，却没人去按 —— 把你的 SaaS 做成 headless（无界面）、让 agent 直接调用，并按调用次数收费，尤其是面向企业。这几乎是把「agent 时代的新商业模式」一句话讲透。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"weird that there's a 'make a lot of money' button and nobody's pressing it (take your SaaS, make it headless, let agents use it, charge per interaction esp for enterprises)"</p></div>
+  <div class="receipts"><a href="https://x.com/trq212/status/2089844723691479333">原推</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · META <span class="ch">· SR DIRECTOR AI</span></div>
+    <p class="name">Madhu Guru <span>— Sr Director AI, Meta</span></p>
+  </div>
+  <p class="zh">曾在 Google 主导 Gemini、Veo、Nano Banana 的 Meta AI 高级总监 Madhu Guru 给了做 evals 的成本心法：把 evals 当前沿模型来对待 —— 先确立「质量前沿」，再沿着成本曲线往下走。先想清楚「好」长什么样、把评分标准（rubric）写出来；再选最高质量的度量方式（人工 / LLM 裁判 / 自动校验），这一步该花钱就花钱，先拿到你信得过的信号；等 evals 能可靠区分好坏、并真实反映产品在意的东西之后，再去谈自动化、更小的裁判模型、采样和确定性检查来降本。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Quality first. Cost next."</p></div>
+  <div class="receipts"><a href="https://x.com/realmadhuguru/status/2089918106814603728">evals 成本曲线</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · CREATOR <span class="ch">· AI 教程</span></div>
+    <p class="name">Peter Yang <span>— AI 教程创作者</span></p>
+  </div>
+  <p class="zh">AI 教程创作者 Peter Yang 分享了一份关于 AI 如何改变工作方式的数据。一是非工程师在越来越多地提交代码：两年里 PM 附带 pull request 的比例从 3% 涨到 10%，设计师从 1% 到 8%，创始人更是仅次于工程师、达到 23%。二是个略显无奈的发现 —— AI 目前是「叠加」在现有工作之上，而非取代它：团队花了更多时间跟 AI 聊天、把活派给 agent，但花在原有工作上的时间并没减少。他认为，这是因为大家对每个岗位能产出多少的预期本身就被拉高了。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"AI has landed on top of existing work rather than replacing it."</p></div>
+  <div class="receipts"><a href="https://x.com/petergyang/status/2089877068188471545">非工程师写代码</a><a href="https://x.com/petergyang/status/2089877083510235328">AI 叠加而非取代</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · AI ENGINEER <span class="ch">· 主理人</span></div>
+    <p class="name">Swyx <span>— smol.ai / Latent Space</span></p>
+  </div>
+  <p class="zh">AI Engineer 大会和 Latent Space 背后的 Swyx 说，他们一直在对 AI Engineer 的 YouTube 缩略图做 A/B 测试，一直讨厌这件事如此不透明，于是今天把这些经验开源、众包出来，希望大家能分享或借鉴，让优质教育内容从噪音里冒头。</p>
+  <div class="receipts"><a href="https://x.com/swyx/status/2089798658225266806">缩略图实验</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GOOGLE <span class="ch">· LABS</span></div>
+    <p class="name">Google Labs <span>— Google</span></p>
+  </div>
+  <p class="zh">Google Labs 更新了他们在 Gmail 里的实验性效率 agent「CC」：澳大利亚和新西兰开放了候补名单，美国和加拿大扩大可用范围并开始向候补用户发放邀请；CC 还升级了日程管理能力，连接 Gmail 后会自动在一个专属 Google 日历里创建事件、并随变动保持更新。</p>
+  <div class="receipts"><a href="https://x.com/GoogleLabs/status/2089812430885208361">CC 更新</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · ANTHROPIC <span class="ch">· CLAUDE CODE</span></div>
+    <p class="name">Boris Cherny <span>— Claude Code, Anthropic</span></p>
+  </div>
+  <p class="zh">Claude Code 的 Boris Cherny 说，小而美的体验改进还在继续 —— 每天用桌面端时，启动慢会让 app 显得迟钝，团队正在进一步优化启动速度。</p>
+  <div class="receipts"><a href="https://x.com/bcherny/status/2089924199804711410">桌面端提速</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">博客</span>Official Blogs</span>
+  <span class="rule"></span><span class="count">2 篇</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · ANTHROPIC ENGINEERING</div>
+    <p class="name">"How we contain Claude across products" <span>— Anthropic 工程团队</span></p>
+  </div>
+  <div class="takeaway"><span class="k">核心要点</span><p class="v">决定 agent 风险的是「爆炸半径」——先在环境层设硬边界，再在模型层引导行为；而最弱的一层，往往是你自己造的那层。</p></div>
+  <p class="zh">Anthropic 工程团队讲他们如何在产品里「关住」Claude。核心框架是爆炸半径：一次失败的风险 = 发生概率 × 能造成的破坏；训练和防护在不断压低前者，但随着能力和权限扩大，后者（理论破坏范围）只会变大，所以工程重点是给爆炸半径设硬上限。他们对比了三款产品的隔离范式：claude.ai 用服务端一次性 gVisor 容器（破坏面最小，能力上限也低）；Claude Code 走「人在环中」的沙箱（面向开发者，但很快出现审批疲劳 —— 数据显示用户对约 93% 的授权弹窗直接点同意，OS 级沙箱把弹窗减少了 84%）；Claude Cowork 则跑在本地虚拟机里，凭证只留在宿主钥匙串、绝不进虚拟机。最坦诚的是复盘「我们漏掉的风险」：信任对话框之前就被执行的 .claude 配置钩子；一次内部红队把员工钓鱼、诱导 Claude 读取 ~/.aws/credentials 并外传，25 次里成功 24 次；以及通过被放行的 api.anthropic.com 域名做数据外泄。反复出现的教训是：成熟的 hypervisor、seccomp、gVisor 都扛住了，真正出事的都是自研的那层代理。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"The deterministic boundary is what gets hit when everything probabilistic misses." — 以及那条反复被验证的老道理：the weakest layer is the one you built yourself.</p></div>
+  <div class="receipts"><a href="https://www.anthropic.com/engineering/how-we-contain-claude">读原文</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · CLAUDE BLOG</div>
+    <p class="name">"Claude Code now supports artifacts" <span>— Claude 官方博客</span></p>
+  </div>
+  <p class="zh">Claude 官方博客宣布 Claude Code 现在支持 artifacts：把一次会话的工作进展变成可分享的动态网页 —— PR 讲解、系统说明、仪表盘、发布清单等，会随会话推进自动更新。它直接基于会话的完整上下文（代码库、连接器、对话本身）生成，不用你另接数据源或搭基础设施；每次发布都是同一链接下的新版本，有版本历史可回滚。最常见的用法之一是排障：工程师上班前发起事故调查，Claude 边查边发布一个带时间线、可疑提交和错误率曲线的页面，到站会时全组看的是同一个视图。目前对 Claude Team 和 Enterprise 组织 beta 开放，每个 artifact 默认仅作者可见、只能在组织内分享，无法公开。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"You ask for a page, and Claude Code builds it from what already exists."</p></div>
+  <div class="receipts"><a href="https://claude.com/blog/artifacts-in-claude-code">读原文</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">播客</span>Podcasts</span>
+  <span class="rule"></span><span class="count">1 集</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">TRAINING DATA · SEQUOIA <span class="ch">· OAK LAB</span></div>
+    <p class="name">"Why AI Models Stop Learning, and How to Start It Again" — Rich Sutton &amp; Khurram Javed <span>— 创始人, Oak Lab</span></p>
+  </div>
+  <div class="takeaway"><span class="k">核心要点</span><p class="v">强化学习之父 Rich Sutton：LLM 只是智能的一小部分（约 20%-25%），真正缺的是「持续学习」——权重永不更新的模型，谈不上真正的智能。</p></div>
+  <p class="zh">强化学习奠基人、《The Bitter Lesson》作者 Rich Sutton，和他的学生兼联合创始人 Khurram Javed，正一起创办新公司 Oak Lab。Sutton 的立场很「逆火」：他不觉得自己激进，反倒觉得整个领域在犯浑 ——「持续学习」这个词在他看来根本多余，所有学习本来就是持续的，是这个领域非要给它单独起个名字。他对 LLM 的批评一针见血：权重训练完就冻住、上线后再也不学，却号称有「博士级」能力；你给它再多 context，权重也纹丝不动。他提出「大世界假设」：世界无限复杂、远超任何智能体，所以一切近似都注定粗糙，这正是必须持续学习的根本原因。由此他直接开炮合成数据，说那是「一个大错误」—— 真正决定什么是好合成数据的还是人类专家，系统本质上被人卡了脖子，而小程序生成的合成世界永远是「微观的」，无法逼近真实世界里的摩擦、磨损，和别人脑子里正在想什么。Oak 最激进的目标是同时做两件事：从零训一个新基础模型，让它在学知识的同时「学会怎么学」（元学习每个权重的步长，加上在特征空间里 generate-and-test，也就是他们发在 Nature 的 continual backprop），从而避免灾难性遗忘。他甚至给了个大胆预期：五到十年、两个数量级的摩尔定律之后，万亿参数、20 瓦功耗的「大脑」并非天方夜谭。</p>
+  <blockquote>"Their weights never change... I'm not the weird one. It's you guys that are the weird ones that think that's possible."<span class="src">— Rich Sutton</span></blockquote>
+  <div class="receipts"><a href="https://www.youtube.com/watch?v=xH7U7w9Qzlo">watch on youtube</a></div>
+</article>
+
+
+  <footer>
+    <div>AI BUILDERS DIGEST · 2026-08-20 · 中文主稿 / EN 原文引用</div>
+    <div>Generated through the Follow Builders skill · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur === 'dark' ||
+        (cur === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    });
+  })();
+</script>
