@@ -1,0 +1,576 @@
+<title>AI Builders Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">14 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+
+<div class="wrap">
+
+  <header class="plate">
+    <div class="plate-top">
+      <span class="signal"><span class="dot"></span>Signal Dispatch · 每日速递</span>
+      <button class="toggle" id="themeToggle" type="button" aria-label="切换深浅色">主题</button>
+    </div>
+
+    <div class="masthead">
+      <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
+      <p class="tagline">追踪真正在造东西的人，而不是复读的意见领袖。</p>
+    </div>
+
+    <div class="dateline">
+      <span><b>周六 · 2026年10月10日</b></span>
+      <span>追踪 <span class="num">15</span> 位 builder</span>
+      <span><span class="num">27</span> 条动态</span>
+      <span><span class="num">1</span> 期播客</span>
+      <span>中文 · EN 原文</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">今日主线 · Today's Signal</p>
+  <h2>今天的主线很清楚：AI 正从聊天框走向<span class="mark">后台代理经济</span>，而真正的瓶颈正在变成<span class="mark">算力、开放模型与安全边界</span>。</h2>
+</section>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">动态</span>X / Twitter</span>
+  <span class="rule"></span><span class="count">12 位有料</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · VERCEL <span class="ch">· CEO</span></div>
+    <p class="name">Guillermo Rauch <span>— CEO, Vercel</span></p>
+  </div>
+  <p class="zh">Guillermo Rauch 用 Vercel 的流量数据把「agent web」讲得很具体：全网 58.18% 流量来自 bot，60% 以上部署已经是 agentic，文档页最高 83% pageviews 来自 agent。他的判断是，人类直连互联网会逐步变成小数点后的事，网站会越来越多地为 agent 读取、购买和部署而设计。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"The web will thrive, but it will be built for and by agents."</p></div>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2108733051283050964">agent 流量</a><a href="https://x.com/rauchg/status/2108669027363295323">域名购买</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · BOX <span class="ch">· CEO</span></div>
+    <p class="name">Aaron Levie <span>— CEO, Box</span></p>
+  </div>
+  <p class="zh">Aaron Levie 把 agent adoption 的早期性落到 token 需求上：未来不是人一个 prompt 一个 prompt 地驱动模型，而是大量后台 agent、agent swarm 和工作流 agent 持续替人做事。他认为这种模式会消耗比当前聊天式使用多几个数量级的 token，也解释了为什么基础设施建设还远没有结束。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"The vast, vast majority of tokens will be consumed by agents that are just doing continuous work for us in the background and in our workflows."</p></div>
+  <div class="receipts"><a href="https://x.com/levie/status/2108750943680630893">后台代理</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · META <span class="ch">· AI DIRECTOR</span></div>
+    <p class="name">Madhu Guru <span>— Sr Director, AI, Meta</span></p>
+  </div>
+  <p class="zh">Madhu Guru 反驳了一个常见归因：智能单价下降并不是 open-weight model 单独带来的，而是更小模型蒸馏、推理基础设施效率和模型供应商竞争共同作用的结果。open-weight 更像顺风，而不是起点；真正的长期趋势是每一代中型模型都在追平上一代大型模型。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Same intelligence for less $."</p></div>
+  <div class="receipts"><a href="https://x.com/realmadhuguru/status/2108618266776387886">智能降价</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CODEX PRODUCT</span></div>
+    <p class="name">Nan Yu <span>— Product, Codex, OpenAI</span></p>
+  </div>
+  <p class="zh">Nan Yu 把 Codex 的新体验总结成一次交互层面的递进：先是手写代码，再到补全代码，随后变成用 prompt 驱动 agent，现在连 prompt 本身也开始被补全。这个信号很小但重要，AI 编程的下一步可能不是更大的按钮，而是把人和 agent 的协作语言继续压缩。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"First we wrote code by hand, then we tab-completed the code."</p></div>
+  <div class="receipts"><a href="https://x.com/thenanyu/status/2108671762984731037">补全 prompt</a><a href="https://x.com/thenanyu/status/2108671887266246730">自我改进</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CODEX & CHATGPT</span></div>
+    <p class="name">Thibault Sottiaux <span>— Codex &amp; ChatGPT, OpenAI</span></p>
+  </div>
+  <p class="zh">Thibault Sottiaux 连发几条产品信号：ChatGPT 订阅和 Devin 的关系被进一步打通，Dots 也有较大升级，并主动把反馈导向相关负责人。这里的重点不是单点功能，而是开发者工具正在从「另一个工具」变成 ChatGPT 订阅体系里可直接触达的能力。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Your ChatGPT subscription is now also a Devin subscription"</p></div>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2108777962053292398">Devin 订阅</a><a href="https://x.com/thsottiaux/status/2108773703064657936">Dots 升级</a><a href="https://x.com/thsottiaux/status/2108650026671231468">反馈入口</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · ANTHROPIC <span class="ch">· CLAUDE CODE</span></div>
+    <p class="name">Thariq <span>— Claude Code, Anthropic</span></p>
+  </div>
+  <p class="zh">Thariq 分享了一个很典型的 agent 迁移案例：他加入 Anthropic 前用 Opus 4 和 Agent SDK 做过一个需要常驻进程的 side project，可靠性一般；后来一个 prompt 让 Opus 5.5 把它迁到 Claude Managed Agents，并显著提升稳定性。这像是 Managed Agents 的最好广告：让旧式常驻 agent 变成托管、可合并 PR、可长期运行的系统。</p>
+  <div class="receipts"><a href="https://x.com/trq212/status/2108689101503566319">迁移案例</a><a href="https://x.com/trq212/status/2108802833986552174">新标签页</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · REPLIT <span class="ch">· CEO</span></div>
+    <p class="name">Amjad Masad <span>— CEO, Replit</span></p>
+  </div>
+  <p class="zh">Amjad Masad 抛出的问题值得产品团队反复看：为什么有些群体会为 AI 改造自己的领域而兴奋，另一些却会恐惧？这不是抽象情绪题，而是 adoption 题，答案可能藏在控制感、收益归属、职业身份和过渡路径里。AI 产品能不能落地，往往取决于它让用户感觉被放大，还是被替代。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Some communities are excited by AI’s impact on their field."</p></div>
+  <div class="receipts"><a href="https://x.com/amasad/status/2108597112707686552">采纳情绪</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · PRACTICAL AI <span class="ch">· EDUCATOR</span></div>
+    <p class="name">Peter Yang <span>— AI educator, Practical AI</span></p>
+  </div>
+  <p class="zh">Peter Yang 一边吐槽「别再做邮件个人助理了」，一边给 Grok Bot 当 chief of staff 提了一个具体命名细节：不要把 bot 邮箱设成自己的名字，否则抄送时会显得像在抄送本人。这个小建议很产品，说明 agent 人格化不是文案装饰，而会影响团队协作时的信任和语境。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"How about let's stop building more personal assistants to manage our emails and more AI startups to manage and cure diseases"</p></div>
+  <div class="receipts"><a href="https://x.com/petergyang/status/2108679515681722787">产品反讽</a><a href="https://x.com/petergyang/status/2108624122339287335">bot 命名</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · FIRSTMARKCAP <span class="ch">· VC</span></div>
+    <p class="name">Matt Turck <span>— VC, FirstMark Capital</span></p>
+  </div>
+  <p class="zh">Matt Turck 看到 Synthesia 的「一个 prompt 生成公司或产品专业级视频」能力后，强调这正是 Synthesia 早期愿景的兑现。重要之处在于企业视频不再只是模板自动化，而是把品牌风格、产品叙事和生成能力压进一个 prompt，内容生产的边际成本继续下探。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Happening slowly, then all at once."</p></div>
+  <div class="receipts"><a href="https://x.com/mattturck/status/2108561284635480443">视频生成</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · FPV VENTURES <span class="ch">· PARTNER</span></div>
+    <p class="name">Nikunj Kothari <span>— Partner, FPV Ventures</span></p>
+  </div>
+  <p class="zh">Nikunj Kothari 给 founders 的提醒很朴素：如果要在 X 上做付费推广，至少别把 VC 当成投放对象，更不要再用私信伪装成「合作机会」。这类增长动作短期可能买到曝光，长期却会暴露判断力问题，并在募资圈层里留下不必要的负面信号。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Shows really poor judgement and word spreads around that you are trying to buy eyeballs to cue a big raise."</p></div>
+  <div class="receipts"><a href="https://x.com/nikunj/status/2108616889605951834">投放判断</a><a href="https://x.com/nikunj/status/2108620851130380610">别再补邮</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · EVERY <span class="ch">· CEO</span></div>
+    <p class="name">Dan Shipper <span>— CEO, Every</span></p>
+  </div>
+  <p class="zh">Dan Shipper 发布「Working With Agents in Slack」，把 agent 放进 Slack 这个真实协作场景，而不是另开一个孤立工作台。信号在于，agent adoption 会越来越少依赖用户主动打开某个 AI app，更多发生在团队已经有上下文、权限和沟通节奏的地方。</p>
+  <div class="receipts"><a href="https://x.com/danshipper/status/2108588611000275009">Slack agent</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · AI ENGINEER <span class="ch">· ORGANIZER</span></div>
+    <p class="name">Swyx <span>— Organizer, AI Engineer / Latent Space</span></p>
+  </div>
+  <p class="zh">Swyx 在为 AI Engineer NYC 做最后召集，并把这次会议描述成自己两段职业路径的汇合：从投行、对冲基金到 big tech、纽约创业生态。值得注意的是，技术会议开始加入 finance mainstage，说明 AI engineering 正在从纯技术社区扩展到资本、交易和企业基础设施的交界处。</p>
+  <div class="receipts"><a href="https://x.com/swyx/status/2108780918060036335">纽约大会</a><a href="https://x.com/swyx/status/2108563331376124389">职业路径</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">播客</span>Podcasts</span>
+  <span class="rule"></span><span class="count">1 集精华</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">NO PRIORS · SARAH GUO &amp; ELAD GIL <span class="ch">· REFLECTION AI</span></div>
+    <p class="name">"Beam: The Great American Open Model with ReflectionAI Co-Founder and CEO Misha Laskin" <span>— 嘉宾：Misha Laskin · Co-founder &amp; CEO, Reflection AI</span></p>
+  </div>
+  <div class="takeaway"><span class="k">核心要点</span><p class="v">Misha Laskin 的核心判断是，开放模型不是闭源模型的便宜替代品，而会成为企业和国家级 AI 基础设施的竞争入口。</p></div>
+  <p class="zh">Misha Laskin 介绍 Reflection AI 推出 Beam 的背景：团队从约 30 人扩到约 300 人，补齐 pre-training、mid-training、reinforcement learning 和基础设施团队，目标是做 frontier open intelligence。他反复强调，训练大模型没有单一秘方，「everything」都要做对，人才、数据、算力、基础设施和文化缺一不可。</p>
+  <p class="zh">最有信息量的部分是 Beam 的训练结构：它是一个 500B 总参数、23B active 的模型，pre-training 使用约 6000 张 GB300，RL 则用了超过 10000 张 GB300 跑四周。Misha 认为 RL 系统已经进入「只要继续给 compute 就会继续变强」的阶段，开放模型的差异化不只是权重开放，而是把企业自有数据、eval、synthetic data 和推理效率接进来。</p>
+  <p class="zh">他对 open vs closed 的判断也很鲜明：closed model 仍会很有价值，但 token 需求会越来越多流向 open model，就像服务器世界大多运行 Linux。他还把 open model 称作基础设施的 Trojan horse，因为模型本身只是入口，真正绑定客户的是推理软件、cluster management、harness、工具链和服务能力。安全上，他反对把开放等同于失控，认为 cyber defense 和 offense 很难切开，更多研究者和企业能看见问题，反而可能让漏洞更快变浅。</p>
+  <blockquote>"I have the belief that with enough eyeballs, most security and safety vulnerabilities become shallow as well."<span class="src">— Misha Laskin</span></blockquote>
+  <div class="receipts"><a href="https://www.youtube.com/@NoPriorsPodcast">No Priors · Sarah Guo &amp; Elad Gil</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">博客</span>Blogs</span>
+  <span class="rule"></span><span class="count">1 篇长文</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">ANTHROPIC ENGINEERING · ANTHROPIC <span class="ch">· AGENT SECURITY</span></div>
+    <p class="name">"How we contain Claude across products" <span>— Anthropic Engineering</span></p>
+  </div>
+  <div class="takeaway"><span class="k">核心要点</span><p class="v">Anthropic 的结论是，agent 安全不能只靠模型听话，必须先把环境层的爆炸半径框住。</p></div>
+  <p class="zh">Anthropic 这篇工程长文把 Claude 的安全问题从「要不要信任模型」转成「模型最多能碰到什么」。他们把风险拆成用户误用、模型误行为和外部攻击，再把防线拆成运行环境、模型层和外部内容。一个关键数据是，用户会批准约 93% 的权限弹窗，审批疲劳会让 human-in-the-loop 从防线变成形式。</p>
+  <p class="zh">文章最实用的经验是按产品形态匹配隔离强度：claude.ai 用临时容器，Claude Code 用本地 sandbox 和 auto mode，Claude Cowork 用 VM 控制本地文件与网络边界。Anthropic 也复盘了几类真实踩坑，包括信任弹窗前的项目配置执行、用户自己粘贴恶意 prompt 导致凭据外传、approved domain 通过 Files API 变成外泄通道，以及 VM 隔离让企业 EDR 看不见内部行为。</p>
+  <p class="zh">它对正在做 agent 产品的人很有提醒意义：允许访问某个域名，本质上是在授予该域名下所有函数能力；让 agent 读 tool output，本质上是在引入 prompt injection 面；自研 proxy、allowlist 和 orchestration 往往比成熟 hypervisor、seccomp、gVisor 更容易出问题。未来多 agent、持久记忆和 agent identity 会让这些边界更复杂，但底层原则仍然朴素：先限制文件、网络和进程，再用模型层去补概率性防护。</p>
+  <blockquote>"The deterministic boundary is what gets hit when everything probabilistic misses."<span class="src">— Anthropic Engineering</span></blockquote>
+  <div class="receipts"><a href="https://www.anthropic.com/engineering/how-we-contain-claude">Claude 隔离</a></div>
+</article>
+
+
+  <footer>
+    <div>AI BUILDERS DIGEST · 2026-10-10 · 中文主稿 / EN 原文引用</div>
+    <div>Generated through the Follow Builders skill · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur === 'dark' ||
+        (cur === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    });
+  })();
+</script>
