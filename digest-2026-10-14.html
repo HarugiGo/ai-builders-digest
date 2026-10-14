@@ -1,0 +1,534 @@
+<title>AI Builders Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">17 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+
+<div class="wrap">
+
+  <header class="plate">
+    <div class="plate-top">
+      <span class="signal"><span class="dot"></span>Signal Dispatch · 每日速递</span>
+      <button class="toggle" id="themeToggle" type="button" aria-label="切换深浅色">主题</button>
+    </div>
+
+    <div class="masthead">
+      <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
+      <p class="tagline">追踪真正在造东西的人，而不是复读的意见领袖。</p>
+    </div>
+
+    <div class="dateline">
+      <span><b>周三 · 2026年10月14日</b></span>
+      <span>追踪 <span class="num">15</span> 位 builder</span>
+      <span><span class="num">31</span> 条动态</span>
+      <span><span class="num">1</span> 期播客</span>
+      <span>中文 · EN 原文</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">今日主线 · Today's Signal</p>
+  <h2>今天的信号很清楚：AI 正从<span class="mark">更强模型</span>走向<span class="mark">更快反馈</span>、更低摩擦的产品形态。</h2>
+</section>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">动态</span>X / Twitter</span>
+  <span class="rule"></span><span class="count">9 位有料</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GOOGLE LABS <span class="ch">· VP</span></div>
+    <p class="name">Josh Woodward <span>— VP, Google Labs</span></p>
+  </div>
+  <p class="zh">Josh Woodward 给 Lenny 的长访谈做预告，重点不是宣传本身，而是他暗示这次对话触到了自己此前没有公开谈过的部分。对关注 Gemini、Google AI Studio 和 Google Labs 产品路线的人来说，这类访谈往往比发布稿更能看到团队如何解释取舍。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Great interviewers do their homework, and you can tell he’s in that league: he took our conversation to places that I’ve never talked about in public."</p></div>
+  <div class="receipts"><a href="https://x.com/joshwoodward/status/2109646793713786970">长访预告</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · AI TUTORIALS <span class="ch">· CREATOR</span></div>
+    <p class="name">Peter Yang <span>— AI tutorial creator</span></p>
+  </div>
+  <p class="zh">Peter Yang 把 Grok bot 的价值讲成「persona 优先」而不是「聊天线程优先」：每个 bot 像一个有固定职责的员工，分别处理客服、研究准备、家庭差事和健身追踪。这说明消费级 agent 的体验差异，可能不在模型名，而在任务身份是否清晰。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"It’s built on personas instead of chat threads, so it really feels like hiring employees to work for you."</p></div>
+  <div class="receipts"><a href="https://x.com/petergyang/status/2109803399332213090">persona agent</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · VERCEL <span class="ch">· CEO</span></div>
+    <p class="name">Guillermo Rauch <span>— CEO, Vercel</span></p>
+  </div>
+  <p class="zh">Guillermo Rauch 对 coding CLI 的判断很直接：工具越堆 daemon、多层 TUI 和 client-server 架构，越偏离 CLI 的低摩擦本质。他顺手推了一个 6MB、毫秒级启动、模型无关的 `fx`，并继续把 Vercel AI Gateway 放进新模型试用路径里。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"The whole point of a CLI is to deliver intelligence with zero friction, and be unix-like."</p></div>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2109734766107099312">极简 CLI</a><a href="https://x.com/rauchg/status/2109719267344261375">模型网关</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · BOX <span class="ch">· CEO</span></div>
+    <p class="name">Aaron Levie <span>— CEO, Box</span></p>
+  </div>
+  <p class="zh">Aaron Levie 连发几条把企业 AI 的方向说得很清楚：agent 最终会自己选择 harness，前沿模型竞争会继续压低高能力 token 成本，而 agent swarms 会先在 cyber 这种可并行搜索、可大量试错的企业场景里吃掉大量算力。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Agent swarms are going to be a core part of many enterprise workflows in the future."</p></div>
+  <div class="receipts"><a href="https://x.com/levie/status/2109788979952558255">agent 架构</a><a href="https://x.com/levie/status/2109711062757216738">前沿竞争</a><a href="https://x.com/levie/status/2109682812811137061">cyber swarms</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · CURSOR/NOTION/STRIPE <span class="ch">· DESIGNER</span></div>
+    <p class="name">Ryo Lu <span>— Designer and startup builder</span></p>
+  </div>
+  <p class="zh">Ryo Lu 在 ryOS 里加了 Dictionary 和 Fitness：一个用来学新词、发音和汉字，一个用来规划训练、记录身体与饮食，并和 ryOS Account 同步。这里有个小趋势：个人 OS 不再只是日历和笔记，而是在把学习、健康这种长期习惯也接进 AI 工作流。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"new on ryOS: Dictionary + Fitness"</p></div>
+  <div class="receipts"><a href="https://x.com/ryolu_/status/2109568690358555064">ryOS 更新</a><a href="https://x.com/ryolu_/status/2109569515910836433">账户同步</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · BUILDER <span class="ch">· CREATOR</span></div>
+    <p class="name">Zara Zhang <span>— Builder</span></p>
+  </div>
+  <p class="zh">Zara Zhang 分享了一个很小但很有力的 AI coding 故事：朋友把童年家庭记忆讲给别人听，对方 vibe coded 成一个小游戏。技术上它不复杂，真正让人动容的是人的经历、情绪和叙事被代码承载了，这比「又做了个 demo」更接近新媒介。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Code is the new medium for storytelling."</p></div>
+  <div class="receipts"><a href="https://x.com/zarazhangrui/status/2109673430245421415">代码叙事</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENCLAW/OPENAI <span class="ch">· BUILDER</span></div>
+    <p class="name">Peter Steinberger <span>— OpenClaw and OpenAI builder</span></p>
+  </div>
+  <p class="zh">Peter Steinberger 的两条短评都指向同一个主题：开发者对模型速度、成本和语言的敏感度越来越高。他认为 6.1 Sol ultrafast 在相近成本下明显胜过 6 Astra，同时再次强调「vibes coding」这个说法会误导人们低估真实的软件工程判断。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"vibes coding is a slur."</p></div>
+  <div class="receipts"><a href="https://x.com/steipete/status/2109730774593487009">模型体感</a><a href="https://x.com/steipete/status/2109724776168300631">命名之争</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · EVERY <span class="ch">· CEO</span></div>
+    <p class="name">Dan Shipper <span>— CEO, Every</span></p>
+  </div>
+  <p class="zh">Dan Shipper 继续用个人 benchmark 测 Muse Wonder，但结论相当克制：API 上可用的是 Standard，不是 Full；他做了一个解释 personal benchmarks 的视频，评价仍然偏负面。这种公开、具体、带失败感的试用，比单纯转发模型发布更有参考价值。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"I used muse wonder to make a video explaining personal benchmarks."</p></div>
+  <div class="receipts"><a href="https://x.com/danshipper/status/2109800647575146906">版本限制</a><a href="https://x.com/danshipper/status/2109778026091209087">视频测试</a><a href="https://x.com/danshipper/status/2109776532503732624">再次上线</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · SPC <span class="ch">· GENERAL PARTNER</span></div>
+    <p class="name">Aditya Agarwal <span>— General Partner, SPC</span></p>
+  </div>
+  <p class="zh">Aditya Agarwal 指出一个被低估的落差：前沿实验室员工使用 AI 的方式，和最顶尖 1% AI 组织的使用方式之间仍有巨大差距，而且这还只是公开能力造成的差距。他认为这里可能会出现一个横向加速器型公司的机会。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"There is a big delta in how frontier lab employees use AI and how even the top 1% of AI orgs use AI."</p></div>
+  <div class="receipts"><a href="https://x.com/adityaag/status/2109748501982872003">使用差距</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">播客</span>Podcasts</span>
+  <span class="rule"></span><span class="count">1 集精华</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">AI &amp; I BY EVERY · Dan Shipper <span class="ch">· OpenAI</span></div>
+    <p class="name">"How Sam Altman Uses Dots to Take Back His Time" <span>— 嘉宾：Sam Altman · OpenAI</span></p>
+  </div>
+  <div class="takeaway"><span class="k">核心要点</span><p class="v">Sam Altman 把 AI 的下一阶段定义为「人重新拿回时间」，而不是机器替代人。</p></div>
+  <p class="zh">这场对话从 Dev Day 后的开发者生态讲起。Sam Altman 的核心判断是，coding model 越强，开发者并不会变少，反而会因为需求和期待同时上升而有更多事情要做。AI 带来的不是简单自动化，而是把更多原本太贵、太慢、太复杂的想法推到可尝试的范围里。</p>
+  <p class="zh">他把 OpenAI 的平台路线描述成「Renaissance」而不是「Industrial Revolution」：前者以人为中心，强调科学、艺术、公司和个人创造力的扩张；后者更容易把人变成机器里的零件。这个比喻也解释了为什么 OpenAI 要让开发者在 ChatGPT 里构建 app、带走自己的订阅，并把 marketplace 继续往前推。</p>
+  <p class="zh">最具体的新形态是 Dots 和 Space。Dots 像一个能持续接收碎片想法、跨 Slack、日程和上下文工作的个人 agent；Space 则试图让多人和多人的 AI 在「活文档」里协作。Altman 说自己会把语音笔记丢给 dot，醒来时不仅东西被做出来，后续步骤也被推进了。真正的二阶影响是，产品经理、创始人和工程师的迭代回路会被速度重写。</p>
+  <blockquote>"There are way more good ideas outside of our building than inside."<span class="src">— Sam Altman</span></blockquote>
+  <div class="receipts"><a href="https://www.youtube.com/playlist?list=PLuMcoKK9mKgHtW_o9h5sGO2vXrffKHwJL">AI &amp; I · Dan Shipper</a></div>
+</article>
+
+
+  <footer>
+    <div>AI BUILDERS DIGEST · 2026-10-14 · 中文主稿 / EN 原文引用</div>
+    <div>Generated through the Follow Builders skill · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur === 'dark' ||
+        (cur === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    });
+  })();
+</script>
