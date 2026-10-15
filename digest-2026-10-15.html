@@ -1,0 +1,551 @@
+<title>AI Builders Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">18 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-10-15.html"><span class="a-date">2026-10-15</span><span class="a-zh">周四 · 2026年10月15日</span></a></li>
+      <li><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+
+<div class="wrap">
+
+  <header class="plate">
+    <div class="plate-top">
+      <span class="signal"><span class="dot"></span>Signal Dispatch · 每日速递</span>
+      <button class="toggle" id="themeToggle" type="button" aria-label="切换深浅色">主题</button>
+    </div>
+
+    <div class="masthead">
+      <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
+      <p class="tagline">追踪真正在造东西的人，而不是复读的意见领袖。</p>
+    </div>
+
+    <div class="dateline">
+      <span><b>周四 · 2026年10月15日</b></span>
+      <span>追踪 <span class="num">13</span> 位 builder</span>
+      <span><span class="num">28</span> 条动态</span>
+      <span><span class="num">1</span> 期播客</span>
+      <span>中文 · EN 原文</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">今日主线 · Today's Signal</p>
+  <h2>今天的信号很清楚：AI 正把瓶颈从模型能力推向 <span class="mark">基础设施</span>、<span class="mark">安全覆盖</span> 和 <span class="mark">自主学习</span>。</h2>
+</section>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">动态</span>X / Twitter</span>
+  <span class="rule"></span><span class="count">9 位有料</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · LATENT SPACE <span class="ch">· AI BUILDER</span></div>
+    <p class="name">Swyx <span>— AI builder, Latent Space / AI Engineer</span></p>
+  </div>
+  <p class="zh">Swyx 把「SaaS 会被 AI 杀死」从口号拉回实证：他们拿一个年费 4.3 万美元的真实 SaaS 做周末克隆赛，用 AI 和真人评测跑了 72 份提交、约 100B token，想看中等复杂 SaaS 到底哪里还难被替代。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"A lot of people talk about the death of SaaS but mostly in theoretical terms."</p></div>
+  <div class="receipts"><a href="https://x.com/swyx/status/2110065576764686421">SaaS 实测</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GOOGLE <span class="ch">· VP</span></div>
+    <p class="name">Josh Woodward <span>— VP, Google Labs / Gemini App / Google AI Studio</span></p>
+  </div>
+  <p class="zh">Josh Woodward 连发 Gemini 4 Argon 的生成案例，从 24 个词的 prompt 做出可把马蹄、水纹和手势转成音乐的合成器，到为 96 毫米宽家具腿探索球体堆叠，重点展示新模型在多模态创作和物理设计细节上的控制力。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Gemini 4 Argon: How a 24-word prompt built a custom synthesizer that turns galloping horses, rippling water, and your own hands into music."</p></div>
+  <div class="receipts"><a href="https://x.com/joshwoodward/status/2110179883045560674">声音合成</a><a href="https://x.com/joshwoodward/status/2110089824573272547">家具设计</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CODEX & CHATGPT</span></div>
+    <p class="name">Thibault Sottiaux <span>— Codex & ChatGPT, OpenAI</span></p>
+  </div>
+  <p class="zh">Thibault Sottiaux 分享 ChatGPT 与 Codex 桌面应用的磁盘状态存储优化，预计本地占用减少 60%。这不是耀眼发布，但很像成熟工具的关键进展：重度用户真正感受到的瓶颈，往往是空间、稳定性和长期使用成本。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Small ship but we've heard enough feedback about power users running out of disk space."</p></div>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2110151780478927344">磁盘优化</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · REPLIT <span class="ch">· CEO</span></div>
+    <p class="name">Amjad Masad <span>— CEO, Replit</span></p>
+  </div>
+  <p class="zh">Amjad Masad 的判断是，即使前沿研究今天暂停，AI 真正扩散进经济也还需要十年。Replit 因此在做 solutions partners，试图补上从模型能力到企业采用之间的落地层，这比单纯追更强模型更接近商业瓶颈。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"You can pause frontier research today, and it would take AI another 10 years to diffuse into the economy."</p></div>
+  <div class="receipts"><a href="https://x.com/amasad/status/2110128937049452575">经济扩散</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · VERCEL <span class="ch">· CEO</span></div>
+    <p class="name">Guillermo Rauch <span>— CEO, Vercel</span></p>
+  </div>
+  <p class="zh">Guillermo Rauch 把 Gemini 4 Argon 和 Muse Wonder 放在一起看，得出的不是「押某一家模型」，而是继续 model agnostic。对开发者和公司来说，coding agents 是 AI 的杀手级应用，但网关和模型切换能力会成为防锁定的基础设施。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Coding agents are the killer app of AI."</p></div>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2110044152482365747">模型中立</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · BOX <span class="ch">· CEO</span></div>
+    <p class="name">Aaron Levie <span>— CEO, Box</span></p>
+  </div>
+  <p class="zh">Aaron Levie 一边说 cyber 会成为 AI agent 最大机会之一，一边给出 Box 对 Gemini 4 Argon 的企业内容评测：相对 Gemini 3.1 Pro 总体提升 14 个百分点，在金融、医疗、技术、能源和消费品任务里更能完成细节推理与执行闭环。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Cyber is going to be one of the biggest spaces for AI agents in the future."</p></div>
+  <div class="receipts"><a href="https://x.com/levie/status/2110227571090788526">安全机会</a><a href="https://x.com/levie/status/2110046686198550539">Box 评测</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · YCOMBINATOR <span class="ch">· PRESIDENT & CEO</span></div>
+    <p class="name">Garry Tan <span>— President & CEO, Y Combinator</span></p>
+  </div>
+  <p class="zh">Garry Tan 推荐 AsideAI 的原因很具体：让 harness 能带着真实浏览器和真实凭证工作，会解锁更多高保真评测与自动化场景。这里的信号不是单个工具，而是 agent 测试正在从玩具网页走向真实账户、真实权限和真实工作流。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Giving your harnesses access to a real browser with your real credentials is a real unlock."</p></div>
+  <div class="receipts"><a href="https://x.com/garrytan/status/2110053836945756234">真实浏览器</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · FPV VENTURES <span class="ch">· PARTNER</span></div>
+    <p class="name">Nikunj Kothari <span>— Partner, FPV Ventures</span></p>
+  </div>
+  <p class="zh">Nikunj Kothari 借 Railway 的 Jake 访谈强调「按自己的方式经营」的价值：关于扩张、销售、招聘和构建，他说每月和 Jake 聊都会打碎旧假设。对早期公司来说，这类 n of 1 样本比通用 playbook 更值得研究。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"Railway is an n of 1 company that’s because Jake runs it HIS way."</p></div>
+  <div class="receipts"><a href="https://x.com/nikunj/status/2110137649168281871">Railway 样本</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · EVERY <span class="ch">· CEO</span></div>
+    <p class="name">Dan Shipper <span>— CEO, Every</span></p>
+  </div>
+  <p class="zh">Dan Shipper 对 Gemini 4 Argon 的评价更分裂：整体 vibe 是「Google 回来了」，但在 Every 的 senior engineer benchmark 上只拿到 21%，明显落后于 Sol 6 和 Muse。这个反差提醒我们，通用热度和真实工程基准仍可能分离。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"gemini 4 argon really struggles on our senior engineer benchmark task"</p></div>
+  <div class="receipts"><a href="https://x.com/danshipper/status/2110039417650024592">Google 回归</a><a href="https://x.com/danshipper/status/2110056016872427944">工程基准</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">播客</span>Podcasts</span>
+  <span class="rule"></span><span class="count">1 集精华</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">TRAINING DATA · SANYAT <span class="ch">· INEFFABLE INTELLIGENCE</span></div>
+    <p class="name">"David Silver and Lasse Espeholt of Ineffable Intelligence: A Superlearner for the Age of Experience" <span>— 嘉宾：David Silver 与 Lasse Espeholt · co-founders, Ineffable Intelligence</span></p>
+  </div>
+  <div class="takeaway"><span class="k">核心要点</span><p class="v">David Silver 把下一阶段 AI 的关键押在能从经验中自主发现知识的 super learner。</p></div>
+  <p class="zh">David Silver 的核心分歧很明确：他尊重 LLM 路线，但认为通往 superintelligence 的路径不必经过 LLM 产品。Ineffable Intelligence 要做的是能从经验中持续学习的系统，而不是继续堆人类文本、后训练和编码能力。</p>
+  <p class="zh">他们把研究对象称为 super learner：既要有深度，能从零开始发现超越人类的知识；也要有广度，能被放进模拟世界、数字世界或物理世界后继续学习。为此团队在构建「crucibles」，也就是能涌现复杂行为的环境，而不是手写一串标准任务。</p>
+  <p class="zh">更有意思的是安全观：Silver 支持现实世界前沿推进要有 pacing，但主张在 simulation 里尽快跑，先形成一门关于 superintelligence 如何互动、如何被约束的科学。Lasse Espeholt 则补上工程底座：RL 的训练、推理和 simulation 都要尽量跑在 GPU 上。</p>
+  <blockquote>"Thinking about these things in terms of language might not even be the right paradigm, and it might just be that all of this human data that's being used in LLMs is kind of weighing things down."<span class="src">— David Silver</span></blockquote>
+  <div class="receipts"><a href="https://www.youtube.com/playlist?list=PLOhHNjZItNnMm5tdW61JpnyxeYH5NDDx8">Training Data · Sanyat</a></div>
+</article>
+
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">博客</span>Blogs</span>
+  <span class="rule"></span><span class="count">1 篇长文</span>
+</div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · ANTHROPIC ENGINEERING <span class="ch">· SOURCE CONTROL</span></div>
+    <p class="name">Redesigning source control at Anthropic <span>— Anthropic Engineering</span></p>
+  </div>
+  <p class="zh">Anthropic 的 Scion 是今天最硬核的基础设施信号：Claude 让代码合并从 2026 年 5 月约每天 2,500 次增长到 9 月超过 30,000 次，原有 git 镜像、checkout、CI 和源代码查询都开始暴露人类规模设计的上限。</p>
+  <p class="zh">Scion 的取舍很激进：默认客户端在线，服务端处理 history、blame、commit、merge 和 rebase，客户端只维护有限缓存和工作区；checkout 可以稀疏甚至虚拟化，CI 和工具可以直接通过 API 问源控问题。结果是源控基础设施 CPU 和内存占用比旧 git mirroring 小 200 倍，CI 单独拿到 25% CPU 容量收益。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>"The bottleneck, now, is all of the developer infrastructure built for human scale: source control, builds, and CI."</p></div>
+  <div class="receipts"><a href="https://www.anthropic.com/engineering/redesigning-source-control">Scion 源控</a></div>
+</article>
+
+
+  <footer>
+    <div>AI BUILDERS DIGEST · 2026-10-15 · 中文主稿 / EN 原文引用</div>
+    <div>Generated through the Follow Builders skill · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur === 'dark' ||
+        (cur === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    });
+  })();
+</script>
