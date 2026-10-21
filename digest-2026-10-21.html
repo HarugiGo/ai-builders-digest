@@ -1,0 +1,826 @@
+<title>AI Builders Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<style>
+  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 15.5px; }
+  .sec-sum p { margin: 0 0 6px; }
+  .sec-sum ol { margin: 4px 0 0; padding-left: 20px; }
+  .sec-sum .k { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; color: var(--accent-ink); }
+  .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
+  .lst { list-style: none; padding: 0; margin: 6px 0 0; }
+  .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
+  .lst li:first-child { border-top: 0; }
+  .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .lst .t:hover { color: var(--accent-ink); }
+  .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .lst .m a { color: var(--accent-ink); text-decoration: none; }
+  .grp { font-family: "Noto Serif SC", serif; font-size: 14px; color: var(--accent-ink); letter-spacing: .08em; margin: 28px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
+  .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
+</style>
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">19 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-10-21.html"><span class="a-date">2026-10-21</span><span class="a-zh">周三 · 2026年10月21日</span></a></li>
+      <li><a href="digest-2026-10-15.html"><span class="a-date">2026-10-15</span><span class="a-zh">周四 · 2026年10月15日</span></a></li>
+      <li><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="plate-top">
+      <span class="signal"><span class="dot"></span>Signal Dispatch · 每日速递</span>
+      <button class="toggle" id="themeToggle" type="button" aria-label="切换深浅色">主题</button>
+    </div>
+
+    <div class="masthead">
+      <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
+      <p class="tagline">追踪真正在造东西的人，而不是复读的意见领袖。</p>
+    </div>
+
+    <div class="dateline">
+      <span><b>周三 · 2026年10月21日</b></span>
+      <span>收录 2026年10月21日 内容</span>
+      <span><span class="num">33</span> 条网站资讯</span>
+      <span><span class="num">19</span> 个 X 账号有料</span>
+      <span><span class="num">0</span> 期播客</span>
+      <span>中文 · EN 原文</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">今日主线 · Today's Signal</p>
+  <h2>昨天的主线是 <span class="mark">AI 找漏洞</span>：OpenAI 牵头的 Patch the Planet 联合维护者披露 PHP 严重漏洞（PHP2Shell），HN 头版、levelsio 与 Cloudflare 连夜跟进；同一天 LiteLLM PyPI 包被投毒，Muse 分享对话泄密，<span class="mark">安全</span>成为全场关键词。另一条线是 <span class="mark">AI for Science</span>：OpenAI 收购 Orchestra Bio、用上千个 agent 挖掘脑细胞数据，Anthropic 让 Claude 设计抗蝎毒蛋白。商业上，OpenAI 模型登陆 <span class="mark">Google Cloud</span>、ChatGPT 广告扩至 26 国；Gemini 4 Argon 上线 72 小时处理约 25 万亿 token。</h2>
+</section>
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span>Labs &amp; Tech Blogs</span>
+  <span class="rule"></span><span class="count">15 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本节小结</span> OpenAI 一天发了 5 篇官方文章，覆盖安全、科研、云合作与广告；HN 头版被 PHP 漏洞和供应链投毒刷屏。DeepMind、Meta、美团技术团队昨天无新文。</p><ol><li>OpenAI 模型进入 Google Cloud Model Garden</li><li>Patch the Planet：AI agent 发现 PHP 严重漏洞</li><li>LiteLLM 1.107.0 PyPI 包被植入窃密后门（HN）</li><li>OpenAI 用上千个 agent 挖掘脑细胞数据</li></ol></div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · OPENAI <span class="ch">· PARTNERSHIP</span></div>
+    <p class="name">OpenAI models are coming to Google Cloud <span>OpenAI News</span></p>
+    <p class="time">北京时间 10-21 20:00</p>
+  </div>
+  <p class="zh">OpenAI 与 Google Cloud 合作，把前沿模型和 Codex 工作流放进 Gemini 的 Model Garden，通过 Google Cloud Marketplace 提供。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>OpenAI and Google Cloud are bringing frontier models and Codex workflows to Gemini’s Model Garden, available through Google Cloud Marketplace.</p></div>
+  <div class="receipts"><a href="https://openai.com/index/openai-models-google-cloud">原文</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · OPENAI <span class="ch">· SECURITY</span></div>
+    <p class="name">Patch the Planet <span>global response coordination as agents uncover critical vulnerabilities</span></p>
+    <p class="time">北京时间 10-21 15:00</p>
+  </div>
+  <p class="zh">Patch the Planet 把安全研究者、开源维护者和应急响应方连起来，协同处理 AI agent 在开源项目里发现的严重漏洞。OpenAI 在 X 上补充：这次发现的是 PHP 的严重缺陷，PHP 支撑着约 70% 的网站。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>Patch the Planet connects security researchers, maintainers, and incident responders to help address critical vulnerabilities across open source.</p></div>
+  <div class="receipts"><a href="https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities">原文</a><a href="https://news.ycombinator.com/item?id=50181175">HN 讨论 116 分</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · OPENAI <span class="ch">· SCIENCE</span></div>
+    <p class="name">Using thousands of AI agents to uncover new leads in biological data <span>OpenAI × PerturbAI × Scripps</span></p>
+    <p class="time">北京时间 10-21 12:50</p>
+  </div>
+  <p class="zh">OpenAI、PerturbAI 与 Scripps Research 用分布式 AI agent 分析数百万个脑细胞的数据，找到值得跟进的研究线索。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>See how OpenAI, PerturbAI, and Scripps Research used distributed AI agents to uncover promising research leads in data from millions of brain cells.</p></div>
+  <div class="receipts"><a href="https://openai.com/index/scaling-ai-research-for-complex-biological-data">原文</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · OPENAI <span class="ch">· ADS</span></div>
+    <p class="name">ChatGPT Ads 扩展到 26 个新国家 <span>+ How we built ChatGPT’s novel ad stack</span></p>
+    <p class="time">北京时间 10-21 21:00 / 15:00</p>
+  </div>
+  <p class="zh">ChatGPT 广告新增 26 个国家，累计已有超过 10 万广告主使用。另一篇技术文讲广告系统怎么搭：用大模型理解对话意图，广告与回答严格分开。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>ChatGPT Ads expands to 26 new countries as over 100,000 advertisers have used the platform. / Learn how OpenAI built ChatGPT’s LLM-powered ad stack to understand conversational intent, keep ads separate from answers…</p></div>
+  <div class="receipts"><a href="https://openai.com/index/chatgpt-ads-expands-26-new-countries">广告扩张</a><a href="https://openai.com/index/building-chatgpt-ad-stack">广告技术栈</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">BLOG · ANTHROPIC <span class="ch">· 窗口外 · 10-20</span></div>
+    <p class="name">Using Claude to reduce the attack surface of code <span>Anthropic Research</span></p>
+    <p class="time">北京时间 10-20（页面只标日期）</p>
+  </div>
+  <p class="zh">anthropic.com/news 昨天没有新文。这篇是前一天的研究文，10-21 登上 HN，所以补在这里：用 Claude 对大型开源代码库做自动化攻击面分析和收敛，并公布初步数据。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>Automated attack surface analysis and reduction can meaningfully improve the security of deployed software in the near term.</p></div>
+  <div class="receipts"><a href="https://www.anthropic.com/research/attack-surface-reduction">原文</a><a href="https://news.ycombinator.com/item?id=50175779">HN 讨论 111 分</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">HACKER NEWS <span class="ch">· FRONT PAGE · AI/TECH TOP 10</span></div>
+    <p class="name">HN 头版精选 <span>抓取于 10-22 00:3x，分数为抓取时数据</span></p>
+    <p class="time">北京时间 见各条</p>
+  </div>
+  <ul class="lst">
+    <li><a class="t" href="https://github.com/php/php-src/releases/tag/php-8.2.35">PHP 8.2.35 安全版本发布</a><span class="m">620 分 · 243 评论 · 10-21 21:45 · <a href="https://news.ycombinator.com/item?id=50180873">讨论</a></span></li>
+    <li><a class="t" href="https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/">Eight Bits of Trust：eMudhra CA 密钥数毫秒被破解</a><span class="m">599 分 · 260 评论 · 10-21 17:08 · <a href="https://news.ycombinator.com/item?id=50177916">讨论</a></span></li>
+    <li><a class="t" href="https://www.wiz.io/blog/php2shell-php-rce">PHP2Shell：AI 发现 PHP 严重 RCE（Wiz）</a><span class="m">346 分 · 114 评论 · 10-21 21:43 · <a href="https://news.ycombinator.com/item?id=50180836">讨论</a></span></li>
+    <li><a class="t" href="https://arstechnica.com/security/2026/10/meta-muse-exposes-users-personal-and-business-secrets-when-they-share-conversations/">Muse 分享对话会泄露用户个人与商业机密（Ars Technica）</a><span class="m">310 分 · 144 评论 · 10-21 08:45 · <a href="https://news.ycombinator.com/item?id=50174687">讨论</a></span></li>
+    <li><a class="t" href="https://www.ncsc.nl/actueel">荷兰国家网络安全中心因使用 PHP 下线</a><span class="m">242 分 · 82 评论 · 10-21 20:31 · <a href="https://news.ycombinator.com/item?id=50179828">讨论</a></span></li>
+    <li><a class="t" href="https://www.hirundo.io/blog/qwen3-coder-vulnerabilities">Qwen3-Coder 被告知用户是美国人时写出更不安全的代码</a><span class="m">225 分 · 112 评论 · 10-21 20:22 · <a href="https://news.ycombinator.com/item?id=50179706">讨论</a></span></li>
+    <li><a class="t" href="https://duckdb.org/2026/10/21/announcing-duckdb-200">DuckDB 2.0.0 LTS 发布</a><span class="m">185 分 · 23 评论 · 10-21 22:01 · <a href="https://news.ycombinator.com/item?id=50181136">讨论</a></span></li>
+    <li><a class="t" href="https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/">LiteLLM 1.107.0 PyPI 包被植入窃密后门</a><span class="m">106 分 · 49 评论 · 10-21 22:00 · <a href="https://news.ycombinator.com/item?id=50181114">讨论</a></span></li>
+    <li><a class="t" href="https://layerfs.ai/">LayerFS：给 AI 编程 agent 的文件系统</a><span class="m">55 分 · 29 评论 · 10-21 20:34 · <a href="https://news.ycombinator.com/item?id=50179857">讨论</a></span></li>
+    <li><a class="t" href="https://alterauth.com/">Launch HN: Alter (YC S25)：多用户 agent 的访问控制</a><span class="m">12 分 · 9 评论 · 10-21 14:42 · <a href="https://news.ycombinator.com/item?id=50176908">讨论</a></span></li>
+  </ul>
+</article>
+
+<p class="note">说明：无新文：DeepMind（最新 10-16）、Meta research.meta.ai（最新 10-15 Muse Spark Open）、美团技术团队（最新 10-15）。follow-builders feed-blogs.json 当天 0 篇。</p>
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">新闻与投资</span>News &amp; Capital</span>
+  <span class="rule"></span><span class="count">18 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本节小结</span> 中文媒体的焦点是 Claude 设计蛋白、OpenAI 收购 AI 制药公司和物理 AI / 世界模型；a16z 讨论 AI 硬件设计，YC 博客昨天无新文。</p><ol><li>机器之心：Claude 64 小时设计 31 万种蛋白，17 种通过实验验证</li><li>机器之心：OpenAI 收购 AI 制药创企</li><li>极客公园早报：DeepSeek 开源推理框架 DeepInfer；Muse 下载破千万</li><li>量子位：清华系千诀把世界模型做进机器人</li><li>a16z：Superhuman Hardware Design Is The Easy Part</li></ol></div>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">量子位 · 资讯 <span class="ch">· 3 篇</span></div>
+    <p class="name">量子位 <span>qbitai.com 资讯栏目</span></p>
+    <p class="time">北京时间 10-21</p>
+  </div>
+  <ul class="lst">
+    <li><a class="t" href="https://www.qbitai.com/2026/10/504653.html">LeCun押注的世界模型，中国一家清华系公司已经做进了机器人</a><span class="m">10-21 15:15 · 千诀主打物理规律与跨本体复用</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/10/504638.html">量智齐飞！4个月9款车落地，轻舟城市NOA击穿10-20万体验天花板</a><span class="m">10-21 14:40</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/10/504608.html">飞书豆包工作AI先锋未来人才大赛：企业正在争抢会用AI做成事的人</a><span class="m">10-21 10:37</span></li>
+  </ul>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">机器之心 · 产业 <span class="ch">· 7 篇</span></div>
+    <p class="name">机器之心 <span>jiqizhixin.com/industry</span></p>
+    <p class="time">北京时间 10-21</p>
+  </div>
+  <ul class="lst">
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-2">刚刚，Claude 64小时设计31万种蛋白，17种通过实验验证</a><span class="m">10-21 10:27</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-10">Anthropic接连突破后，OpenAI收购AI制药创企，CTO是北大校友</a><span class="m">10-21 21:38 · ScienceAI</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-12">一句话指挥机器人组团打工，还能越干越聪明？这波物理AI有点夯</a><span class="m">10-21 21:49</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-9">继罗福莉之后，生数科技Motubrain团队公开Physical AI训练全流程，连续直播半个月</a><span class="m">10-21 18:01</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-6">刚离开Kimi，17岁的陈广宇去了Jeff Dean新公司</a><span class="m">10-21 13:15</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-4">NeurIPS 2026 | 大模型真的会模拟人类用户吗？中科院软件所、快手推出首个真实世界全链路用户行为模拟基准</a><span class="m">10-21 11:39</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-7">从种草到世界杯，小红书的技术实力藏不住了</a><span class="m">10-21 13:21</span></li>
+  </ul>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">极客公园 <span class="ch">· RSS + 栏目</span></div>
+    <p class="name">极客公园 <span>RSS 4 篇；栏目 304 有 1 篇与 RSS 重复，306/307/308/347 无新文；栏目 2 只挑 AI、硬件和智驾</span></p>
+    <p class="time">北京时间 10-21</p>
+  </div>
+  <ul class="lst">
+    <li><a class="t" href="http://www.geekpark.net/news/372650">曝高通启动全球裁员；上线 40 天，Muse 下载量突破 1000 万次；ChatGPT 上线幻灯片工具</a><span class="m">10-21 08:37 · 早报，含 DeepSeek 开源 DeepInfer 推理框架</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/372671">亚马逊 CTO Werner Vogels：二十余年技术实践，想与创业者分享这 4 点</a><span class="m">10-21 12:16 · 栏目 304</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/372692">奇瑞说，中国家庭的下一台车是摩托</a><span class="m">10-21 22:26</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/372698">当车企要说为「人类自由」奋斗时，它在说什么</a><span class="m">10-21 17:10</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/372697">华为靳玉志：自动驾驶时代安全责任正逐步向系统能力转移</a><span class="m">10-21 · 栏目 2 · 世界智能网联汽车大会</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/372706">荣耀 WIN 平板发布：240Hz OLED 电竞屏，国补到手价 3699 元起</a><span class="m">10-21 · 栏目 2</span></li>
+  </ul>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">A16Z <span class="ch">· HARDWARE</span></div>
+    <p class="name">Superhuman Hardware Design Is The Easy Part <span>Andreessen Horowitz</span></p>
+    <p class="time">北京时间 10-21 02:09</p>
+  </div>
+  <p class="zh">a16z 的观点是，AI 设计硬件本身已经不是最难的，难的是数字世界与物理世界之间那道有损的接口：从设计走到可制造、可交付的实物。（只根据页面摘要写，没有逐段精读）</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>The interface between the digital and physical world is lossy.</p></div>
+  <div class="receipts"><a href="https://a16z.com/superhuman-hardware-design-is-the-easy-part/">原文</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">YC 博客 <span class="ch">· 窗口外 · 10-20</span></div>
+    <p class="name">How Vin Bui became engineer #1 at Nowadays <span>Y Combinator Blog · 注：HN 是 YC 运营的社区，YC 博客是 YC 自己的官方文章</span></p>
+    <p class="time">北京时间 10-20 23:30</p>
+  </div>
+  <p class="zh">昨天 YC 博客没有新文，补一篇最近的：Vin Bui 在 Work at a Startup 上找到 Nowadays，看到一个自己能修好的代码库，就加入成了第一位工程师，现在在做 AI 语音工具，同时带团队。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>Vin found Nowadays on Work at a Startup, saw a codebase he could fix, and joined as the first engineer. Now he builds AI voice tools and mentors the team.</p></div>
+  <div class="receipts"><a href="https://www.ycombinator.com/blog/how-vin-bui-became-engineer-1-at-nowadays-and-started-treating-it-like-his-own-company/">原文</a></div>
+</article>
+
+<p class="note">说明：虎嗅：RSS 只返回最新 5 条（都在 10-22 00:07 之后，而且是财经和社会话题），昨天的 AI 和科技文章没抓到。晚点 LatePost：官网证书校验失败，打不开，本期跳过。</p>
+<div class="sec-head">
+  <span class="lbl"><span class="zh-lbl">动态</span>X / Twitter</span>
+  <span class="rule"></span><span class="count">20 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本节小结</span> 官方号集中发布 PHP 漏洞、AI 制药和开发者功能；个人号里 levelsio 实时直播 PHP 应急，Logan 给出 Gemini 4 Argon 的 token 用量数据。</p><ol><li>OpenAI：Patch the Planet 发现 PHP 严重漏洞</li><li>OpenAI：收购 Orchestra Bio</li><li>Logan Kilpatrick：Gemini 4 Argon 上线 72 小时处理约 25 万亿 token</li><li>Sam Altman：Aleksander 接手安全与安保挑战</li><li>Thibault Sottiaux：API 缓存延长到 12 小时，Codex 登录用户永久缓存</li></ol></div>
+
+<p class="grp">官方 · OpenAI</p>
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· OFFICIAL</span></div>
+    <p class="name">OpenAI <span>@OpenAI</span></p>
+    <p class="time">北京时间 10-21 22:04</p>
+  </div>
+  <p class="zh">OpenAI 的模型协助 Patch the Planet 的研究者发现了 PHP 的严重安全缺陷。PHP 支撑着约 70% 的网站，OpenAI 过去两个月牵头维护者和研究者组成联盟来处理。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>OpenAI models helped researchers—operating as part of our Patch the Planet initiative—discover critical security flaws in PHP, an open-source programming language used to run an estimated 70% of websites.</p></div>
+  <div class="receipts"><a href="https://x.com/OpenAI/status/2112907856018309586">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· OFFICIAL</span></div>
+    <p class="name">OpenAI <span>@OpenAI · 2 条</span></p>
+    <p class="time">北京时间 10-21 02:10 / 21:32</p>
+  </div>
+  <p class="zh">OpenAI 收购 Orchestra Bio（帮药企协调药物研发流程的平台），会和生命科学模型 Rosalind 结合。另一条：GPT-Rosalind 在小鼠脑数据里发现，恢复胆固醇转运也许能保护神经元，这是 Perry 综合征（DCTN1 基因相关）的新线索。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>We’ve acquired Orchestra Bio, a platform that helps biopharma teams coordinate the complex process of drug development. / GPT-Rosalind surfaced a new lead for drug discovery: could restoring cholesterol transport protect neurons from degeneration?</p></div>
+  <div class="receipts"><a href="https://x.com/OpenAI/status/2112607347688583586">收购</a><a href="https://x.com/OpenAI/status/2112899854569762936">GPT-Rosalind</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI DEVS / CHATGPT <span class="ch">· OFFICIAL</span></div>
+    <p class="name">OpenAIDevs · ChatGPT <span>@OpenAIDevs @ChatGPT</span></p>
+    <p class="time">北京时间 10-21 01:56 / 01:32</p>
+  </div>
+  <p class="zh">API 现在可以选 12 小时提示缓存，长期运行的 agent 能用更低的缓存价复用上下文。ChatGPT 上线 Locked Chats：把敏感对话移进受保护空间，用 PIN 或生物识别解锁。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>You can now choose 12-hour prompt caching in the API. / Keep sensitive conversations out of view with Locked Chats in ChatGPT.</p></div>
+  <div class="receipts"><a href="https://x.com/OpenAIDevs/status/2112603916076781778">12h 缓存</a><a href="https://x.com/ChatGPT/status/2112597766333673624">Locked Chats</a></div>
+</article>
+
+<p class="grp">官方 · Anthropic</p>
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · ANTHROPIC <span class="ch">· OFFICIAL</span></div>
+    <p class="name">Anthropic <span>@AnthropicAI</span></p>
+    <p class="time">北京时间 10-21 00:18</p>
+  </div>
+  <p class="zh">Science Blog 新文：用 Claude 设计针对蝎毒神经毒素的蛋白结合剂。全球每年约 120 万人被蝎子蜇伤，抗毒血清贵且常常短缺。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>New on our Science Blog: designing protein binders against scorpion neurotoxins. Scorpions sting about 1.2m people every year, and antivenoms are often costly or in short supply.</p></div>
+  <div class="receipts"><a href="https://x.com/AnthropicAI/status/2112579251555721573">原帖</a></div>
+</article>
+
+<p class="grp">官方 · Google</p>
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GOOGLE LABS <span class="ch">· OFFICIAL</span></div>
+    <p class="name">Google Labs <span>@GoogleLabs</span></p>
+    <p class="time">北京时间 10-21 02:05</p>
+  </div>
+  <p class="zh">Google Labs 用一支趣味视频「Dreambeans Roulette」推广 Dreambeans：打开应用、选一个故事，然后照着去做。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>What would happen if Dreambeans dreamt up your morning?</p></div>
+  <div class="receipts"><a href="https://x.com/GoogleLabs/status/2112606263163203970">原帖</a></div>
+</article>
+
+<p class="grp">官方 · Manus / Grok Bot</p>
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · MANUS <span class="ch">· OFFICIAL</span></div>
+    <p class="name">Manus <span>@ManusAI</span></p>
+    <p class="time">北京时间 10-21 23:32</p>
+  </div>
+  <p class="zh">Manus 现在可以自动完成角色绑定和动画，个人开发者不用学动画也能做 3D 游戏。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>You can now build 3D games with fluid, expressive character animation—without learning to animate each action yourself.</p></div>
+  <div class="receipts"><a href="https://x.com/ManusAI/status/2112929941444776138">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GROK BOT <span class="ch">· OFFICIAL</span></div>
+    <p class="name">Grok Bot <span>@bot</span></p>
+    <p class="time">北京时间 10-21 04:42</p>
+  </div>
+  <p class="zh">官方案例：一次故障中，Grok Bot 在约 10 分钟内清掉 204 张相关工单，只需一位工程师批量批准。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>In one incident, it cleared 204 tickets in about 10 minutes, with one engineer approving the batch.</p></div>
+  <div class="receipts"><a href="https://x.com/bot/status/2112645531076096330">原帖</a></div>
+</article>
+
+<p class="grp">个人</p>
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GOOGLE <span class="ch">· GEMINI / AI STUDIO</span></div>
+    <p class="name">Logan Kilpatrick <span>— Member of technical staff, working on Gemini, @GoogleAIStudio, the Gemini API</span></p>
+    <p class="time">北京时间 10-21 12:45</p>
+  </div>
+  <p class="zh">Gemini 4 Argon 上线头 72 小时处理了约 25 万亿 token，他认为市场对智能的需求仍被低估。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>In just the first 72 hours since Gemini 4 Argon launched, we processed ~25 trillion tokens, the demand for intelligence is incredible and still under appreciated!</p></div>
+  <div class="receipts"><a href="https://x.com/OfficialLoganK/status/2112767157746688480">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · INDIE <span class="ch">· 8 条原创</span></div>
+    <p class="name">Pieter Levels <span>— @levelsio</span></p>
+    <p class="time">北京时间 10-21 02:23 – 23:07</p>
+  </div>
+  <p class="zh">白天他用 Claude Code 做了一个 GTA 圣安地列斯 mod 任务：CJ 要 vibe code 一家创业公司，再去旧金山找投资人融资（1.7 万赞）。还分享了把 Amazon Alexa 改成私人音乐和网络电台的 prompt。</p>
+  <p class="zh">晚上他实时跟进 PHP 漏洞：先把所有站点和 VPS 断网，等北京时间 22:00（UTC 14:00）补丁上线，提醒大家有 PHP 站点就先下线；后来又转发 Ubuntu 修复包，说 Cloudflare 的防护只是不完美的权宜之计。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>I pre-emptively disconnected ALL my sites / VPS servers from the web. I&#x27;ll wait for the patch to hit at 2 PM UTC.</p></div>
+  <div class="receipts"><a href="https://x.com/levelsio/status/2112686345617547538">GTA 任务</a><a href="https://x.com/levelsio/status/2112887674251976827">PHP 断网</a><a href="https://x.com/levelsio/status/2112923845267210658">Ubuntu 修复</a><a href="https://x.com/levelsio/status/2112618575752229299">Alexa 改造</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · META <span class="ch">· CHIEF AI OFFICER</span></div>
+    <p class="name">Alexandr Wang <span>— chief ai officer @meta, founder Meta Superintelligence Labs, founder @scale_ai</span></p>
+    <p class="time">北京时间 10-21 04:22</p>
+  </div>
+  <p class="zh">配图调侃：muse 正在准备上 Cheeky Pint 节目。另外两条引用帖只有链接，没有正文。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>muse preparing for his cheeky pint appearance</p></div>
+  <div class="receipts"><a href="https://x.com/alexandr_wang/status/2112640717428576442">原帖</a><a href="https://x.com/alexandr_wang/status/2112776650240950326">引用帖 1</a><a href="https://x.com/alexandr_wang/status/2112637941986255024">引用帖 2</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · X <span class="ch">· FORMER HEAD OF PRODUCT</span></div>
+    <p class="name">Nikita Bier <span>— former head of product @x</span></p>
+    <p class="time">北京时间 10-21 22:22</p>
+  </div>
+  <p class="zh">如果把数据泄露和垃圾信息造成的损失算进去，AI 短期对 GDP 的贡献可能接近零，他对此不会意外。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>It’s still early but I wouldn’t be surprised if AI’s contribution to GDP is neutral in the short-term when accounting for the financial impact of data breaches and spam.</p></div>
+  <div class="receipts"><a href="https://x.com/nikitabier/status/2112912350403760362">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · 中文 <span class="ch">· AI 写作者</span></div>
+    <p class="name">李继刚 <span>— @lijigang</span></p>
+    <p class="time">北京时间 10-21 11:20</p>
+  </div>
+  <p class="zh">推荐一篇论文：论文中针对阅读提出了一个非常有意思的取景框架。我们一直有「六经注我」vs「我注六经」的分类……这论文加了一个维度：「AI 替我读」vs「AI 陪我读」。</p>
+  <div class="receipts"><a href="https://x.com/lijigang/status/2112745933108850944">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · X / SPACEX / XAI <span class="ch">· 9 条原创 · 节选</span></div>
+    <p class="name">Elon Musk <span>— @elonmusk</span></p>
+    <p class="time">北京时间 10-21 06:05 / 13:44</p>
+  </div>
+  <p class="zh">他说 SpaceX 在 2028 年做到 1 万亿美元收入「不再是不可能」。另外两条引用帖分别是「Grok 和 Fable 的诚实反馈」和推荐 Grok @Bot。其余 6 条是政治和媒体评论，按规则也算原创，但和科技无关，本期没有展开。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>As crazy as this sounds, $1T in SpaceX revenue in 2028 is no longer impossible</p></div>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2112666467712073815">SpaceX</a><a href="https://x.com/elonmusk/status/2112781998624555086">Grok/Fable</a><a href="https://x.com/elonmusk/status/2112932127901987225">Try Grok @Bot</a></div>
+</article>
+
+<p class="grp">follow-builders 补充（feed-x.json，已按推文 id 去重）</p>
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CEO</span></div>
+    <p class="name">Sam Altman <span>— bio: The mission of OpenAI is to ensure that AGI benefits all of humanity</span></p>
+    <p class="time">北京时间 10-21 05:10</p>
+  </div>
+  <p class="zh">他感谢 Aleksander 接下这份工作：面对超级智能，安全与安保的挑战巨大，而 Aleksander 的能力很适合。（引用帖）</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>I am very grateful Aleksander accepted our request to come take this on; the safety and security challenges in front of us as we confront superintelligence are immense…</p></div>
+  <div class="receipts"><a href="https://x.com/sama/status/2112652656602923366">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENAI <span class="ch">· CODEX &amp; CHATGPT</span></div>
+    <p class="name">Thibault Sottiaux <span>— Codex &amp; ChatGPT @OpenAI</span></p>
+    <p class="time">北京时间 10-21 09:10 / 01:10</p>
+  </div>
+  <p class="zh">API 缓存可以保留 12 小时，Codex 和 Work 的登录用户永久缓存，回到旧对话也能保证命中缓存。另一条：约 4 万个账号的用量额度与所选套餐不一致，已经修复，受影响的用户会补发额度。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>You can now cache for 12h in the API and for logged in users across Codex &amp; Work we keep cache forever…</p></div>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2112712984644784534">缓存</a><a href="https://x.com/thsottiaux/status/2112592264686149749">用量修复</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · VERCEL <span class="ch">· CEO</span></div>
+    <p class="name">Guillermo Rauch <span>— @vercel CEO</span></p>
+    <p class="time">北京时间 10-21 05:33 / 04:12</p>
+  </div>
+  <p class="zh">Vercel 把驱动 eve 和 Workflows 的持久化基础设施开源，做成和运行时无关的方案，Pi、OpenCode 等 harness 都能用，Claude Code 和 Codex 也可以变得持久、可观测。另一条：AI 能算出你懂与不懂之间的差距，带你循序渐进地学会任何东西。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>We&#x27;re extending the durability infra that powers @eve and Workflows to all harnesses, like Pi and OpenCode.</p></div>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2112658577110520122">持久化</a><a href="https://x.com/rauchg/status/2112638107749355867">AI 教育</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · OPENCLAW <span class="ch">· BUILDER</span></div>
+    <p class="name">Peter Steinberger <span>— bio: Polyagentmorous ClawFather … @OpenClaw</span></p>
+    <p class="time">北京时间 10-21 02:03</p>
+  </div>
+  <p class="zh">他的分工是 Astra 做规划、Sol 6.1 写代码。他发现让 Astra 在 worktree 里调用 codex cli，比依赖 subagent 好用得多，再加一个 agent 专门挑战和监督。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>Astra did the planning, Sol 6.1 did the coding. I found that the workflow of prompting Astra to run codex cli in worktrees works FAR better than relying on subagents.</p></div>
+  <div class="receipts"><a href="https://x.com/steipete/status/2112605703219347503">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · SPC <span class="ch">· GENERAL PARTNER</span></div>
+    <p class="name">Aditya Agarwal <span>— General Partner @SPC, Co-Founder @Bevel_Health</span></p>
+    <p class="time">北京时间 10-21 00:19</p>
+  </div>
+  <p class="zh">他做了一个类比：推理时扩展 → subagent → agent 集群，很像 CPU 线程 → 多核 → 多节点分布式系统，历史在押韵。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>Inference time scaling → Subagents → Agent Swarms looks an awful lot like CPU Threads → Multi-core CPUs → Multi-Node Distributed Systems.</p></div>
+  <div class="receipts"><a href="https://x.com/adityaag/status/2112579526379401408">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · BOX <span class="ch">· CEO</span></div>
+    <p class="name">Aaron Levie <span>— ceo @box</span></p>
+    <p class="time">北京时间 10-21 12:55</p>
+  </div>
+  <p class="zh">他认为 AI 正在形成一种清晰的形态：专注于特定任务或领域的自主系统，比「LLM 套壳」时代前进了一大步。</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>We clearly have an emerging form factor for what AI might look like … as autonomous systems dedicated to specific tasks or domains.</p></div>
+  <div class="receipts"><a href="https://x.com/levie/status/2112769686798832013">原帖</a></div>
+</article>
+
+<article class="entry">
+  <div class="byline">
+    <div class="tag">POST · GOOGLE <span class="ch">· VP</span></div>
+    <p class="name">Josh Woodward <span>— VP, @Google @GoogleLabs @GeminiApp @GoogleAIStudio</span></p>
+    <p class="time">北京时间 10-21 06:46 / 06:55</p>
+  </div>
+  <p class="zh">Gemini App 的 Trusted Tester 社区刚达到一个重要里程碑。他还引用了 Sundar 的话：「我们一定要站在前沿，这是我们的 DNA。」</p>
+  <div class="en-quote"><span class="q-lbl">原文</span><p>Sundar: &quot;We are so committed to being at the frontier. It’s in our DNA.&quot;</p></div>
+  <div class="receipts"><a href="https://x.com/joshwoodward/status/2112676777290248675">Trusted Tester</a><a href="https://x.com/joshwoodward/status/2112679011839344651">Sundar</a></div>
+</article>
+
+<p class="note">说明：follow-builders 的 feed 生成于 10-21 14:42，只覆盖到当天下午。没收录的：swyx、Peter Yang（含付费推广）、Matt Turck、Nikunj、Garry Tan、Dan Shipper 的生活类帖子。</p>
+  <footer>
+    <div>AI BUILDERS DIGEST · 2026-10-21 · 中文主稿 / EN 原文引用 · 时间均为北京时间</div>
+    <div>X 数据来自 X API 与 Follow Builders feed · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur === 'dark' ||
+        (cur === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    });
+  })();
+</script>
