@@ -340,38 +340,56 @@
   }
 </style>
 
-<style>
-  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 15.5px; }
+<!-- FB_EXTRA --><style>
+  .masthead { margin-top: 8px; }
+  .dateline { font-size: 15px; letter-spacing: .02em; text-transform: none; gap: 8px 22px; }
+  .dateline b { font-size: 17px; color: var(--ink); }
+  .dateline .num { font-size: 17px; }
+  .lead .kicker { font-size: 13px; letter-spacing: .14em; }
+  .lead .lead-p { font-size: 17px; line-height: 1.75; margin: 0; color: var(--ink); text-wrap: pretty; }
+  .lead .lead-p .mark { background: linear-gradient(transparent 62%, var(--accent-wash) 62%); color: var(--accent-ink); font-weight: 600; }
+  .sec-head .lbl .zh-lbl { font-size: 1.7rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); text-transform: none; margin: 0; }
+  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 17px; }
   .sec-sum p { margin: 0 0 6px; }
-  .sec-sum ol { margin: 4px 0 0; padding-left: 20px; }
-  .sec-sum .k { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; color: var(--accent-ink); }
+  .sec-sum ol { margin: 4px 0 0; padding-left: 22px; }
+  .sec-sum .k { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 700; color: var(--accent-ink); margin-right: 4px; }
+  .name .src { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-style: normal; font-weight: 500; font-size: 12px; letter-spacing: .04em; color: var(--ink-faint); margin-left: 8px; white-space: nowrap; }
   .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
+  .receipts { justify-content: flex-end; }
   .lst { list-style: none; padding: 0; margin: 6px 0 0; }
   .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
   .lst li:first-child { border-top: 0; }
   .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
   .lst .t:hover { color: var(--accent-ink); }
   .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
-  .lst .m a { color: var(--accent-ink); text-decoration: none; }
-  .grp { font-family: "Noto Serif SC", serif; font-size: 14px; color: var(--accent-ink); letter-spacing: .08em; margin: 28px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
+  .grp { font-family: "Noto Serif SC", serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-ink); letter-spacing: .04em; margin: 30px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
   .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
-</style>
-<style>
-  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 15.5px; }
-  .sec-sum p { margin: 0 0 6px; }
-  .sec-sum ol { margin: 4px 0 0; padding-left: 20px; }
-  .sec-sum .k { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 600; letter-spacing: .14em; color: var(--accent-ink); }
-  .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
-  .lst { list-style: none; padding: 0; margin: 6px 0 0; }
-  .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
-  .lst li:first-child { border-top: 0; }
-  .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
-  .lst .t:hover { color: var(--accent-ink); }
-  .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
-  .lst .m a { color: var(--accent-ink); text-decoration: none; }
-  .grp { font-family: "Noto Serif SC", serif; font-size: 14px; color: var(--accent-ink); letter-spacing: .08em; margin: 28px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
-  .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
-</style>
+  .sec-head, .grp, .entry { scroll-margin-top: 24px; }
+  .toc { position: fixed; top: 34px; right: max(20px, calc((100vw - 720px) / 2 - 252px)); width: 220px; max-height: calc(100vh - 68px); overflow-y: auto; z-index: 10; font-family: "Noto Serif SC", serif; }
+  .toc-inner { border-left: 2px solid var(--line-strong); padding: 6px 0 6px 14px; }
+  .toc-head { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .2em; color: var(--ink); margin-bottom: 10px; }
+  .toc-head .rail-zh { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc a { text-decoration: none; color: var(--ink-faint); display: block; }
+  .toc a:hover, .toc a.on { color: var(--accent-ink); }
+  .toc .t-sec { margin: 0 0 10px; }
+  .toc .t-sec > a { font-size: 14px; font-weight: 600; color: var(--ink); padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .toc .t-sec > a .n { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-left: 6px; }
+  .toc .t-grp > a { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); padding: 6px 0 2px; }
+  .toc .t-it > a { font-size: 12px; line-height: 1.45; padding: 3px 0 3px 8px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .toc::-webkit-scrollbar { width: 6px; } .toc::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .toc-m { display: none; }
+  @media (max-width: 1179px) {
+    .toc { display: none; }
+    .toc-m { display: block; margin: 18px 0 0; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); padding: 10px 14px; font-family: "Noto Serif SC", serif; }
+    .toc-m summary { cursor: pointer; font-weight: 600; font-size: 15px; color: var(--ink); }
+    .toc-m ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    .toc-m a { text-decoration: none; color: var(--ink-faint); display: block; padding: 3px 0; }
+    .toc-m .t-sec > a { color: var(--ink); font-weight: 600; } .toc-m .t-grp > a { color: var(--accent-ink); padding-left: 8px; }
+    .toc-m .t-it { display: none; }
+    .sec-head, .grp, .entry { scroll-margin-top: 72px; }
+  }
+</style><!-- /FB_EXTRA -->
 <!-- /FB_RAIL_CSS -->
 
 
@@ -406,17 +424,13 @@
     </ul>
   </div>
 </aside>
+<script src="archive.js"></script>
+<nav class="toc" aria-label="本期目录"><div class="toc-inner"><div class="toc-head"><span class="rail-zh">本期目录</span>Contents</div><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">17</span></a><ul><li class="t-it"><a href="#e-2">OpenAI models are coming to Google Cloud</a></li><li class="t-it"><a href="#e-3">Patch the Planet</a></li><li class="t-it"><a href="#e-4">Using thousands of AI agents to uncover new leads in biological data</a></li><li class="t-it"><a href="#e-5">ChatGPT Ads 扩展到 26 个新国家</a></li><li class="t-it"><a href="#e-6">Democratic governance of frontier AI, part II: Empowering cyber defenders</a></li><li class="t-it"><a href="#e-7">Using Claude to reduce the attack surface of code</a></li><li class="t-it"><a href="#e-8">Physicist Christopher Stubbs joins Anthropic&#x27;s Long-Term Benefit Trust</a></li><li class="t-grp"><a href="#g-9">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-10">新闻与投资<span class="n">18</span></a><ul><li class="t-grp"><a href="#g-11">量子位</a></li><li class="t-grp"><a href="#g-12">机器之心</a></li><li class="t-grp"><a href="#g-13">极客公园</a></li><li class="t-it"><a href="#e-14">Superhuman Hardware Design Is The Easy Part</a></li><li class="t-it"><a href="#e-15">How Vin Bui became engineer #1 at Nowadays</a></li></ul></li><li class="t-sec"><a href="#s-16">X 动态<span class="n">20</span></a><ul><li class="t-grp"><a href="#g-17">官方 · OpenAI</a></li><li class="t-it"><a href="#e-18">OpenAI</a></li><li class="t-it"><a href="#e-19">OpenAI</a></li><li class="t-it"><a href="#e-20">OpenAIDevs · ChatGPT</a></li><li class="t-grp"><a href="#g-21">官方 · Anthropic</a></li><li class="t-it"><a href="#e-22">Anthropic</a></li><li class="t-grp"><a href="#g-23">官方 · Google</a></li><li class="t-it"><a href="#e-24">Google Labs</a></li><li class="t-grp"><a href="#g-25">官方 · Manus / Grok Bot</a></li><li class="t-it"><a href="#e-26">Manus</a></li><li class="t-it"><a href="#e-27">Grok Bot</a></li><li class="t-grp"><a href="#g-28">个人</a></li><li class="t-it"><a href="#e-29">Logan Kilpatrick</a></li><li class="t-it"><a href="#e-30">Pieter Levels</a></li><li class="t-it"><a href="#e-31">Alexandr Wang</a></li><li class="t-it"><a href="#e-32">Nikita Bier</a></li><li class="t-it"><a href="#e-33">李继刚</a></li><li class="t-it"><a href="#e-34">Elon Musk</a></li><li class="t-grp"><a href="#g-35">follow-builders 补充</a></li><li class="t-it"><a href="#e-36">Sam Altman</a></li><li class="t-it"><a href="#e-37">Thibault Sottiaux</a></li><li class="t-it"><a href="#e-38">Guillermo Rauch</a></li><li class="t-it"><a href="#e-39">Peter Steinberger</a></li><li class="t-it"><a href="#e-40">Aditya Agarwal</a></li><li class="t-it"><a href="#e-41">Aaron Levie</a></li><li class="t-it"><a href="#e-42">Josh Woodward</a></li></ul></li></ul></div></nav>
 <div class="wrap">
 
   <header class="plate">
-    <div class="plate-top">
-      <span class="signal"><span class="dot"></span>Signal Dispatch · 每日速递</span>
-      <button class="toggle" id="themeToggle" type="button" aria-label="切换深浅色">主题</button>
-    </div>
-
     <div class="masthead">
       <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
-      <p class="tagline">追踪真正在造东西的人，而不是复读的意见领袖。</p>
     </div>
 
     <div class="dateline">
@@ -425,144 +439,113 @@
       <span><span class="num">35</span> 条网站资讯</span>
       <span><span class="num">19</span> 个 X 账号有料</span>
       <span><span class="num">0</span> 期播客</span>
-      <span>中文 · EN 原文</span>
     </div>
   </header>
 
 <section class="lead reveal">
-  <p class="kicker">今日主线 · Today's Signal</p>
-  <h2>昨天的主线是 <span class="mark">AI 找漏洞</span>：OpenAI 牵头的 Patch the Planet 联合维护者披露 PHP 严重漏洞（PHP2Shell），HN 头版、levelsio 与 Cloudflare 连夜跟进；同一天 LiteLLM PyPI 包被投毒，Muse 分享对话泄密，<span class="mark">安全</span>成为全场关键词。另一条线是 <span class="mark">AI for Science</span>：OpenAI 收购 Orchestra Bio、用上千个 agent 挖掘脑细胞数据，Anthropic 让 Claude 设计抗蝎毒蛋白。商业上，OpenAI 模型登陆 <span class="mark">Google Cloud</span>、ChatGPT 广告扩至 26 国；Gemini 4 Argon 上线 72 小时处理约 25 万亿 token。</h2>
+  <p class="kicker">Executive Summary</p>
+  <p class="lead-p"><span class="mark">安全</span>是全天最集中的话题：OpenAI 牵头的 Patch the Planet 借助 AI agent 发现 PHP 多个严重远程代码执行漏洞，PHP 官方公告以 1503 分登上 HN 当天第一，PHP 基金会、Ubuntu、Cloudflare 相继跟进，levelsio 等开发者连夜断网等补丁；同日 LiteLLM PyPI 包被投毒、eMudhra CA 密钥被破解，OpenAI 也发布了“赋能网络防御者”的政策蓝图。<span class="mark">AI for Science</span> 是第二条线：OpenAI 收购 Orchestra Bio，并用上千个 agent 分析数百万脑细胞数据，GPT-Rosalind 给出 Perry 综合征的新线索；Anthropic 用 Claude 64 小时设计 31 万种蛋白、17 种通过实验验证，还针对蝎毒设计蛋白结合剂。商业与产品方面，OpenAI 模型登陆 Google Cloud Model Garden，ChatGPT 广告扩至 26 个新国家，API 支持 12 小时提示缓存，ChatGPT 上线 Locked Chats；Gemini 4 Argon 上线 72 小时处理约 25 万亿 token，Manus 支持自动角色动画，Vercel 开源 agent 持久化基础设施。国内媒体聚焦物理 AI 与世界模型（千诀、生数 Motubrain）、DeepSeek 开源推理框架 DeepInfer 和 Muse 下载破千万；a16z 讨论 AI 硬件设计，Mistral 发布 Voxtral 3。观点上，Nikita Bier 认为计入数据泄露与垃圾信息后 AI 短期对 GDP 贡献可能接近零，Aaron Levie 则看到“专注特定任务的自主系统”这一新形态。</p>
 </section>
-<div class="sec-head">
-  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span>Labs &amp; Tech Blogs</span>
+<details class="toc-m"><summary>本期目录</summary><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">17</span></a><ul><li class="t-grp"><a href="#g-9">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-10">新闻与投资<span class="n">18</span></a><ul><li class="t-grp"><a href="#g-11">量子位</a></li><li class="t-grp"><a href="#g-12">机器之心</a></li><li class="t-grp"><a href="#g-13">极客公园</a></li></ul></li><li class="t-sec"><a href="#s-16">X 动态<span class="n">20</span></a><ul><li class="t-grp"><a href="#g-17">官方 · OpenAI</a></li><li class="t-grp"><a href="#g-21">官方 · Anthropic</a></li><li class="t-grp"><a href="#g-23">官方 · Google</a></li><li class="t-grp"><a href="#g-25">官方 · Manus / Grok Bot</a></li><li class="t-grp"><a href="#g-28">个人</a></li><li class="t-grp"><a href="#g-35">follow-builders 补充</a></li></ul></li></ul></details>
+<div class="sec-head" id="s-1">
+  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span></span>
   <span class="rule"></span><span class="count">17 条</span>
 </div>
-<div class="sec-sum"><p><span class="k">本节小结</span> OpenAI 一天发了 6 篇官方文章，覆盖网络安全、科研、云合作与广告；Anthropic 宣布物理学家 Christopher Stubbs 加入长期利益信托。HN（YC 办的社区）当天最高分是 PHP 严重 RCE 安全公告，前十里 3 条与 PHP 漏洞有关。DeepMind、Meta、美团技术团队昨天无新文。</p><ol><li>OpenAI 模型进入 Google Cloud Model Garden</li><li>Patch the Planet：AI agent 发现 PHP 严重漏洞</li><li>HN 当天最高分：PHP 严重 RCE 安全公告（1503 分）</li><li>OpenAI 用上千个 agent 挖掘脑细胞数据</li></ol></div>
+<div class="sec-sum"><p><span class="k">本章小结</span> OpenAI 一天发了 6 篇官方文章，覆盖网络安全、科研、云合作与广告；Anthropic 宣布物理学家 Christopher Stubbs 加入长期利益信托。HN（YC 办的社区）当天最高分是 PHP 严重 RCE 安全公告，前十里 3 条与 PHP 漏洞有关。DeepMind、Meta、美团技术团队昨天无新文。</p><ol><li>OpenAI 模型进入 Google Cloud Model Garden</li><li>Patch the Planet：AI agent 发现 PHP 严重漏洞</li><li>HN 当天最高分：PHP 严重 RCE 安全公告（1503 分）</li><li>OpenAI 用上千个 agent 挖掘脑细胞数据</li></ol></div>
 
-<article class="entry">
+<article class="entry" id="e-2">
   <div class="byline">
-    <div class="tag">BLOG · OPENAI <span class="ch">· PARTNERSHIP</span></div>
-    <p class="name">OpenAI models are coming to Google Cloud <span>OpenAI News</span></p>
+    <p class="name">OpenAI models are coming to Google Cloud<span class="src">OpenAI</span></p>
     <p class="time">北京时间 10-21 20:00</p>
   </div>
   <p class="zh">OpenAI 与 Google Cloud 合作，把前沿模型和 Codex 工作流放进 Gemini 的 Model Garden，通过 Google Cloud Marketplace 提供。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>OpenAI and Google Cloud are bringing frontier models and Codex workflows to Gemini’s Model Garden, available through Google Cloud Marketplace.</p></div>
   <div class="receipts"><a href="https://openai.com/index/openai-models-google-cloud">原文</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-3">
   <div class="byline">
-    <div class="tag">BLOG · OPENAI <span class="ch">· SECURITY</span></div>
-    <p class="name">Patch the Planet <span>global response coordination as agents uncover critical vulnerabilities</span></p>
+    <p class="name">Patch the Planet<span class="src">OpenAI</span></p>
     <p class="time">北京时间 10-21 15:00</p>
   </div>
   <p class="zh">Patch the Planet 把安全研究者、开源维护者和应急响应方连起来，协同处理 AI agent 在开源项目里发现的严重漏洞。OpenAI 在 X 上补充：这次发现的是 PHP 的严重缺陷，PHP 支撑着约 70% 的网站。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Patch the Planet connects security researchers, maintainers, and incident responders to help address critical vulnerabilities across open source.</p></div>
   <div class="receipts"><a href="https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities">原文</a><a href="https://news.ycombinator.com/item?id=50181175">HN 讨论 116 分</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-4">
   <div class="byline">
-    <div class="tag">BLOG · OPENAI <span class="ch">· SCIENCE</span></div>
-    <p class="name">Using thousands of AI agents to uncover new leads in biological data <span>OpenAI × PerturbAI × Scripps</span></p>
+    <p class="name">Using thousands of AI agents to uncover new leads in biological data<span class="src">OpenAI</span></p>
     <p class="time">北京时间 10-21 12:50</p>
   </div>
   <p class="zh">OpenAI、PerturbAI 与 Scripps Research 用分布式 AI agent 分析数百万个脑细胞的数据，找到值得跟进的研究线索。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>See how OpenAI, PerturbAI, and Scripps Research used distributed AI agents to uncover promising research leads in data from millions of brain cells.</p></div>
   <div class="receipts"><a href="https://openai.com/index/scaling-ai-research-for-complex-biological-data">原文</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-5">
   <div class="byline">
-    <div class="tag">BLOG · OPENAI <span class="ch">· ADS</span></div>
-    <p class="name">ChatGPT Ads 扩展到 26 个新国家 <span>+ How we built ChatGPT’s novel ad stack</span></p>
+    <p class="name">ChatGPT Ads 扩展到 26 个新国家<span class="src">OpenAI</span></p>
     <p class="time">北京时间 10-21 21:00 / 15:00</p>
   </div>
   <p class="zh">ChatGPT 广告新增 26 个国家，累计已有超过 10 万广告主使用。另一篇技术文讲广告系统怎么搭：用大模型理解对话意图，广告与回答严格分开。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>ChatGPT Ads expands to 26 new countries as over 100,000 advertisers have used the platform. / Learn how OpenAI built ChatGPT’s LLM-powered ad stack to understand conversational intent, keep ads separate from answers…</p></div>
   <div class="receipts"><a href="https://openai.com/index/chatgpt-ads-expands-26-new-countries">广告扩张</a><a href="https://openai.com/index/building-chatgpt-ad-stack">广告技术栈</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-6">
   <div class="byline">
-    <div class="tag">BLOG · OPENAI <span class="ch">· POLICY</span></div>
-    <p class="name">Democratic governance of frontier AI, part II: Empowering cyber defenders <span>OpenAI News</span></p>
+    <p class="name">Democratic governance of frontier AI, part II: Empowering cyber defenders<span class="src">OpenAI</span></p>
     <p class="time">北京时间 10-21 08:00</p>
   </div>
   <p class="zh">OpenAI 提出用前沿 AI 武装网络安全防守方的蓝图：更强的安全护栏、现代化网络安全体系，以及更有韧性的公共机构。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>OpenAI outlines a blueprint for empowering cyber defenders with frontier AI, stronger safeguards, modernized cybersecurity, and more resilient public institutions.</p></div>
   <div class="receipts"><a href="https://openai.com/index/empowering-cyber-defenders">原文</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-7">
   <div class="byline">
-    <div class="tag">BLOG · ANTHROPIC <span class="ch">· 窗口外 · 10-20</span></div>
-    <p class="name">Using Claude to reduce the attack surface of code <span>Anthropic Research</span></p>
+    <p class="name">Using Claude to reduce the attack surface of code<span class="src">Anthropic</span></p>
     <p class="time">北京时间 10-20（页面只标日期）</p>
   </div>
   <p class="zh">anthropic.com/news 昨天没有新文。这篇是前一天的研究文，10-21 登上 HN，所以补在这里：用 Claude 对大型开源代码库做自动化攻击面分析和收敛，并公布初步数据。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Automated attack surface analysis and reduction can meaningfully improve the security of deployed software in the near term.</p></div>
   <div class="receipts"><a href="https://www.anthropic.com/research/attack-surface-reduction">原文</a><a href="https://news.ycombinator.com/item?id=50175779">HN 讨论 111 分</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-8">
   <div class="byline">
-    <div class="tag">NEWS · ANTHROPIC <span class="ch">· GOVERNANCE</span></div>
-    <p class="name">Physicist Christopher Stubbs joins Anthropic&#x27;s Long-Term Benefit Trust <span>Anthropic News</span></p>
+    <p class="name">Physicist Christopher Stubbs joins Anthropic&#x27;s Long-Term Benefit Trust<span class="src">Anthropic</span></p>
     <p class="time">北京时间 10-21（页面只标日期）</p>
   </div>
   <p class="zh">哈佛前理学院院长、实验物理学家 Christopher Stubbs 加入 Anthropic 长期利益信托（LTBT），他曾为美国政府提供国家安全与军控方面的建议。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Dr. Christopher Stubbs, an experimental physicist and former Dean of Science at Harvard University, has joined Anthropic’s Long-Term Benefit Trust.</p></div>
   <div class="receipts"><a href="https://www.anthropic.com/news/christopher-stubbs-joins-long-term-benefit-trust">原文</a></div>
 </article>
 
-<article class="entry">
-  <div class="byline">
-    <div class="tag">HACKER NEWS <span class="ch">· 当天发帖 · 按分数 TOP 10</span></div>
-    <p class="name">HN 当天热帖 Top 10 <span>Hacker News 是 YC 办的技术社区；统计 10-21 北京时间发的帖子，分数取自 10-22 07:58 抓取</span></p>
-    <p class="time">北京时间 见各条</p>
-  </div>
-  <ul class="lst">
-    <li><a class="t" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方安全公告：多个严重远程代码执行漏洞，请立即升级 / Security advisory: Critical remote code execution vulnerabilities, update now</a><span class="m">1503 分 · 649 评论 · 10-21 04:15 · <a href="https://news.ycombinator.com/item?id=50172041">讨论</a></span></li>
-    <li><a class="t" href="https://github.com/php/php-src/releases/tag/php-8.2.35">PHP 8.2.35 安全版本发布 / PHP 8.2.35</a><span class="m">955 分 · 529 评论 · 10-21 21:45 · <a href="https://news.ycombinator.com/item?id=50180873">讨论</a></span></li>
-    <li><a class="t" href="https://permit.petercai.com/">Show HN：带审批许可的 SimCity / Show HN: SimCity, but with Permits</a><span class="m">906 分 · 408 评论 · 10-21 02:29 · <a href="https://news.ycombinator.com/item?id=50170593">讨论</a></span></li>
-    <li><a class="t" href="https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/">Eight Bits of Trust：eMudhra CA 密钥数毫秒被破解 / Eight Bits of Trust: eMudhra&#x27;s CA keys cracked in milliseconds</a><span class="m">821 分 · 393 评论 · 10-21 17:08 · <a href="https://news.ycombinator.com/item?id=50177916">讨论</a></span></li>
-    <li><a class="t" href="https://mistral.ai/news/voxtral-3/">Mistral 发布 Voxtral 3 / Voxtral 3</a><span class="m">757 分 · 195 评论 · 10-21 00:02 · <a href="https://news.ycombinator.com/item?id=50168396">讨论</a></span></li>
-    <li><a class="t" href="https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/">PHP 基金会：今天的安全版本，以及我们如何加强 PHP 安全 / Today&#x27;s PHP security release, and how we&#x27;re strengthening security</a><span class="m">640 分 · 317 评论 · 10-21 23:48 · <a href="https://news.ycombinator.com/item?id=50182987">讨论</a></span></li>
-    <li><a class="t" href="https://unric.org/en/unep-emissions-gap-report-2026-1-5-degree-overshoot/">《巴黎协定》1.5°C 目标已不再可行（UNEP 排放差距报告） / The 1.5°C goal of the Paris Agreement is no longer viable</a><span class="m">611 分 · 745 评论 · 10-21 17:07 · <a href="https://news.ycombinator.com/item?id=50177911">讨论</a></span></li>
-    <li><a class="t" href="https://www.joshwcomeau.com/css/interop-2027/">CSS 的未来（Interop 2027） / The Future of CSS</a><span class="m">590 分 · 261 评论 · 10-21 09:47 · <a href="https://news.ycombinator.com/item?id=50175070">讨论</a></span></li>
-    <li><a class="t" href="https://www.techdirt.com/2026/10/20/accident-or-not-the-no-kings-takedown-is-why-you-shouldnt-rent-your-megaphone-from-zuck/">No Kings 帖子被下架：为什么不该把话筒租给扎克伯格 / The No Kings Takedown Is Why You Shouldn&#x27;t Rent Your Megaphone from Zuck</a><span class="m">488 分 · 472 评论 · 10-21 22:01 · <a href="https://news.ycombinator.com/item?id=50181137">讨论</a></span></li>
-    <li><a class="t" href="https://stevekrouse.com/ends">我该教儿子什么？（Steve Krouse） / What shall I teach my son?</a><span class="m">470 分 · 619 评论 · 10-21 01:25 · <a href="https://news.ycombinator.com/item?id=50169707">讨论</a></span></li>
-  </ul>
-</article>
+<p class="grp" id="g-9">HN 当天热帖 Top 10</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方安全公告：多个严重远程代码执行漏洞，请立即升级 / Security advisory: Critical remote code execution vulnerabilities, update now</a><span class="m">10-21 04:15 · 1503 分 · 649 评论</span></li>
+    <li><a class="t" href="https://github.com/php/php-src/releases/tag/php-8.2.35">PHP 8.2.35 安全版本发布 / PHP 8.2.35</a><span class="m">10-21 21:45 · 955 分 · 529 评论</span></li>
+    <li><a class="t" href="https://permit.petercai.com/">Show HN：带审批许可的 SimCity / Show HN: SimCity, but with Permits</a><span class="m">10-21 02:29 · 906 分 · 408 评论</span></li>
+    <li><a class="t" href="https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/">Eight Bits of Trust：eMudhra CA 密钥数毫秒被破解 / Eight Bits of Trust: eMudhra&#x27;s CA keys cracked in milliseconds</a><span class="m">10-21 17:08 · 821 分 · 393 评论</span></li>
+    <li><a class="t" href="https://mistral.ai/news/voxtral-3/">Mistral 发布 Voxtral 3 / Voxtral 3</a><span class="m">10-21 00:02 · 757 分 · 195 评论</span></li>
+    <li><a class="t" href="https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/">PHP 基金会：今天的安全版本，以及我们如何加强 PHP 安全 / Today&#x27;s PHP security release, and how we&#x27;re strengthening security</a><span class="m">10-21 23:48 · 640 分 · 317 评论</span></li>
+    <li><a class="t" href="https://unric.org/en/unep-emissions-gap-report-2026-1-5-degree-overshoot/">《巴黎协定》1.5°C 目标已不再可行（UNEP 排放差距报告） / The 1.5°C goal of the Paris Agreement is no longer viable</a><span class="m">10-21 17:07 · 611 分 · 745 评论</span></li>
+    <li><a class="t" href="https://www.joshwcomeau.com/css/interop-2027/">CSS 的未来（Interop 2027） / The Future of CSS</a><span class="m">10-21 09:47 · 590 分 · 261 评论</span></li>
+    <li><a class="t" href="https://www.techdirt.com/2026/10/20/accident-or-not-the-no-kings-takedown-is-why-you-shouldnt-rent-your-megaphone-from-zuck/">No Kings 帖子被下架：为什么不该把话筒租给扎克伯格 / The No Kings Takedown Is Why You Shouldn&#x27;t Rent Your Megaphone from Zuck</a><span class="m">10-21 22:01 · 488 分 · 472 评论</span></li>
+    <li><a class="t" href="https://stevekrouse.com/ends">我该教儿子什么？（Steve Krouse） / What shall I teach my son?</a><span class="m">10-21 01:25 · 470 分 · 619 评论</span></li>
+</ul>
 
 <p class="note">说明：无新文：DeepMind（最新 10-16）、Meta research.meta.ai（最新 10-15 Muse Spark Open）、美团技术团队（最新 10-15）。follow-builders feed-blogs.json 当天 0 篇。 HN 前十之外值得一看：PHP2Shell（AI 发现 PHP RCE，429 分）、LiteLLM 1.107.0 PyPI 包被投毒（412 分）。</p>
-<div class="sec-head">
-  <span class="lbl"><span class="zh-lbl">新闻与投资</span>News &amp; Capital</span>
+<div class="sec-head" id="s-10">
+  <span class="lbl"><span class="zh-lbl">新闻与投资</span></span>
   <span class="rule"></span><span class="count">18 条</span>
 </div>
-<div class="sec-sum"><p><span class="k">本节小结</span> 中文媒体的焦点是 Claude 设计蛋白、OpenAI 收购 AI 制药公司和物理 AI / 世界模型；a16z 讨论 AI 硬件设计，YC 博客昨天无新文。</p><ol><li>机器之心：Claude 64 小时设计 31 万种蛋白，17 种通过实验验证</li><li>机器之心：OpenAI 收购 AI 制药创企</li><li>极客公园早报：DeepSeek 开源推理框架 DeepInfer；Muse 下载破千万</li><li>量子位：清华系千诀把世界模型做进机器人</li><li>a16z：Superhuman Hardware Design Is The Easy Part</li></ol></div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 中文媒体的焦点是 Claude 设计蛋白、OpenAI 收购 AI 制药公司和物理 AI / 世界模型；a16z 讨论 AI 硬件设计，YC 博客昨天无新文。</p><ol><li>机器之心：Claude 64 小时设计 31 万种蛋白，17 种通过实验验证</li><li>机器之心：OpenAI 收购 AI 制药创企</li><li>极客公园早报：DeepSeek 开源推理框架 DeepInfer；Muse 下载破千万</li><li>量子位：清华系千诀把世界模型做进机器人</li><li>a16z：Superhuman Hardware Design Is The Easy Part</li></ol></div>
 
-<article class="entry">
-  <div class="byline">
-    <div class="tag">量子位 · 资讯 <span class="ch">· 3 篇</span></div>
-    <p class="name">量子位 <span>qbitai.com 资讯栏目</span></p>
-    <p class="time">北京时间 10-21</p>
-  </div>
-  <ul class="lst">
+<p class="grp" id="g-11">量子位</p>
+<ul class="lst">
     <li><a class="t" href="https://www.qbitai.com/2026/10/504653.html">LeCun押注的世界模型，中国一家清华系公司已经做进了机器人</a><span class="m">10-21 15:15 · 千诀主打物理规律与跨本体复用</span></li>
     <li><a class="t" href="https://www.qbitai.com/2026/10/504638.html">量智齐飞！4个月9款车落地，轻舟城市NOA击穿10-20万体验天花板</a><span class="m">10-21 14:40</span></li>
     <li><a class="t" href="https://www.qbitai.com/2026/10/504608.html">飞书豆包工作AI先锋未来人才大赛：企业正在争抢会用AI做成事的人</a><span class="m">10-21 10:37</span></li>
-  </ul>
-</article>
+</ul>
 
-<article class="entry">
-  <div class="byline">
-    <div class="tag">机器之心 · 产业 <span class="ch">· 7 篇</span></div>
-    <p class="name">机器之心 <span>jiqizhixin.com/industry</span></p>
-    <p class="time">北京时间 10-21</p>
-  </div>
-  <ul class="lst">
+<p class="grp" id="g-12">机器之心</p>
+<ul class="lst">
     <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-2">刚刚，Claude 64小时设计31万种蛋白，17种通过实验验证</a><span class="m">10-21 10:27</span></li>
     <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-10">Anthropic接连突破后，OpenAI收购AI制药创企，CTO是北大校友</a><span class="m">10-21 21:38 · ScienceAI</span></li>
     <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-12">一句话指挥机器人组团打工，还能越干越聪明？这波物理AI有点夯</a><span class="m">10-21 21:49</span></li>
@@ -570,296 +553,240 @@
     <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-6">刚离开Kimi，17岁的陈广宇去了Jeff Dean新公司</a><span class="m">10-21 13:15</span></li>
     <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-4">NeurIPS 2026 | 大模型真的会模拟人类用户吗？中科院软件所、快手推出首个真实世界全链路用户行为模拟基准</a><span class="m">10-21 11:39</span></li>
     <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-21-7">从种草到世界杯，小红书的技术实力藏不住了</a><span class="m">10-21 13:21</span></li>
-  </ul>
-</article>
+</ul>
 
-<article class="entry">
-  <div class="byline">
-    <div class="tag">极客公园 <span class="ch">· RSS + 栏目</span></div>
-    <p class="name">极客公园 <span>RSS 4 篇；栏目 304 有 1 篇与 RSS 重复，306/307/308/347 无新文；栏目 2 只挑 AI、硬件和智驾</span></p>
-    <p class="time">北京时间 10-21</p>
-  </div>
-  <ul class="lst">
+<p class="grp" id="g-13">极客公园</p>
+<ul class="lst">
     <li><a class="t" href="http://www.geekpark.net/news/372650">曝高通启动全球裁员；上线 40 天，Muse 下载量突破 1000 万次；ChatGPT 上线幻灯片工具</a><span class="m">10-21 08:37 · 早报，含 DeepSeek 开源 DeepInfer 推理框架</span></li>
     <li><a class="t" href="http://www.geekpark.net/news/372671">亚马逊 CTO Werner Vogels：二十余年技术实践，想与创业者分享这 4 点</a><span class="m">10-21 12:16 · 栏目 304</span></li>
     <li><a class="t" href="http://www.geekpark.net/news/372692">奇瑞说，中国家庭的下一台车是摩托</a><span class="m">10-21 22:26</span></li>
     <li><a class="t" href="http://www.geekpark.net/news/372698">当车企要说为「人类自由」奋斗时，它在说什么</a><span class="m">10-21 17:10</span></li>
     <li><a class="t" href="https://www.geekpark.net/news/372697">华为靳玉志：自动驾驶时代安全责任正逐步向系统能力转移</a><span class="m">10-21 · 栏目 2 · 世界智能网联汽车大会</span></li>
     <li><a class="t" href="https://www.geekpark.net/news/372706">荣耀 WIN 平板发布：240Hz OLED 电竞屏，国补到手价 3699 元起</a><span class="m">10-21 · 栏目 2</span></li>
-  </ul>
-</article>
+</ul>
 
-<article class="entry">
+<article class="entry" id="e-14">
   <div class="byline">
-    <div class="tag">A16Z <span class="ch">· HARDWARE</span></div>
-    <p class="name">Superhuman Hardware Design Is The Easy Part <span>Andreessen Horowitz</span></p>
+    <p class="name">Superhuman Hardware Design Is The Easy Part<span class="src">a16z</span></p>
     <p class="time">北京时间 10-21 02:09</p>
   </div>
   <p class="zh">a16z 的观点是，AI 设计硬件本身已经不是最难的，难的是数字世界与物理世界之间那道有损的接口：从设计走到可制造、可交付的实物。（只根据页面摘要写，没有逐段精读）</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>The interface between the digital and physical world is lossy.</p></div>
   <div class="receipts"><a href="https://a16z.com/superhuman-hardware-design-is-the-easy-part/">原文</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-15">
   <div class="byline">
-    <div class="tag">YC 博客 <span class="ch">· 窗口外 · 10-20</span></div>
-    <p class="name">How Vin Bui became engineer #1 at Nowadays <span>Y Combinator Blog · 注：HN 是 YC 运营的社区，YC 博客是 YC 自己的官方文章</span></p>
+    <p class="name">How Vin Bui became engineer #1 at Nowadays<span class="src">YC 博客</span></p>
     <p class="time">北京时间 10-20 23:30</p>
   </div>
   <p class="zh">昨天 YC 博客没有新文，补一篇最近的：Vin Bui 在 Work at a Startup 上找到 Nowadays，看到一个自己能修好的代码库，就加入成了第一位工程师，现在在做 AI 语音工具，同时带团队。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Vin found Nowadays on Work at a Startup, saw a codebase he could fix, and joined as the first engineer. Now he builds AI voice tools and mentors the team.</p></div>
   <div class="receipts"><a href="https://www.ycombinator.com/blog/how-vin-bui-became-engineer-1-at-nowadays-and-started-treating-it-like-his-own-company/">原文</a></div>
 </article>
 
 <p class="note">说明：虎嗅：RSS 只返回最新几条（都发在 10-22，没有 10-21 的），昨天的 AI 和科技文章没抓到。晚点 LatePost：官网证书校验失败，打不开，本期跳过。</p>
-<div class="sec-head">
-  <span class="lbl"><span class="zh-lbl">动态</span>X / Twitter</span>
+<div class="sec-head" id="s-16">
+  <span class="lbl"><span class="zh-lbl">X 动态</span></span>
   <span class="rule"></span><span class="count">20 条</span>
 </div>
-<div class="sec-sum"><p><span class="k">本节小结</span> 官方号集中发布 PHP 漏洞、AI 制药和开发者功能；个人号里 levelsio 实时直播 PHP 应急，Logan 给出 Gemini 4 Argon 的 token 用量数据。</p><ol><li>OpenAI：Patch the Planet 发现 PHP 严重漏洞</li><li>OpenAI：收购 Orchestra Bio</li><li>Logan Kilpatrick：Gemini 4 Argon 上线 72 小时处理约 25 万亿 token</li><li>Sam Altman：Aleksander 接手安全与安保挑战</li><li>Thibault Sottiaux：API 缓存延长到 12 小时，Codex 登录用户永久缓存</li></ol></div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 官方号集中发布 PHP 漏洞、AI 制药和开发者功能；个人号里 levelsio 实时直播 PHP 应急，Logan 给出 Gemini 4 Argon 的 token 用量数据。</p><ol><li>OpenAI：Patch the Planet 发现 PHP 严重漏洞</li><li>OpenAI：收购 Orchestra Bio</li><li>Logan Kilpatrick：Gemini 4 Argon 上线 72 小时处理约 25 万亿 token</li><li>Sam Altman：Aleksander 接手安全与安保挑战</li><li>Thibault Sottiaux：API 缓存延长到 12 小时，Codex 登录用户永久缓存</li></ol></div>
 
-<p class="grp">官方 · OpenAI</p>
-<article class="entry">
+<p class="grp" id="g-17">官方 · OpenAI</p>
+<article class="entry" id="e-18">
   <div class="byline">
-    <div class="tag">POST · OPENAI <span class="ch">· OFFICIAL</span></div>
-    <p class="name">OpenAI <span>@OpenAI</span></p>
+    <p class="name">OpenAI<span class="src">@OpenAI</span></p>
     <p class="time">北京时间 10-21 22:04</p>
   </div>
   <p class="zh">OpenAI 的模型协助 Patch the Planet 的研究者发现了 PHP 的严重安全缺陷。PHP 支撑着约 70% 的网站，OpenAI 过去两个月牵头维护者和研究者组成联盟来处理。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>OpenAI models helped researchers—operating as part of our Patch the Planet initiative—discover critical security flaws in PHP, an open-source programming language used to run an estimated 70% of websites.</p></div>
   <div class="receipts"><a href="https://x.com/OpenAI/status/2112907856018309586">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-19">
   <div class="byline">
-    <div class="tag">POST · OPENAI <span class="ch">· OFFICIAL</span></div>
-    <p class="name">OpenAI <span>@OpenAI · 2 条</span></p>
+    <p class="name">OpenAI<span class="src">@OpenAI</span></p>
     <p class="time">北京时间 10-21 02:10 / 21:32</p>
   </div>
   <p class="zh">OpenAI 收购 Orchestra Bio（帮药企协调药物研发流程的平台），会和生命科学模型 Rosalind 结合。另一条：GPT-Rosalind 在小鼠脑数据里发现，恢复胆固醇转运也许能保护神经元，这是 Perry 综合征（DCTN1 基因相关）的新线索。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>We’ve acquired Orchestra Bio, a platform that helps biopharma teams coordinate the complex process of drug development. / GPT-Rosalind surfaced a new lead for drug discovery: could restoring cholesterol transport protect neurons from degeneration?</p></div>
   <div class="receipts"><a href="https://x.com/OpenAI/status/2112607347688583586">收购</a><a href="https://x.com/OpenAI/status/2112899854569762936">GPT-Rosalind</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-20">
   <div class="byline">
-    <div class="tag">POST · OPENAI DEVS / CHATGPT <span class="ch">· OFFICIAL</span></div>
-    <p class="name">OpenAIDevs · ChatGPT <span>@OpenAIDevs @ChatGPT</span></p>
+    <p class="name">OpenAIDevs · ChatGPT<span class="src">@OpenAIDevs · @ChatGPT</span></p>
     <p class="time">北京时间 10-21 01:56 / 01:32</p>
   </div>
   <p class="zh">API 现在可以选 12 小时提示缓存，长期运行的 agent 能用更低的缓存价复用上下文。ChatGPT 上线 Locked Chats：把敏感对话移进受保护空间，用 PIN 或生物识别解锁。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>You can now choose 12-hour prompt caching in the API. / Keep sensitive conversations out of view with Locked Chats in ChatGPT.</p></div>
   <div class="receipts"><a href="https://x.com/OpenAIDevs/status/2112603916076781778">12h 缓存</a><a href="https://x.com/ChatGPT/status/2112597766333673624">Locked Chats</a></div>
 </article>
 
-<p class="grp">官方 · Anthropic</p>
-<article class="entry">
+<p class="grp" id="g-21">官方 · Anthropic</p>
+<article class="entry" id="e-22">
   <div class="byline">
-    <div class="tag">POST · ANTHROPIC <span class="ch">· OFFICIAL</span></div>
-    <p class="name">Anthropic <span>@AnthropicAI</span></p>
+    <p class="name">Anthropic<span class="src">@AnthropicAI</span></p>
     <p class="time">北京时间 10-21 00:18</p>
   </div>
   <p class="zh">Science Blog 新文：用 Claude 设计针对蝎毒神经毒素的蛋白结合剂。全球每年约 120 万人被蝎子蜇伤，抗毒血清贵且常常短缺。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>New on our Science Blog: designing protein binders against scorpion neurotoxins. Scorpions sting about 1.2m people every year, and antivenoms are often costly or in short supply.</p></div>
   <div class="receipts"><a href="https://x.com/AnthropicAI/status/2112579251555721573">原帖</a></div>
 </article>
 
-<p class="grp">官方 · Google</p>
-<article class="entry">
+<p class="grp" id="g-23">官方 · Google</p>
+<article class="entry" id="e-24">
   <div class="byline">
-    <div class="tag">POST · GOOGLE LABS <span class="ch">· OFFICIAL</span></div>
-    <p class="name">Google Labs <span>@GoogleLabs</span></p>
+    <p class="name">Google Labs<span class="src">@GoogleLabs</span></p>
     <p class="time">北京时间 10-21 02:05</p>
   </div>
   <p class="zh">Google Labs 用一支趣味视频「Dreambeans Roulette」推广 Dreambeans：打开应用、选一个故事，然后照着去做。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>What would happen if Dreambeans dreamt up your morning?</p></div>
   <div class="receipts"><a href="https://x.com/GoogleLabs/status/2112606263163203970">原帖</a></div>
 </article>
 
-<p class="grp">官方 · Manus / Grok Bot</p>
-<article class="entry">
+<p class="grp" id="g-25">官方 · Manus / Grok Bot</p>
+<article class="entry" id="e-26">
   <div class="byline">
-    <div class="tag">POST · MANUS <span class="ch">· OFFICIAL</span></div>
-    <p class="name">Manus <span>@ManusAI</span></p>
+    <p class="name">Manus<span class="src">@ManusAI</span></p>
     <p class="time">北京时间 10-21 23:32</p>
   </div>
   <p class="zh">Manus 现在可以自动完成角色绑定和动画，个人开发者不用学动画也能做 3D 游戏。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>You can now build 3D games with fluid, expressive character animation—without learning to animate each action yourself.</p></div>
   <div class="receipts"><a href="https://x.com/ManusAI/status/2112929941444776138">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-27">
   <div class="byline">
-    <div class="tag">POST · GROK BOT <span class="ch">· OFFICIAL</span></div>
-    <p class="name">Grok Bot <span>@bot</span></p>
+    <p class="name">Grok Bot<span class="src">@bot</span></p>
     <p class="time">北京时间 10-21 04:42</p>
   </div>
   <p class="zh">官方案例：一次故障中，Grok Bot 在约 10 分钟内清掉 204 张相关工单，只需一位工程师批量批准。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>In one incident, it cleared 204 tickets in about 10 minutes, with one engineer approving the batch.</p></div>
   <div class="receipts"><a href="https://x.com/bot/status/2112645531076096330">原帖</a></div>
 </article>
 
-<p class="grp">个人</p>
-<article class="entry">
+<p class="grp" id="g-28">个人</p>
+<article class="entry" id="e-29">
   <div class="byline">
-    <div class="tag">POST · GOOGLE <span class="ch">· GEMINI / AI STUDIO</span></div>
-    <p class="name">Logan Kilpatrick <span>— Member of technical staff, working on Gemini, @GoogleAIStudio, the Gemini API</span></p>
+    <p class="name">Logan Kilpatrick<span class="src">@OfficialLoganK</span></p>
     <p class="time">北京时间 10-21 12:45</p>
   </div>
   <p class="zh">Gemini 4 Argon 上线头 72 小时处理了约 25 万亿 token，他认为市场对智能的需求仍被低估。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>In just the first 72 hours since Gemini 4 Argon launched, we processed ~25 trillion tokens, the demand for intelligence is incredible and still under appreciated!</p></div>
   <div class="receipts"><a href="https://x.com/OfficialLoganK/status/2112767157746688480">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-30">
   <div class="byline">
-    <div class="tag">POST · INDIE <span class="ch">· 8 条原创</span></div>
-    <p class="name">Pieter Levels <span>— @levelsio</span></p>
+    <p class="name">Pieter Levels<span class="src">@levelsio</span></p>
     <p class="time">北京时间 10-21 02:23 – 23:07</p>
   </div>
   <p class="zh">白天他用 Claude Code 做了一个 GTA 圣安地列斯 mod 任务：CJ 要 vibe code 一家创业公司，再去旧金山找投资人融资（1.7 万赞）。还分享了把 Amazon Alexa 改成私人音乐和网络电台的 prompt。</p>
   <p class="zh">晚上他实时跟进 PHP 漏洞：先把所有站点和 VPS 断网，等北京时间 22:00（UTC 14:00）补丁上线，提醒大家有 PHP 站点就先下线；后来又转发 Ubuntu 修复包，说 Cloudflare 的防护只是不完美的权宜之计。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>I pre-emptively disconnected ALL my sites / VPS servers from the web. I&#x27;ll wait for the patch to hit at 2 PM UTC.</p></div>
   <div class="receipts"><a href="https://x.com/levelsio/status/2112686345617547538">GTA 任务</a><a href="https://x.com/levelsio/status/2112887674251976827">PHP 断网</a><a href="https://x.com/levelsio/status/2112923845267210658">Ubuntu 修复</a><a href="https://x.com/levelsio/status/2112618575752229299">Alexa 改造</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-31">
   <div class="byline">
-    <div class="tag">POST · META <span class="ch">· CHIEF AI OFFICER</span></div>
-    <p class="name">Alexandr Wang <span>— chief ai officer @meta, founder Meta Superintelligence Labs, founder @scale_ai</span></p>
+    <p class="name">Alexandr Wang<span class="src">@alexandr_wang</span></p>
     <p class="time">北京时间 10-21 04:22</p>
   </div>
   <p class="zh">配图调侃：muse 正在准备上 Cheeky Pint 节目。另外两条引用帖只有链接，没有正文。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>muse preparing for his cheeky pint appearance</p></div>
   <div class="receipts"><a href="https://x.com/alexandr_wang/status/2112640717428576442">原帖</a><a href="https://x.com/alexandr_wang/status/2112776650240950326">引用帖 1</a><a href="https://x.com/alexandr_wang/status/2112637941986255024">引用帖 2</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-32">
   <div class="byline">
-    <div class="tag">POST · X <span class="ch">· FORMER HEAD OF PRODUCT</span></div>
-    <p class="name">Nikita Bier <span>— former head of product @x</span></p>
+    <p class="name">Nikita Bier<span class="src">@nikitabier</span></p>
     <p class="time">北京时间 10-21 22:22</p>
   </div>
   <p class="zh">如果把数据泄露和垃圾信息造成的损失算进去，AI 短期对 GDP 的贡献可能接近零，他对此不会意外。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>It’s still early but I wouldn’t be surprised if AI’s contribution to GDP is neutral in the short-term when accounting for the financial impact of data breaches and spam.</p></div>
   <div class="receipts"><a href="https://x.com/nikitabier/status/2112912350403760362">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-33">
   <div class="byline">
-    <div class="tag">POST · 中文 <span class="ch">· AI 写作者</span></div>
-    <p class="name">李继刚 <span>— @lijigang</span></p>
+    <p class="name">李继刚<span class="src">@lijigang</span></p>
     <p class="time">北京时间 10-21 11:20</p>
   </div>
   <p class="zh">推荐一篇论文：论文中针对阅读提出了一个非常有意思的取景框架。我们一直有「六经注我」vs「我注六经」的分类……这论文加了一个维度：「AI 替我读」vs「AI 陪我读」。</p>
   <div class="receipts"><a href="https://x.com/lijigang/status/2112745933108850944">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-34">
   <div class="byline">
-    <div class="tag">POST · X / SPACEX / XAI <span class="ch">· 9 条原创 · 节选</span></div>
-    <p class="name">Elon Musk <span>— @elonmusk</span></p>
+    <p class="name">Elon Musk<span class="src">@elonmusk</span></p>
     <p class="time">北京时间 10-21 06:05 / 13:44</p>
   </div>
   <p class="zh">他说 SpaceX 在 2028 年做到 1 万亿美元收入「不再是不可能」。另外两条引用帖分别是「Grok 和 Fable 的诚实反馈」和推荐 Grok @Bot。其余 6 条是政治和媒体评论，按规则也算原创，但和科技无关，本期没有展开。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>As crazy as this sounds, $1T in SpaceX revenue in 2028 is no longer impossible</p></div>
   <div class="receipts"><a href="https://x.com/elonmusk/status/2112666467712073815">SpaceX</a><a href="https://x.com/elonmusk/status/2112781998624555086">Grok/Fable</a><a href="https://x.com/elonmusk/status/2112932127901987225">Try Grok @Bot</a></div>
 </article>
 
-<p class="grp">follow-builders 补充（feed-x.json，已按推文 id 去重）</p>
-<article class="entry">
+<p class="grp" id="g-35">follow-builders 补充</p>
+<article class="entry" id="e-36">
   <div class="byline">
-    <div class="tag">POST · OPENAI <span class="ch">· CEO</span></div>
-    <p class="name">Sam Altman <span>— bio: The mission of OpenAI is to ensure that AGI benefits all of humanity</span></p>
+    <p class="name">Sam Altman<span class="src">@sama</span></p>
     <p class="time">北京时间 10-21 05:10</p>
   </div>
   <p class="zh">他感谢 Aleksander 接下这份工作：面对超级智能，安全与安保的挑战巨大，而 Aleksander 的能力很适合。（引用帖）</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>I am very grateful Aleksander accepted our request to come take this on; the safety and security challenges in front of us as we confront superintelligence are immense…</p></div>
   <div class="receipts"><a href="https://x.com/sama/status/2112652656602923366">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-37">
   <div class="byline">
-    <div class="tag">POST · OPENAI <span class="ch">· CODEX &amp; CHATGPT</span></div>
-    <p class="name">Thibault Sottiaux <span>— Codex &amp; ChatGPT @OpenAI</span></p>
+    <p class="name">Thibault Sottiaux<span class="src">@thsottiaux</span></p>
     <p class="time">北京时间 10-21 09:10 / 01:10</p>
   </div>
   <p class="zh">API 缓存可以保留 12 小时，Codex 和 Work 的登录用户永久缓存，回到旧对话也能保证命中缓存。另一条：约 4 万个账号的用量额度与所选套餐不一致，已经修复，受影响的用户会补发额度。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>You can now cache for 12h in the API and for logged in users across Codex &amp; Work we keep cache forever…</p></div>
   <div class="receipts"><a href="https://x.com/thsottiaux/status/2112712984644784534">缓存</a><a href="https://x.com/thsottiaux/status/2112592264686149749">用量修复</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-38">
   <div class="byline">
-    <div class="tag">POST · VERCEL <span class="ch">· CEO</span></div>
-    <p class="name">Guillermo Rauch <span>— @vercel CEO</span></p>
+    <p class="name">Guillermo Rauch<span class="src">@rauchg</span></p>
     <p class="time">北京时间 10-21 05:33 / 04:12</p>
   </div>
   <p class="zh">Vercel 把驱动 eve 和 Workflows 的持久化基础设施开源，做成和运行时无关的方案，Pi、OpenCode 等 harness 都能用，Claude Code 和 Codex 也可以变得持久、可观测。另一条：AI 能算出你懂与不懂之间的差距，带你循序渐进地学会任何东西。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>We&#x27;re extending the durability infra that powers @eve and Workflows to all harnesses, like Pi and OpenCode.</p></div>
   <div class="receipts"><a href="https://x.com/rauchg/status/2112658577110520122">持久化</a><a href="https://x.com/rauchg/status/2112638107749355867">AI 教育</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-39">
   <div class="byline">
-    <div class="tag">POST · OPENCLAW <span class="ch">· BUILDER</span></div>
-    <p class="name">Peter Steinberger <span>— bio: Polyagentmorous ClawFather … @OpenClaw</span></p>
+    <p class="name">Peter Steinberger<span class="src">@steipete</span></p>
     <p class="time">北京时间 10-21 02:03</p>
   </div>
   <p class="zh">他的分工是 Astra 做规划、Sol 6.1 写代码。他发现让 Astra 在 worktree 里调用 codex cli，比依赖 subagent 好用得多，再加一个 agent 专门挑战和监督。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Astra did the planning, Sol 6.1 did the coding. I found that the workflow of prompting Astra to run codex cli in worktrees works FAR better than relying on subagents.</p></div>
   <div class="receipts"><a href="https://x.com/steipete/status/2112605703219347503">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-40">
   <div class="byline">
-    <div class="tag">POST · SPC <span class="ch">· GENERAL PARTNER</span></div>
-    <p class="name">Aditya Agarwal <span>— General Partner @SPC, Co-Founder @Bevel_Health</span></p>
+    <p class="name">Aditya Agarwal<span class="src">@adityaag</span></p>
     <p class="time">北京时间 10-21 00:19</p>
   </div>
   <p class="zh">他做了一个类比：推理时扩展 → subagent → agent 集群，很像 CPU 线程 → 多核 → 多节点分布式系统，历史在押韵。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Inference time scaling → Subagents → Agent Swarms looks an awful lot like CPU Threads → Multi-core CPUs → Multi-Node Distributed Systems.</p></div>
   <div class="receipts"><a href="https://x.com/adityaag/status/2112579526379401408">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-41">
   <div class="byline">
-    <div class="tag">POST · BOX <span class="ch">· CEO</span></div>
-    <p class="name">Aaron Levie <span>— ceo @box</span></p>
+    <p class="name">Aaron Levie<span class="src">@levie</span></p>
     <p class="time">北京时间 10-21 12:55</p>
   </div>
   <p class="zh">他认为 AI 正在形成一种清晰的形态：专注于特定任务或领域的自主系统，比「LLM 套壳」时代前进了一大步。</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>We clearly have an emerging form factor for what AI might look like … as autonomous systems dedicated to specific tasks or domains.</p></div>
   <div class="receipts"><a href="https://x.com/levie/status/2112769686798832013">原帖</a></div>
 </article>
 
-<article class="entry">
+<article class="entry" id="e-42">
   <div class="byline">
-    <div class="tag">POST · GOOGLE <span class="ch">· VP</span></div>
-    <p class="name">Josh Woodward <span>— VP, @Google @GoogleLabs @GeminiApp @GoogleAIStudio</span></p>
+    <p class="name">Josh Woodward<span class="src">@joshwoodward</span></p>
     <p class="time">北京时间 10-21 06:46 / 06:55</p>
   </div>
   <p class="zh">Gemini App 的 Trusted Tester 社区刚达到一个重要里程碑。他还引用了 Sundar 的话：「我们一定要站在前沿，这是我们的 DNA。」</p>
-  <div class="en-quote"><span class="q-lbl">原文</span><p>Sundar: &quot;We are so committed to being at the frontier. It’s in our DNA.&quot;</p></div>
   <div class="receipts"><a href="https://x.com/joshwoodward/status/2112676777290248675">Trusted Tester</a><a href="https://x.com/joshwoodward/status/2112679011839344651">Sundar</a></div>
 </article>
 
 <p class="note">说明：follow-builders 的 feed 生成于 10-21 14:42，只覆盖到当天下午。没收录的：swyx、Peter Yang（含付费推广）、Matt Turck、Nikunj、Garry Tan、Dan Shipper 的生活类帖子。</p>
   <footer>
-    <div>AI BUILDERS DIGEST · 2026-10-22 · 中文主稿 / EN 原文引用 · 时间均为北京时间</div>
+    <div>AI BUILDERS DIGEST · 2026-10-22 · 时间均为北京时间</div>
     <div>X 数据来自 X API 与 Follow Builders feed · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
   </footer>
 
 </div>
-<script>
-  (function () {
-    var btn = document.getElementById('themeToggle');
-    var root = document.documentElement;
-    btn.addEventListener('click', function () {
-      var cur = root.getAttribute('data-theme');
-      var isDark = cur === 'dark' ||
-        (cur === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    });
-  })();
-</script>
+<script>(function(){var ls=[].slice.call(document.querySelectorAll('.toc a[href^="#"]'));var ts=ls.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+function f(){var k=-1;for(var j=0;j<ts.length;j++){if(ts[j]&&ts[j].getBoundingClientRect().top<120)k=j;}ls.forEach(function(a,j){a.classList.toggle('on',j===k);});
+if(k>=0){var a=ls[k],t=a.closest('.toc');var r=a.getBoundingClientRect(),q=t.getBoundingClientRect();if(r.top<q.top||r.bottom>q.bottom)t.scrollTop+=r.top-q.top-q.height/2;}}
+addEventListener('scroll',f,{passive:true});f();})();</script>
+</body>
+</html>
