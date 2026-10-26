@@ -1,0 +1,623 @@
+<title>AI Builders Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- FB_EXTRA --><style>
+  .masthead { margin-top: 8px; }
+  .dateline { font-size: 15px; letter-spacing: .02em; text-transform: none; gap: 8px 22px; }
+  .dateline b { font-size: 17px; color: var(--ink); }
+  .dateline .num { font-size: 17px; }
+  .lead .kicker { font-size: 13px; letter-spacing: .14em; }
+  .lead .lead-p { font-size: 17px; line-height: 1.75; margin: 0; color: var(--ink); text-wrap: pretty; }
+  .lead .lead-p .mark { background: linear-gradient(transparent 62%, var(--accent-wash) 62%); color: var(--accent-ink); font-weight: 600; }
+  .sec-head .lbl .zh-lbl { font-size: 1.7rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); text-transform: none; margin: 0; }
+  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 17px; }
+  .sec-sum p { margin: 0 0 6px; }
+  .sec-sum ol { margin: 4px 0 0; padding-left: 22px; }
+  .sec-sum .k { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 700; color: var(--accent-ink); margin-right: 4px; }
+  .name .src { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-style: normal; font-weight: 500; font-size: 12px; letter-spacing: .04em; color: var(--ink-faint); margin-left: 8px; white-space: nowrap; }
+  .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
+  .receipts { justify-content: flex-end; }
+  .lst { list-style: none; padding: 0; margin: 6px 0 0; }
+  .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
+  .lst li:first-child { border-top: 0; }
+  .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .lst .t:hover { color: var(--accent-ink); }
+  .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .grp { font-family: "Noto Serif SC", serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-ink); letter-spacing: .04em; margin: 30px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
+  .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
+  .sec-head, .grp, .entry { scroll-margin-top: 24px; }
+  .toc { position: fixed; top: 34px; right: max(20px, calc((100vw - 720px) / 2 - 252px)); width: 220px; max-height: calc(100vh - 68px); overflow-y: auto; z-index: 10; font-family: "Noto Serif SC", serif; }
+  .toc-inner { border-left: 2px solid var(--line-strong); padding: 6px 0 6px 14px; }
+  .toc-head { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .2em; color: var(--ink); margin-bottom: 10px; }
+  .toc-head .rail-zh { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc a { text-decoration: none; color: var(--ink-faint); display: block; }
+  .toc a:hover, .toc a.on { color: var(--accent-ink); }
+  .toc .t-sec { margin: 0 0 10px; }
+  .toc .t-sec > a { font-size: 14px; font-weight: 600; color: var(--ink); padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .toc .t-sec > a .n { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-left: 6px; }
+  .toc .t-grp > a { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); padding: 6px 0 2px; }
+  .toc .t-it > a { font-size: 12px; line-height: 1.45; padding: 3px 0 3px 8px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .toc::-webkit-scrollbar { width: 6px; } .toc::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .toc-m { display: none; }
+  @media (max-width: 1179px) {
+    .toc { display: none; }
+    .toc-m { display: block; margin: 18px 0 0; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); padding: 10px 14px; font-family: "Noto Serif SC", serif; }
+    .toc-m summary { cursor: pointer; font-weight: 600; font-size: 15px; color: var(--ink); }
+    .toc-m ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    .toc-m a { text-decoration: none; color: var(--ink-faint); display: block; padding: 3px 0; }
+    .toc-m .t-sec > a { color: var(--ink); font-weight: 600; } .toc-m .t-grp > a { color: var(--accent-ink); padding-left: 8px; }
+    .toc-m .t-it { display: none; }
+    .sec-head, .grp, .entry { scroll-margin-top: 72px; }
+  }
+</style><!-- /FB_EXTRA -->
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">24 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-10-26.html"><span class="a-date">2026-10-26</span><span class="a-zh">周一 · 2026年10月26日</span></a></li>
+      <li><a href="digest-2026-10-25.html"><span class="a-date">2026-10-25</span><span class="a-zh">周日 · 2026年10月25日</span></a></li>
+      <li><a href="digest-2026-10-24.html"><span class="a-date">2026-10-24</span><span class="a-zh">周六 · 2026年10月24日</span></a></li>
+      <li><a href="digest-2026-10-23.html"><span class="a-date">2026-10-23</span><span class="a-zh">周五 · 2026年10月23日</span></a></li>
+      <li><a href="digest-2026-10-22.html"><span class="a-date">2026-10-22</span><span class="a-zh">周四 · 2026年10月22日</span></a></li>
+      <li><a href="digest-2026-10-21.html"><span class="a-date">2026-10-21</span><span class="a-zh">周三 · 2026年10月21日</span></a></li>
+      <li><a href="digest-2026-10-15.html"><span class="a-date">2026-10-15</span><span class="a-zh">周四 · 2026年10月15日</span></a></li>
+      <li><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+<script src="archive.js"></script>
+<nav class="toc" aria-label="本期目录"><div class="toc-inner"><div class="toc-head"><span class="rail-zh">本期目录</span>Contents</div><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">10</span></a><ul><li class="t-grp"><a href="#g-2">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-3">新闻与投资<span class="n">5</span></a><ul><li class="t-grp"><a href="#g-4">机器之心</a></li><li class="t-grp"><a href="#g-5">极客公园</a></li></ul></li><li class="t-sec"><a href="#s-6">X 动态<span class="n">12</span></a><ul><li class="t-grp"><a href="#g-7">个人</a></li><li class="t-it"><a href="#e-8">Grok Bot 可代打电话</a></li><li class="t-it"><a href="#e-9">X Money：长按点赞打赏 1 美元</a></li><li class="t-it"><a href="#e-10">Claude Code 安全审计周</a></li><li class="t-it"><a href="#e-11">挖洞速度 × 仿人声</a></li><li class="t-it"><a href="#e-12">诗词变字画 Prompt</a></li><li class="t-it"><a href="#e-13">周末 Muse / 关心 Tibo</a></li><li class="t-it"><a href="#e-14">反派总部求售</a></li><li class="t-grp"><a href="#g-15">follow-builders 精选</a></li><li class="t-it"><a href="#e-16">Codex：Day 20 / 午夜 PST 前传播完毕</a></li><li class="t-it"><a href="#e-17">别过度指挥 AI</a></li><li class="t-it"><a href="#e-18">网络防御 token 将 ×1000</a></li><li class="t-it"><a href="#e-19">Latent Space 招编辑</a></li><li class="t-it"><a href="#e-20">Gstack 更新</a></li></ul></li></ul></div></nav>
+<div class="wrap">
+
+  <header class="plate">
+    <div class="masthead">
+      <h1 class="title">AI&nbsp;Builders<br><em>Digest</em></h1>
+    </div>
+
+    <div class="dateline">
+      <span><b>周一 · 2026年10月26日</b></span>
+      <span>收录 2026年10月25日 内容</span>
+      <span><span class="num">15</span> 条网站资讯</span>
+      <span><span class="num">11</span> 个 X 账号有料</span>
+      <span><span class="num">0</span> 期播客</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">Executive Summary</p>
+  <p class="lead-p">实验室官方博客当天静默，主线落在社区与国内报道：HN 最高分是「写软件要更有野心」（736 分），其次是「科技以外看不到 AI 回报」与 Cerebras 万亿参数部署；机器之心跟 Softmax 隐藏 Bug、OpenAI 训练断网与双手操作基准 HandsOn。X 上马斯克推 <span class="mark">Grok Bot</span> 可代打电话、X Money 长按点赞打赏 1 美元，levelsio 用 Claude Code 做整站安全审计，Nikita Bier 预警「模型挖漏洞 + 仿人声」叠加风险。</p>
+</section>
+<details class="toc-m"><summary>本期目录</summary><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">10</span></a><ul><li class="t-grp"><a href="#g-2">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-3">新闻与投资<span class="n">5</span></a><ul><li class="t-grp"><a href="#g-4">机器之心</a></li><li class="t-grp"><a href="#g-5">极客公园</a></li></ul></li><li class="t-sec"><a href="#s-6">X 动态<span class="n">12</span></a><ul><li class="t-grp"><a href="#g-7">个人</a></li><li class="t-grp"><a href="#g-15">follow-builders 精选</a></li></ul></li></ul></details>
+<div class="sec-head" id="s-1">
+  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span></span>
+  <span class="rule"></span><span class="count">10 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> OpenAI / DeepMind / Anthropic / Meta / 美团技术团队当天均无新博文。HN 前十被「软件野心」、AI 回报存疑、Steal My Bitcoin、Goose 语言、创意行业岗位流失与 Cerebras 万亿参数部署占据。</p><ol><li>HN 最高分：We should be more ambitious with the software we build（736 分）</li><li>HN：No signs of AI payoff outside the tech sector（609 分）</li><li>Cerebras：部署万亿参数前沿模型（348 分）</li><li>实验室官方博客窗口内无新文</li></ol></div>
+
+<p class="grp" id="g-2">HN 当天热帖 Top 10</p>
+<ul class="lst">
+    <li><a class="t" href="https://danluu.com/ambitious/">We should be more ambitious with the software we build / 我们写软件应该更有野心</a><span class="m">10-25 05:47 · 736 分 · 677 评论</span></li>
+    <li><a class="t" href="https://www.apollo.com/wealth/insights-news/insights/daily-spark/no-signs-of-ai-payoff-outside-the-tech-sector">No signs of AI payoff outside the tech sector / 科技以外看不到 AI 回报迹象</a><span class="m">10-25 03:47 · 609 分 · 645 评论</span></li>
+    <li><a class="t" href="https://stealmybitcoin.com/">Show HN: Steal My Bitcoin</a><span class="m">10-25 04:30 · 583 分 · 431 评论</span></li>
+    <li><a class="t" href="https://aardappel.github.io/goose/">The Goose Programming Language</a><span class="m">10-25 03:06 · 563 分 · 347 评论</span></li>
+    <li><a class="t" href="https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class">America has lost 200k of jobs in media, film and the arts. How much is AI? / 美国媒体影视艺术流失约 20 万岗位，AI 占多少？</a><span class="m">10-25 07:11 · 500 分 · 536 评论</span></li>
+    <li><a class="t" href="https://www.panamericandispatch.org/p/meta-ignores-brazilian-court-order">Meta Ignores Brazilian Court Order to End Bolsonaro Favoritism / Meta 无视巴西法院要求停止偏袒博索纳罗的裁定</a><span class="m">10-25 17:00 · 466 分 · 323 评论</span></li>
+    <li><a class="t" href="https://www.cerebras.ai/blog/how-we-deploy-trillion-parameter-frontier-models-on-cerebras">Cerebras Deploys Trillion-Parameter AI Models / Cerebras 部署万亿参数 AI 模型</a><span class="m">10-25 09:33 · 348 分 · 127 评论</span></li>
+    <li><a class="t" href="https://blog.roku.com/developer/gitlab-move">Roku developer repositories moved from GitHub to GitLab / Roku 开发者仓库从 GitHub 迁到 GitLab</a><span class="m">10-25 00:06 · 305 分 · 216 评论</span></li>
+    <li><a class="t" href="https://twitter.com/mike64_t/status/2114150399406202896">Samsung running a TensorFlow lite model on 960x540 image to track you / 三星用 TFLite 在 960×540 图像上追踪你</a><span class="m">10-25 18:42 · 285 分 · 1 评论</span></li>
+    <li><a class="t" href="https://arxiv.org/abs/2610.29162">Why is AI generated language so hard to understand? / 为什么 AI 生成的语言这么难懂？</a><span class="m">10-25 02:04 · 241 分 · 197 评论</span></li>
+</ul>
+
+<p class="note">说明：无新文：OpenAI RSS（最新仍是 10-24 Habitat Part II）、DeepMind RSS（最新 10-22 森林制图）、Anthropic /news（最新公开页为 10-22 Agent Skills 捐赠与生命科学客座研究员）、Meta research.meta.ai（最新 Featured 仍是 10-12/10-15 一带，无 10-25）、美团技术团队 RSS 为空。</p>
+<div class="sec-head" id="s-3">
+  <span class="lbl"><span class="zh-lbl">新闻与投资</span></span>
+  <span class="rule"></span><span class="count">5 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 国内主线在机器之心：Softmax 隐藏 Bug（Gemini 立功）、OpenAI 前沿训练断网复盘、复旦主动式助手 A5、清华 HandsOn 双手操作基准。极客早知道提到英国超 6 亿英镑 AI 投资计划，以及 iPhone Duo 首批折叠屏集中投诉。</p><ol><li>Softmax 隐藏 Bug 波及 PyTorch / JAX，Gemini 协助发现</li><li>机器之心复盘 OpenAI 前沿训练全面断网</li><li>清华 HandsOn：66 项任务评测机器人双手能力</li><li>英国宣布超过 6 亿英镑 AI 投资计划（极客早知道）</li></ol></div>
+
+<p class="grp" id="g-4">机器之心</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-25-8">清华团队构建HandsOn灵巧操作基准，66项任务全方位评测机器人双手能力</a><span class="m">10-25 22:02</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-25-6">受够了AI失忆？复旦NLP推出的主动式助手A5越用越懂你，还会主动帮忙</a><span class="m">10-25 21:50</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-25-4">PyTorch、JAX都被点名！Softmax曝出隐藏Bug，Gemini立功</a><span class="m">10-25 21:38</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-10-25-2">数千亿Token测安全，AI仍能「隔墙传话」！OpenAI前沿训练全面断网</a><span class="m">10-25 21:28</span></li>
+</ul>
+
+<p class="grp" id="g-5">极客公园</p>
+<ul class="lst">
+    <li><a class="t" href="http://www.geekpark.net/news/372860">苹果首批折叠屏遭集中投诉；英国宣布超过 6 亿英镑 AI 投资计划；刘慈欣监制《三体·大史》年内开机｜极客早知道</a><span class="m">10-25 08:52</span></li>
+</ul>
+
+<p class="note">说明：量子位：资讯栏目未出现可确认的 10-25 新稿。虎嗅 RSS 窗口内无 10-25 条目（最新已是 10-26）。晚点 LatePost 官网证书校验失败。a16z 点开确认的近期篇均为 10-20 及更早（如 Superhuman Hardware Design 10-20）；YC 博客最新 10-20。极客公园栏目 304/306/307/308/347/2 未解析出额外可确认的 10-25 稿，仅 RSS 早知道一条入选。</p>
+<div class="sec-head" id="s-6">
+  <span class="lbl"><span class="zh-lbl">X 动态</span></span>
+  <span class="rule"></span><span class="count">12 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 官方账号窗口内几乎无原创：OpenAI / ChatGPT / OpenAIDevs / Anthropic / Claude / Google 系 / Meta / Manus / SpaceXSI / Grok / Grok Bot 均未检出原创或引用帖。个人侧主线是 Grok Bot 代打电话、X Money 打赏、levelsio 的 Claude Code 安全周，以及 Nikita Bier 对「挖洞 + 仿人声」的预警。</p><ol><li>马斯克：Grok Bot 可代打电话、记笔记并回传摘要</li><li>X Money：长按点赞可打赏对方 1 美元</li><li>levelsio：用 Claude Code 对全部 VPS 做安全审计，提议每月「安全周」</li><li>Nikita Bier：前沿模型挖洞速度 × 仿人声 = 社会工程完美风暴</li></ol></div>
+
+<p class="grp" id="g-7">个人</p>
+<article class="entry" id="e-8">
+  <div class="byline">
+    <p class="name">Grok Bot 可代打电话<span class="src">@elonmusk</span></p>
+    <p class="time">北京时间 10-25 22:35</p>
+  </div>
+  <p class="zh">称 Grok @Bot 现在可以替你打电话给某人或商家、代为提出请求、记录对方回应，并给你发一则对话摘要；另有帖鼓励把 Bot 当成「超能干的员工」来用。技术向还包括引用超算建设制约清单、以及「想雇多少越来越聪明的人」的 framing；大量其余帖为德州选举政治内容，未逐条收录。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2114365361068138990">原帖</a></div>
+</article>
+
+<article class="entry" id="e-9">
+  <div class="byline">
+    <p class="name">X Money：长按点赞打赏 1 美元<span class="src">@elonmusk</span></p>
+    <p class="time">北京时间 10-25 10:39</p>
+  </div>
+  <p class="zh">宣布将加入「长按点赞 → 通过 X Money 给对方打赏 1 美元」。另有帖分享「AI 发现的灾难级 bug」对话链接（Wild times）。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2114184998651822094">原帖</a></div>
+</article>
+
+<article class="entry" id="e-10">
+  <div class="byline">
+    <p class="name">Claude Code 安全审计周<span class="src">@levelsio</span></p>
+    <p class="time">北京时间 10-25 19:26</p>
+  </div>
+  <p class="zh">称花一整天对每台 VPS / 站点向 Claude Code 下达「做完整安全审计」；已有 Ubuntu 自动安全更新、Tailscale 隔离与 www-data 权限收紧。提议在「营销周」之外每月加一周「安全周」，并认为攻防能力大致同步提升。</p>
+  <div class="receipts"><a href="https://x.com/levelsio/status/2114317753985188201">原帖</a></div>
+</article>
+
+<article class="entry" id="e-11">
+  <div class="byline">
+    <p class="name">挖洞速度 × 仿人声<span class="src">@nikitabier</span></p>
+    <p class="time">北京时间 10-25 15:04</p>
+  </div>
+  <p class="zh">预警：前沿模型正以极快速度发现冷门安全漏洞，同时语音模型已难与真人区分——模型卡住时可以直接伪造来电显示，假装成你的银行客户经理给你打电话。</p>
+  <div class="receipts"><a href="https://x.com/nikitabier/status/2114251829370560631">原帖</a></div>
+</article>
+
+<article class="entry" id="e-12">
+  <div class="byline">
+    <p class="name">诗词变字画 Prompt<span class="src">@lijigang</span></p>
+    <p class="time">北京时间 10-25 12:03</p>
+  </div>
+  <p class="zh">分享辅导孩子学诗词的 Prompt：把一首诗变成只由诗中文字组成的图，字的位置与走向即画面，读者既能看出画面也能顺着路径读完整首诗。另有早间短帖：「清晰表达更像是一种道德，而不是风格。」</p>
+  <div class="receipts"><a href="https://x.com/lijigang/status/2114206178939146352">原帖</a></div>
+</article>
+
+<article class="entry" id="e-13">
+  <div class="byline">
+    <p class="name">周末 Muse / 关心 Tibo<span class="src">@alexandr_wang</span></p>
+    <p class="time">北京时间 10-25 10:17</p>
+  </div>
+  <p class="zh">周末相关帖「my weekend i guess」配视频；另引用关心 Codex 相关的 Thibault（Tibo）状态。凌晨还有 chill lofi muse beats 放松向帖。</p>
+  <div class="receipts"><a href="https://x.com/alexandr_wang/status/2114179464678777268">原帖</a></div>
+</article>
+
+<article class="entry" id="e-14">
+  <div class="byline">
+    <p class="name">反派总部求售<span class="src">@paulg</span></p>
+    <p class="time">北京时间 10-25 08:20</p>
+  </div>
+  <p class="zh">半开玩笑：如果有超级反派在找新总部，22 街有一栋在售。</p>
+  <div class="receipts"><a href="https://x.com/paulg/status/2114149948916703491">原帖</a></div>
+</article>
+
+<p class="grp" id="g-15">follow-builders 精选</p>
+<article class="entry" id="e-16">
+  <div class="byline">
+    <p class="name">Codex：Day 20 / 午夜 PST 前传播完毕<span class="src">@thsottiaux</span></p>
+    <p class="time">北京时间 10-25 11:39</p>
+  </div>
+  <p class="zh">连续发「Day 20 / Rest and reset」「By midnight PST」，随后引用称「It is all propagated. Enjoy some mad codexing tomorrow」，互动很高（引用帖约 1400 赞）。</p>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2114237083652882932">原帖</a></div>
+</article>
+
+<article class="entry" id="e-17">
+  <div class="byline">
+    <p class="name">别过度指挥 AI<span class="src">@rauchg</span></p>
+    <p class="time">北京时间 10-25 04:03</p>
+  </div>
+  <p class="zh">称有时你会过度引导 AI——它其实比你更懂、也更聪明；另帖喜欢模型工程黑话：gate、evidence、culprit、durable、provenance、contract…</p>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2114085432749347086">原帖</a></div>
+</article>
+
+<article class="entry" id="e-18">
+  <div class="byline">
+    <p class="name">网络防御 token 将 ×1000<span class="src">@levie</span></p>
+    <p class="time">北京时间 10-25 10:48</p>
+  </div>
+  <p class="zh">引用称：网络防御相关 agent 很快会跑过比今天多约 1000 倍的 token，因为攻击面扩大、需要持续防御。</p>
+  <div class="receipts"><a href="https://x.com/levie/status/2114187326406766604">原帖</a></div>
+</article>
+
+<article class="entry" id="e-19">
+  <div class="byline">
+    <p class="name">Latent Space 招编辑<span class="src">@swyx</span></p>
+    <p class="time">北京时间 10-25 08:01</p>
+  </div>
+  <p class="zh">为新的 @latentspacepod 编辑团队招写作者、审稿与记者；另称接受兼职与单次客座稿。</p>
+  <div class="receipts"><a href="https://x.com/swyx/status/2114145315196711194">原帖</a></div>
+</article>
+
+<article class="entry" id="e-20">
+  <div class="byline">
+    <p class="name">Gstack 更新<span class="src">@garrytan</span></p>
+    <p class="time">北京时间 10-25 04:24</p>
+  </div>
+  <p class="zh">引用介绍 Gstack 新变化：「What&#x27;s new in Gstack?」</p>
+  <div class="receipts"><a href="https://x.com/garrytan/status/2114090740217499854">原帖</a></div>
+</article>
+
+<p class="note">说明：已按推文 id 与 watchlist 合并 follow-builders feed-x（生成于 10-25 06:39 UTC）。过滤回复与纯转帖。当天无原创/引用帖（API 窗口内 result_count=0）：@AIatMeta、@GoogleDeepMind、@GeminiApp、@GoogleAIStudio、@googledevs、@GoogleAI、@GoogleLabs、@AnthropicAI、@claudeai、@OpenAI、@ChatGPT、@OpenAIDevs、@ManusAI、@SpaceXSI、@grok、@bot、@lexfridman、@OfficialLoganK、@AndrewYNg、@drfeifei、@nagayama_koharu。官方号继续用 @SpaceXSI（@SpaceXAI 404）。播客：feed-podcasts 仅有 10-15 MAD Podcast（Jev / TypeSafe），不在窗口内，本期省略播客分区。</p>
+  <footer>
+    <div>AI BUILDERS DIGEST · 2026-10-26 · 时间均为北京时间</div>
+    <div>X 数据来自 X API 与 Follow Builders feed · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+<script>(function(){var ls=[].slice.call(document.querySelectorAll('.toc a[href^="#"]'));var ts=ls.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+function f(){var k=-1;for(var j=0;j<ts.length;j++){if(ts[j]&&ts[j].getBoundingClientRect().top<120)k=j;}ls.forEach(function(a,j){a.classList.toggle('on',j===k);});
+if(k>=0){var a=ls[k],t=a.closest('.toc');var r=a.getBoundingClientRect(),q=t.getBoundingClientRect();if(r.top<q.top||r.bottom>q.bottom)t.scrollTop+=r.top-q.top-q.height/2;}}
+addEventListener('scroll',f,{passive:true});f();})();</script>
+</body>
+</html>
