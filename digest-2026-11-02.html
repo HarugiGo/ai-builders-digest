@@ -1,0 +1,731 @@
+<title>AI Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- FB_EXTRA --><style>
+  .masthead { margin-top: 8px; }
+  .dateline { font-size: 15px; letter-spacing: .02em; text-transform: none; gap: 8px 22px; }
+  .dateline b { font-size: 17px; color: var(--ink); }
+  .dateline .num { font-size: 17px; }
+  .lead .kicker { font-size: 13px; letter-spacing: .14em; }
+  .lead .lead-p { font-size: 17px; line-height: 1.75; margin: 0; color: var(--ink); text-wrap: pretty; }
+  .lead .lead-p .mark { background: linear-gradient(transparent 62%, var(--accent-wash) 62%); color: var(--accent-ink); font-weight: 600; }
+  .sec-head .lbl .zh-lbl { font-size: 1.7rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); text-transform: none; margin: 0; }
+  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 17px; }
+  .sec-sum p { margin: 0 0 6px; }
+  .sec-sum ol { margin: 4px 0 0; padding-left: 22px; }
+  .sec-sum .k { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 700; color: var(--accent-ink); margin-right: 4px; }
+  .name .src { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-style: normal; font-weight: 500; font-size: 12px; letter-spacing: .04em; color: var(--ink-faint); margin-left: 8px; white-space: nowrap; }
+  .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
+  .receipts { justify-content: flex-end; }
+  .lst { list-style: none; padding: 0; margin: 6px 0 0; }
+  .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
+  .lst li:first-child { border-top: 0; }
+  .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .lst .t:hover { color: var(--accent-ink); }
+  .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .grp { font-family: "Noto Serif SC", serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-ink); letter-spacing: .04em; margin: 30px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
+  .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
+  .sec-head, .grp, .entry { scroll-margin-top: 24px; }
+  .toc { position: fixed; top: 34px; right: max(20px, calc((100vw - 720px) / 2 - 252px)); width: 220px; max-height: calc(100vh - 68px); overflow-y: auto; z-index: 10; font-family: "Noto Serif SC", serif; }
+  .toc-inner { border-left: 2px solid var(--line-strong); padding: 6px 0 6px 14px; }
+  .toc-head { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .2em; color: var(--ink); margin-bottom: 10px; }
+  .toc-head .rail-zh { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc a { text-decoration: none; color: var(--ink-faint); display: block; }
+  .toc a:hover, .toc a.on { color: var(--accent-ink); }
+  .toc .t-sec { margin: 0 0 10px; }
+  .toc .t-sec > a { font-size: 14px; font-weight: 600; color: var(--ink); padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .toc .t-sec > a .n { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-left: 6px; }
+  .toc .t-grp > a { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); padding: 6px 0 2px; }
+  .toc .t-it > a { font-size: 12px; line-height: 1.45; padding: 3px 0 3px 8px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .toc::-webkit-scrollbar { width: 6px; } .toc::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .toc-m { display: none; }
+  @media (max-width: 1179px) {
+    .toc { display: none; }
+    .toc-m { display: block; margin: 18px 0 0; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); padding: 10px 14px; font-family: "Noto Serif SC", serif; }
+    .toc-m summary { cursor: pointer; font-weight: 600; font-size: 15px; color: var(--ink); }
+    .toc-m ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    .toc-m a { text-decoration: none; color: var(--ink-faint); display: block; padding: 3px 0; }
+    .toc-m .t-sec > a { color: var(--ink); font-weight: 600; } .toc-m .t-grp > a { color: var(--accent-ink); padding-left: 8px; }
+    .toc-m .t-it { display: none; }
+    .sec-head, .grp, .entry { scroll-margin-top: 72px; }
+  }
+</style><!-- /FB_EXTRA -->
+<!-- YOHAKU --><style>
+:root{--bg:#f4f1ea;--surface:#f4f1ea;--ink:#23211d;--ink-soft:#23211d;--ink-faint:#8a8478;--line:transparent;--line-strong:transparent;--accent:#23211d;--accent-ink:#23211d;--accent-wash:transparent;--accent-wash-edge:transparent;--shadow:none}
+@media (prefers-color-scheme:dark){:root{--bg:#f4f1ea;--surface:#f4f1ea;--ink:#23211d;--ink-faint:#8a8478}}
+html,body{background:#f4f1ea!important}
+body,body *{font-family:"Noto Serif SC","Noto Serif CJK SC","Songti SC",serif!important;border-color:transparent!important;box-shadow:none!important}
+body{color:#23211d!important;font-size:16px!important;line-height:1.85!important;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px!important}
+/* title: one quiet line */
+.masthead{border:0!important;padding:0!important;margin:56px 0 0!important}
+h1.title{font-family:"Noto Serif SC","Noto Serif CJK SC",serif!important;font-size:30px!important;font-weight:600!important;letter-spacing:.01em!important;line-height:1.2!important}
+h1.title br{display:none}
+h1.title em{font-style:normal!important;color:#23211d!important;font-weight:600!important;margin-left:.25em;font-family:inherit!important}
+.dateline{font-size:13px!important;text-transform:none!important;letter-spacing:.02em!important;color:#8a8478!important;gap:4px 18px!important;padding-top:14px!important}
+.dateline b,.dateline .num{color:#8a8478!important;font-weight:400!important;font-size:13px!important}
+/* summary */
+.lead{background:none!important;border:0!important;padding:0!important;margin:72px 0 0!important}
+.kicker{display:none!important}
+.lead .lead-p,.lead p,.lead h2{font-size:19px!important;line-height:1.95!important;color:#23211d!important;font-weight:400!important}
+.lead .mark{background:none!important;color:#b03a2e!important;font-weight:500!important}
+.lead *{color:#23211d!important;opacity:1!important}.lead .mark{color:#b03a2e!important}
+/* sections */
+.sec-head{margin:120px 0 0!important;display:block!important}
+.sec-head .rule,.sec-head .count{display:none!important}
+.sec-head .lbl .zh-lbl,.sec-head .lbl{font-family:"Noto Serif SC","Noto Serif CJK SC",serif!important;font-size:34px!important;font-weight:600!important;letter-spacing:.12em!important;color:#23211d!important}
+.sec-sum{background:none!important;border:0!important;padding:0!important;margin:24px 0 64px!important;font-size:17px!important;color:#23211d!important}
+.sec-sum .k{display:none!important}
+.sec-sum ol{padding-left:1.2em!important}
+/* entries */
+.entry{padding:0 0 56px!important;border:0!important}
+.name{font-size:17px!important;font-weight:600!important;line-height:1.6!important}
+.name .src{font-size:13px!important;font-weight:400!important;color:#8a8478!important;margin-left:10px!important;letter-spacing:0!important}
+.time{font-size:12px!important;color:#a8a194!important;margin:2px 0 12px!important;font-variant-numeric:tabular-nums}
+.entry p{color:#33302a!important}
+.receipts{gap:14px!important;margin-top:8px!important}
+.receipts a{background:none!important;border:0!important;padding:0!important;color:#23211d!important;font-size:12px!important;text-decoration:none!important}
+.receipts a::before{content:""!important}
+/* rails: lighter, Chinese only */
+.rail-lbl,.toc-head{font-size:0!important}
+.rail-lbl .rail-zh,.toc-head .rail-zh{font-size:12px!important;color:#23211d!important;letter-spacing:.1em!important;font-weight:500!important}
+.rail-count{display:none!important}
+.rail,.toc{font-size:12px!important}
+.a-zh{display:none!important}
+.a-date{color:#8a8478!important;font-size:12px!important;font-weight:400!important;letter-spacing:.02em!important}
+.a-current .a-date{color:#23211d!important}
+.toc-inner{border:0!important;padding:0!important}
+.toc .t-sec>a{font-size:13px!important;font-weight:500!important;border:0!important;color:#23211d!important}
+.toc .t-sec>a .n{display:none!important}
+.toc .t-it>a{color:#8a8478!important;padding-left:0!important}
+.toc a.on{color:#23211d!important}
+a.kw,.zh a.kw{color:inherit!important;text-decoration:none!important;border:0!important;background-image:linear-gradient(rgba(35,33,29,.35),rgba(35,33,29,.35))!important;background-size:100% 1px!important;background-repeat:no-repeat!important;background-position:0 95%!important}a.kw:hover{color:#23211d!important}
+.receipts a:not(:first-child){display:none!important}
+.receipts a:first-child{font-size:0!important}.receipts a:first-child::after{content:"原文";font-size:12px}
+.lead .mark,a.kw:hover{font-weight:600!important}.a-current .a-date{font-weight:600!important}
+.name{font-size:20px!important;font-weight:700!important;color:#1a1814!important;letter-spacing:.02em!important;line-height:1.5!important}
+.name .src{font-size:13px!important;font-weight:400!important}
+.entry p:not(.name):not(.time){font-size:15.5px!important;color:#4a463e!important;font-weight:400!important;line-height:2!important}
+.time{margin:4px 0 16px!important}
+.sec-sum,.sec-sum *{color:#33302a!important}
+.sec-head .lbl .zh-lbl,.sec-head .lbl{font-size:38px!important;font-weight:700!important;color:#1a1814!important}
+h1.title{font-weight:700!important;color:#1a1814!important}
+.mark,.lead .mark{color:#b03a2e!important;background:none!important}
+</style><!-- /YOHAKU -->
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">31 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-11-02.html"><span class="a-date">2026-11-02</span><span class="a-zh">周一 · 2026年11月2日</span></a></li>
+      <li><a href="digest-2026-11-01.html"><span class="a-date">2026-11-01</span><span class="a-zh">周日 · 2026年11月1日</span></a></li>
+      <li><a href="digest-2026-10-31.html"><span class="a-date">2026-10-31</span><span class="a-zh">周六 · 2026年10月31日</span></a></li>
+      <li><a href="digest-2026-10-30.html"><span class="a-date">2026-10-30</span><span class="a-zh">周五 · 2026年10月30日</span></a></li>
+      <li><a href="digest-2026-10-29.html"><span class="a-date">2026-10-29</span><span class="a-zh">周四 · 2026年10月29日</span></a></li>
+      <li><a href="digest-2026-10-28.html"><span class="a-date">2026-10-28</span><span class="a-zh">周三 · 2026年10月28日</span></a></li>
+      <li><a href="digest-2026-10-27.html"><span class="a-date">2026-10-27</span><span class="a-zh">周二 · 2026年10月27日</span></a></li>
+      <li><a href="digest-2026-10-26.html"><span class="a-date">2026-10-26</span><span class="a-zh">周一 · 2026年10月26日</span></a></li>
+      <li><a href="digest-2026-10-25.html"><span class="a-date">2026-10-25</span><span class="a-zh">周日 · 2026年10月25日</span></a></li>
+      <li><a href="digest-2026-10-24.html"><span class="a-date">2026-10-24</span><span class="a-zh">周六 · 2026年10月24日</span></a></li>
+      <li><a href="digest-2026-10-23.html"><span class="a-date">2026-10-23</span><span class="a-zh">周五 · 2026年10月23日</span></a></li>
+      <li><a href="digest-2026-10-22.html"><span class="a-date">2026-10-22</span><span class="a-zh">周四 · 2026年10月22日</span></a></li>
+      <li><a href="digest-2026-10-21.html"><span class="a-date">2026-10-21</span><span class="a-zh">周三 · 2026年10月21日</span></a></li>
+      <li><a href="digest-2026-10-15.html"><span class="a-date">2026-10-15</span><span class="a-zh">周四 · 2026年10月15日</span></a></li>
+      <li><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+<script src="archive.js"></script>
+<nav class="toc" aria-label="本期目录"><div class="toc-inner"><div class="toc-head"><span class="rail-zh">本期目录</span>Contents</div><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">10</span></a><ul><li class="t-grp"><a href="#g-2">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-3">新闻与投资<span class="n">37</span></a><ul><li class="t-grp"><a href="#g-4">量子位</a></li><li class="t-grp"><a href="#g-5">机器之心</a></li><li class="t-grp"><a href="#g-6">极客公园</a></li><li class="t-grp"><a href="#g-7">虎嗅</a></li><li class="t-it"><a href="#e-8">一颗大模型芯片，藏着 Momenta 三年前的判断</a></li></ul></li><li class="t-sec"><a href="#s-9">播客<span class="n">1</span></a><ul><li class="t-it"><a href="#e-10">Using Agents for Long-Horizon Financial Work — Aman Singh, Arca</a></li></ul></li><li class="t-sec"><a href="#s-11">X 动态<span class="n">9</span></a><ul><li class="t-grp"><a href="#g-12">个人</a></li><li class="t-it"><a href="#e-13">X 平均访问时长领先各大社交网站</a></li><li class="t-it"><a href="#e-14">Neuralink 深度探访；Starlink 救援</a></li><li class="t-it"><a href="#e-15">AI 什么都能做了，人还剩下什么可做？</a></li><li class="t-it"><a href="#e-16">意大利拟征退出税：欧洲没钱了</a></li><li class="t-it"><a href="#e-17">高速小型喷气无人机与民航安全</a></li><li class="t-it"><a href="#e-18">Meta Muse 语音和 Grok</a></li><li class="t-it"><a href="#e-19">最不过时的人造物接近永恒</a></li><li class="t-grp"><a href="#g-20">follow-builders 精选</a></li><li class="t-it"><a href="#e-21">检验 AI 用得够不够狠的标准</a></li><li class="t-it"><a href="#e-22">Karpathy 用 medium 档跑 Opus 5.5</a></li></ul></li></ul></div></nav>
+<div class="wrap">
+
+  <header class="plate">
+    <style>.site-switch{display:flex;gap:28px;justify-content:flex-end;margin:0 0 28px}.site-switch a{font:500 13px/1 -apple-system,Helvetica,Arial,sans-serif!important;letter-spacing:.06em!important;text-decoration:none!important;padding:6px 0!important;color:#9a9a9a!important;border-bottom:1.5px solid transparent!important}.site-switch a.on{color:#111!important;border-bottom-color:#111!important}.site-switch a:hover{color:#111!important}</style><nav class="site-switch"><a href="../ai-builders-digest/" class="on">AI Digest</a><a href="../politics-digest/">Politics</a></nav>
+    <div class="masthead">
+      <h1 class="title">AI<br><em>Digest</em></h1>
+    </div>
+
+    <div class="dateline">
+      <span><b>周一 · 2026年11月2日</b></span>
+      <span>收录 2026年11月1日 内容</span>
+      <span><span class="num">47</span> 条网站资讯</span>
+      <span><span class="num">7</span> 个 X 账号有料</span>
+      <span><span class="num">1</span> 期播客</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">Executive Summary</p>
+  <p class="lead-p">当天是周日，大公司官网和官方 X 账号都没有新发布，讨论集中在 AI 产品规则的收紧上：<span class="mark">Claude Code 在 Opus 5.5 的系统提示里禁止复刻已有游戏</span>，量子位和机器之心都做了报道，HN 上也有人反映 Anthropic 封禁涉及训练更大模型的用户；OpenAI 帮助文档显示 <span class="mark">12 月起 ChatGPT 聊天与 Codex 共用一个按 Token 计的额度</span>，机器之心和虎嗅都写了。DeepSeek 公布 Super Agent 架构，极客公园和虎嗅都有解读，极客公园早报还提到苹果重回市值第一、传 Meta 与傅利叶打造 Muse 机器人。HN 当天最热的是 <span class="mark">Karpathy 的 HackerTube</span>（2183 分），swyx 透露他用的是 Opus 5.5 的 medium 档；HN 还有 CVSS 9.8 的 Linux TCP 漏洞和 5 个 Qwen3.8-27B 组队胜过 Fable 5。具身方向，红旗连锁机器人售货项目终止，宇树上市首份季报增收不增利；晚点写 Momenta 系的大模型芯片 X7 Ultra，已出货超 20 万颗。X 上马斯克称 X 平均访问时长领先各大社交网站，levelsio 发视频谈 AI 什么都能做之后人还能做什么，Aaron Levie 说没有 AI 也能做到的事说明 AI 还没用到位。Latent Space 请 Arca 的 Aman Singh 谈用 agent 做长周期理财工作。a16z 和 YC 博客当天没有新文章。</p>
+</section>
+<details class="toc-m"><summary>本期目录</summary><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">10</span></a><ul><li class="t-grp"><a href="#g-2">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-3">新闻与投资<span class="n">37</span></a><ul><li class="t-grp"><a href="#g-4">量子位</a></li><li class="t-grp"><a href="#g-5">机器之心</a></li><li class="t-grp"><a href="#g-6">极客公园</a></li><li class="t-grp"><a href="#g-7">虎嗅</a></li></ul></li><li class="t-sec"><a href="#s-9">播客<span class="n">1</span></a><ul></ul></li><li class="t-sec"><a href="#s-11">X 动态<span class="n">9</span></a><ul><li class="t-grp"><a href="#g-12">个人</a></li><li class="t-grp"><a href="#g-20">follow-builders 精选</a></li></ul></li></ul></details>
+<div class="sec-head" id="s-1">
+  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span></span>
+  <span class="rule"></span><span class="count">10 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> OpenAI、Google DeepMind、Anthropic 和 Meta 的官网当天都没有新文章，美团技术团队 RSS 也为空，本章只有 HN 热帖。HN 当天最热的是 Karpathy 的 HackerTube（2183 分），晚些时候又有人做了图书版 HackerBooks（776 分）。和 AI 直接相关的有：有人反映 Anthropic 封禁涉及训练更大模型的用户（450 分）；5 个 Qwen3.8-27B 组队在 LiveCodeBench Hard 上胜过 Fable 5；巴西法院处罚在诉状里做提示注入的律师。安全方面有 CVSS 9.8 的 Linux TCP 漏洞，以及联想「加密」U 盘其实没加密。</p><ol><li>HN：Karpathy 的 HackerTube，2183 分</li><li>HN：Linux TCP 释放后使用漏洞，CVSS 9.8，694 分</li><li>HN：Anthropic 封禁涉及训练更大模型的用户，450 分</li><li>HN：5 个 Qwen3.8-27B 组队胜过 Fable 5，419 分</li></ol></div>
+
+<p class="grp" id="g-2">HN 当天热帖 Top 10</p>
+<ul class="lst">
+    <li><a class="t" href="https://karpathy.bearblog.dev/hacker-tube/">HackerTube: YouTube built from videos recommended by HN / Karpathy 做了 HackerTube：用 HN 推荐过的视频搭一个 YouTube</a><span class="m">11-01 03:56 · 2183 分 · 530 评论</span></li>
+    <li><a class="t" href="https://hackerbooks.org">Show HN: HackerBooks – HackerTube, but for books mentioned on HN / HackerBooks：HN 上被提到的书，HackerTube 的图书版</a><span class="m">11-01 23:58 · 776 分 · 162 评论</span></li>
+    <li><a class="t" href="https://www.smithsonianmag.com/science-nature/italian-farmer-found-unknown-seeds-attic-with-nothing-lose-planted-them-result-biblical-180989644/">An Italian farmer found some unknown seeds in his attic and planted them / 意大利农民在阁楼发现不明种子，种下去后……</a><span class="m">11-01 06:41 · 754 分 · 197 评论</span></li>
+    <li><a class="t" href="https://atlasum.net/blog/cve-2026-98432-linux-ipv4-tcp-uaf">TCP Use-After-Free: CVE-2026-98432 / CVSS 9.8 / Linux TCP 释放后使用漏洞 CVE-2026-98432，CVSS 9.8</a><span class="m">11-01 03:16 · 694 分 · 324 评论</span></li>
+    <li><a class="t" href="https://www.visitnorway.com/plan-your-trip/travel-tips-a-z/norwegian-scenic-routes/worlds-best-toilets/">Restrooms along the Norwegian Scenic Routes / 挪威国家风景路线沿途的公共厕所</a><span class="m">11-01 18:47 · 667 分 · 388 评论</span></li>
+    <li><a class="t" href="https://twitter.com/jiahaoshao1/status/2116475922190922088">Anthropic blocks users for anything touching training larger models / Anthropic 封禁涉及「训练更大模型」用途的用户</a><span class="m">11-01 03:39 · 450 分 · 250 评论</span></li>
+    <li><a class="t" href="https://github.com/guregodevo/memdoor/tree/main/examples/workflows/team-solve">Memdoor: A team of 5 Qwen3.8-27B models beats Fable 5 on LiveCodeBench Hard / Memdoor：5 个 Qwen3.8-27B 组队，在 LiveCodeBench Hard 上胜过 Fable 5</a><span class="m">11-01 06:46 · 419 分 · 204 评论</span></li>
+    <li><a class="t" href="https://www.thedrive.com/news/my-city-canceled-flocks-contract-flock-ignored-it-so-the-police-chief-unplugged-the-cameras">Police chief unplugs cameras after Flock ignores contract cancellation / Flock 无视合同解约，警察局长亲手拔掉摄像头</a><span class="m">11-01 22:36 · 405 分 · 143 评论</span></li>
+    <li><a class="t" href="https://www.reddit.com/r/technology/comments/1xl2pr3/lenovos_encrypted_fingerprint_usb_drive_is_just/">Lenovo&#x27;s &#x27;encrypted&#x27; fingerprint USB is just an unencrypted SD card in a case / 联想「加密」指纹 U 盘其实是装在壳里的未加密 SD 卡</a><span class="m">11-01 22:34 · 357 分 · 124 评论</span></li>
+    <li><a class="t" href="https://jetstream.security/insights/brazilian-court-sanctions-prompt-injection-filing/">Brazilian Court Sanctions Lawyers for Prompt Injection in Court Filing / 巴西法院因诉状中的提示注入处罚律师</a><span class="m">11-01 10:19 · 310 分 · 195 评论</span></li>
+</ul>
+
+<p class="note">说明：OpenAI、Google DeepMind、Anthropic、Meta 官网在北京时间 11-01 都没有新文章（最新分别是 10-30、10-29、10-28、10-28，均已在往期收录）；美团技术团队 RSS 当天为空。HN 按北京时间 11-01 发帖、按分数取前十，用官方 API 核对，分数与评论数为采集时的数字，只有标题。</p>
+<div class="sec-head" id="s-3">
+  <span class="lbl"><span class="zh-lbl">新闻与投资</span></span>
+  <span class="rule"></span><span class="count">37 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 国内媒体当天的共同话题有三个：一是 Claude Code 在 Opus 5.5 的系统提示里加规则，禁止复刻已有的具体游戏，量子位和机器之心都报道了，虎嗅也谈 AI 抄袭对游戏业的冲击；二是 OpenAI 帮助文档显示 12 月起 Plus、Pro 的 ChatGPT 聊天和 Codex 共用一个按 Token 计的额度，机器之心和虎嗅都写了；三是 DeepSeek 公布 Super Agent 架构，极客公园早报、虎嗅都有解读，极客公园另有 DeepSeek「大肥鱼」AI 账号现象和个人灵光 2.0 实测。极客公园早报还提到苹果重回市值第一、传 Meta 与傅利叶打造 Muse 机器人。具身方向，量子位写红旗连锁机器人售货项目终止，虎嗅写宇树上市首份季报增收不增利。晚点写 Momenta 系的大模型芯片 X7 Ultra。a16z 和 YC 博客当天没有新文章。</p><ol><li>量子位/机器之心：Claude Code 禁止用 Opus 5.5 复刻已有游戏</li><li>虎嗅/机器之心：ChatGPT 与 Codex 12 月起共用 Token 额度</li><li>极客公园：DeepSeek 公布 Super Agent 架构；苹果重回市值第一</li><li>虎嗅：宇树上市首份季报增收不增利</li><li>晚点：Momenta 系 X7 Ultra 大模型芯片，已出货超 20 万颗</li></ol></div>
+
+<p class="grp" id="g-4">量子位</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.qbitai.com/2026/11/507038.html">Claude紧急叫停！暗改Harness禁止逆向游戏</a><span class="m">11-01 21:09</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/507076.html">三年前布局，今年爆火丨西湖大学成立新中心</a><span class="m">11-01 21:28</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/507031.html">清华姚期智团队新作：代数世界模型，让AI像牛顿一样思考</a><span class="m">11-01 16:02</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/506990.html">老牌便利店机器人售货折戟：实验室锤炼上万次，货架前还是摔瓶子</a><span class="m">11-01 15:50</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/506922.html">Jev新成果，再次引爆开源</a><span class="m">11-01 12:18</span></li>
+</ul>
+
+<p class="grp" id="g-5">机器之心</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-01-9">让灾害预报更快转化为行动，浙大联合团队提出多智能体系统MAESTRO</a><span class="m">11-01 20:18</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-01-8">算力的尽头是电力？从第一性原理看AI基础设施</a><span class="m">11-01 20:15</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-01-7">24项真机硬碰硬！不靠大规模机器人预训练，Fysiverse-UniWAM拿下导航、移动操作双第一</a><span class="m">11-01 20:08</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-01-6">Tibo 28连更后，OpenAI合并额度池，计费聊天开始了</a><span class="m">11-01 19:59</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-01-4">具身RSI的真假之争：机器人是在自我进化，还是在反复刷题？</a><span class="m">11-01 19:45</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-01-2">Claude Code悄悄更新：不让Opus 5.5复刻游戏</a><span class="m">11-01 19:21</span></li>
+</ul>
+
+<p class="grp" id="g-6">极客公园</p>
+<ul class="lst">
+    <li><a class="t" href="http://www.geekpark.net/news/373251">性能直升，跨代之作，一加 Ace 7 系列国补到手价2761.65元起</a><span class="m">11-01 22:56</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/373250">一加 Ace 7 Pro 火爆热销：首销销量同比上涨 225%</a><span class="m">11-01 22:55</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/373249">个人灵光 2.0 实测：个人 AI 助理的机会和门槛｜AI 上新</a><span class="m">11-01 18:03</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/373248">DeepSeek，怎么就变成了一条「大肥鱼」</a><span class="m">11-01 17:57</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/373246">Pika 基于 MiniMax H3 开源 H3 Flex，六步实现音视频联合生成</a><span class="m">11-01 12:20</span></li>
+    <li><a class="t" href="http://www.geekpark.net/news/373243">DeepSeek 公布 Super Agent 架构；苹果超越英伟达，重回市值第一；传 Meta 与傅利叶打造 Muse 机器人</a><span class="m">11-01 08:29</span></li>
+</ul>
+
+<p class="grp" id="g-7">虎嗅</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.huxiu.com/article/4902125.html">观察｜AI 把双11的算术题撕了，然后给你出了道证明题</a><span class="m">11-01 23:51</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902119.html">AI算力驱动，科创板光通信24家企业净利增超五成</a><span class="m">11-01 22:07</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902115.html">少有的同时做过Agent、多模态和具身的人</a><span class="m">11-01 21:09</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902107.html">你想过没有：既然按成果付费走不通，那AI靠什么收钱？</a><span class="m">11-01 20:24</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902105.html">DeepSeek开源Agent架构，想让人少给AI打工</a><span class="m">11-01 20:13</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902103.html">宇树上市首份季报：增收不增利，具身智能开始为模型和算力买单</a><span class="m">11-01 20:04</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902093.html">AI抄袭者正在全力毁灭游戏行业</a><span class="m">11-01 19:19</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902046.html">详解Super Agent：会主动干活，更懂何时闭嘴</a><span class="m">11-01 15:14</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4901966.html">跟AI谈恋爱，年轻人图什么？</a><span class="m">11-01 15:02</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902068.html">Agent改写算力账本，CPU不再是AI服务器的配角？</a><span class="m">11-01 14:54</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902064.html">一级市场，不愿聊物理AI了</a><span class="m">11-01 14:18</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902051.html">Tibo28连更后，OpenAI合并额度池，计费聊天开始了</a><span class="m">11-01 12:09</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902042.html">AI的“火”，PCB三季报接住了</a><span class="m">11-01 10:57</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902038.html">股价反弹超60%，宇树能否撑起增长预期？</a><span class="m">11-01 10:15</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902037.html">算上这次的触屏Mac，这些年苹果究竟打了乔布斯多少次脸？</a><span class="m">11-01 10:10</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902024.html">ChatGPT和Codex要共用额度了，无限聊天的时代结束了</a><span class="m">11-01 08:31</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902023.html">从选模型到派任务，我的多Agent 工作流走到哪一步</a><span class="m">11-01 03:20</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902022.html">当Agent 能同时干活，谁来守住人的注意力</a><span class="m">11-01 03:15</span></li>
+    <li><a class="t" href="https://www.huxiu.com/article/4902018.html">请停止赞美技术的“无人化”</a><span class="m">11-01 00:04</span></li>
+</ul>
+
+<article class="entry" id="e-8">
+  <div class="byline">
+    <p class="name">一颗大模型芯片，藏着 Momenta 三年前的判断<span class="src">晚点 LatePost</span></p>
+    <p class="time">11-01 09:11</p>
+  </div>
+  <p class="zh">晚点写 Momenta 系芯片公司 XHEART（新芯航途）10 月 29 日发布的 <a class="kw" href="https://www.latepost.com/news/dj_detail?id=3781">大模型芯片 X7 Ultra</a>：大模型算力 700 TOPS，用超大核 NPU 把原本在多个小核之间百 GB/s 级的数据交换挪到核内以 TB/s 级完成，并为 Transformer 的高频计算加了专用加速单元。官方数据称在量产智驾模型上 NPU 利用率 98.7%，内存带宽消耗比「行业旗舰」降 80%、能效提高 100%。</p>
+  <p class="zh">X7 系列今年 2 月量产，已有 10 款车型量产、出货超 20 万颗，另有 40 多款车型定点，上汽大众是首个量产客户；公司累计融资近 50 亿元。下一代 X9 计划把算力提到 3000 TOPS，2027 年发布。Momenta CEO 曹旭东认为规模化 L4 需要 10B 甚至 100B 参数的模型，通用芯片难以同时满足功耗、车规可靠性和成本，他称之为<a class="kw" href="https://www.latepost.com/news/dj_detail?id=3781">「通用芯片的不可能三角」</a>。</p>
+  <div class="receipts"><a href="https://www.latepost.com/news/dj_detail?id=3781">原文</a></div>
+</article>
+
+<p class="note">说明：虎嗅 RSS 只返回最新 5 条（都是 11-02 的），这里改为逐篇打开虎嗅文章页核对发布时间，只收 AI 与科技相关的；有两个文章号当时打不开，可能有个别遗漏。晚点官网证书校验失败，改用跳过校验的方式读取，11-01 只确认到这一篇。极客公园收录了当天各栏目的全部文章，包括两篇一加手机的硬件新闻。a16z 最新文章是北京时间 10-31 00:00 的 New Founder Archetypes（已在上期收录），YC 博客最新一批是 10-31，当天都没有新文章。</p>
+<div class="sec-head" id="s-9">
+  <span class="lbl"><span class="zh-lbl">播客</span></span>
+  <span class="rule"></span><span class="count">1 期</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> Latent Space 这期在 AI Engineer New York 大会现场录制，请来 Arca 的 AI 平台负责人 Aman Singh，谈怎样用 agent 做持续十天左右的长周期理财工作。</p><ol><li>Aman Singh：AI 不替代理财顾问，替代顾问周围的所有工作</li><li>资金流动、清仓和对客户沟通必须有人审批，安全规则全部是确定性的</li></ol></div>
+
+<article class="entry" id="e-10">
+  <div class="byline">
+    <p class="name">Using Agents for Long-Horizon Financial Work — Aman Singh, Arca<span class="src">Latent Space</span></p>
+    <p class="time">11-01 00:00</p>
+  </div>
+  <p class="zh">Arca 刚融资 6400 万美元，是一家 AI 原生的财富管理公司。Aman Singh 说 Arca 不是 SaaS 公司，而是自己就是这家理财机构；<a class="kw" href="https://www.youtube.com/@LatentSpacePod">AI 不替代顾问，而是替代顾问周围的所有工作</a>，客户不直接和 AI 打交道。模型以 Claude 为主，按任务复杂度给模型分档，税务分析这类任务用最重的一档（Opus 档、Sonnet 档或重型 GPT 模型），后台杂活用低档模型，选型看内部基准而不是外部榜单，自研了与模型无关的 harness，也不打算依赖 Anthropic 的 managed agents，因为不想把记忆和业务知识交给供应商。</p>
+  <p class="zh">他用一个十万美元税单的例子说明分工：分析持仓、找出最优变现方案由 agent 全自动完成，但资金流动、清仓和直接联系客户都必须有人审批。长周期任务靠每位客户的记忆系统和定期「做梦」式反思来接续；每次写数据都有快速的 LLM 校验，入口处检测提示注入，数据外发时用确定性规则加小模型共识防泄露，所有人和 agent 的操作都有变更日志，方便合规审计。他的说法是「agent 提示人比人提示 agent 更多」。</p>
+  <div class="receipts"><a href="https://www.youtube.com/@LatentSpacePod">节目</a></div>
+</article>
+
+<div class="sec-head" id="s-11">
+  <span class="lbl"><span class="zh-lbl">X 动态</span></span>
+  <span class="rule"></span><span class="count">9 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 当天是北京时间周日，名单里的官方账号都没有原创或引用帖，X 动态全部来自个人账号。马斯克引用 Similarweb 数据称 X 平均访问时长领先各大社交网站，并转发 Neuralink 深度探访节目；levelsio 发视频谈 AI 什么都能做之后人还能做什么，又吐槽意大利拟征退出税；Nikita Bier 担心高速小型喷气无人机威胁民航安全；Alexandr Wang 关注 Meta Muse 语音。follow-builders 里，Aaron Levie 提出检验 AI 用得够不够狠的标准，swyx 透露 Karpathy 做 HackerTube 用的是 Opus 5.5 的 medium 档。</p><ol><li>马斯克：X 平均访问时长领先 Instagram、TikTok 等</li><li>levelsio：AI 什么都能做了，人还剩下很多事可做</li><li>Nikita Bier：高速小型喷气无人机威胁民航</li><li>Aaron Levie：没有 AI 也能做到，就是还没用到位</li></ol></div>
+
+<p class="grp" id="g-12">个人</p>
+<article class="entry" id="e-13">
+  <div class="byline">
+    <p class="name">X 平均访问时长领先各大社交网站<span class="src">@elonmusk</span></p>
+    <p class="time">11-01 21:04</p>
+  </div>
+  <p class="zh">马斯克引用 cb_doge 转述的 Similarweb 2026 年 9 月数据——X 的平均网站访问时长超过 Instagram、Reddit、Facebook 和 TikTok——配文 <a class="kw" href="https://x.com/elonmusk/status/2116879037175898424">Anyone with a brain is on 𝕏</a>（约 3.7 万赞）；21:10 又引用每次访问 13 分 25 秒的数字，说 X 追求的是<a class="kw" href="https://x.com/elonmusk/status/2116880652389728748">「长期不后悔的用户时长」</a>（约 5200 赞）。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2116879037175898424">原帖</a></div>
+</article>
+
+<article class="entry" id="e-14">
+  <div class="byline">
+    <p class="name">Neuralink 深度探访；Starlink 救援<span class="src">@elonmusk</span></p>
+    <p class="time">11-01 03:33</p>
+  </div>
+  <p class="zh">马斯克转发科普博主 Cleo Abram 探访 Neuralink 的完整一期节目，配文 <a class="kw" href="https://x.com/elonmusk/status/2116614579136635120">Neuralink deep dive</a>，节目近距离展示了新的 R1 手术机器人（约 1.9 万赞）。当天他还两次引用 Starlink 帮助救援的帖子，配文 <a class="kw" href="https://x.com/elonmusk/status/2116881187394445633">Starlink saves lives</a>。其余多为政治评论和一两个字的回应，未收。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2116614579136635120">原帖</a></div>
+</article>
+
+<article class="entry" id="e-15">
+  <div class="byline">
+    <p class="name">AI 什么都能做了，人还剩下什么可做？<span class="src">@levelsio</span></p>
+    <p class="time">11-01 18:44</p>
+  </div>
+  <p class="zh">levelsio 发了一段约 14 分钟的视频，题为 <a class="kw" href="https://x.com/levelsio/status/2116843791214629021">What’s left to do when AI can build everything?</a>，回答是「其实还有很多」，并引用了自己 10 月那条「软件已死，进入人人自建个人软件的时代」的帖子（约 3300 赞）。22:59 他补充说，如果有人在做有意思的事，他愿意飞过去一起散步拍视频。</p>
+  <div class="receipts"><a href="https://x.com/levelsio/status/2116843791214629021">原帖</a></div>
+</article>
+
+<article class="entry" id="e-16">
+  <div class="byline">
+    <p class="name">意大利拟征退出税：欧洲没钱了<span class="src">@levelsio</span></p>
+    <p class="time">11-01 02:53</p>
+  </div>
+  <p class="zh">levelsio 引用意大利拟对 2027 年起离境、相关资产 80 万欧元以上者的未实现投资收益征 26% 退出税的消息，说继法国的「Gigabyte 税」、德国的 AI 税之后，<a class="kw" href="https://x.com/levelsio/status/2116604593282965549">意大利又提出退出税</a>，「欧洲没钱了」。约 2100 赞。</p>
+  <div class="receipts"><a href="https://x.com/levelsio/status/2116604593282965549">原帖</a></div>
+</article>
+
+<article class="entry" id="e-17">
+  <div class="byline">
+    <p class="name">高速小型喷气无人机与民航安全<span class="src">@nikitabier</span></p>
+    <p class="time">11-01 08:11</p>
+  </div>
+  <p class="zh">X 产品负责人 Nikita Bier 引用一条「大学宿舍项目 Reaper 以 790 km/h 携带 1.2 kg 载荷，打破小型喷气无人机速度纪录」的帖子，说<a class="kw" href="https://x.com/nikitabier/status/2116684478878003708">安全的商业航空已进入最后几局</a>：这类东西一旦落入坏人手里，会被用来攻击从 JFK 起飞的每一架航班。约 1.2 万赞。</p>
+  <div class="receipts"><a href="https://x.com/nikitabier/status/2116684478878003708">原帖</a></div>
+</article>
+
+<article class="entry" id="e-18">
+  <div class="byline">
+    <p class="name">Meta Muse 语音和 Grok<span class="src">@alexandr_wang</span></p>
+    <p class="time">11-01 06:07</p>
+  </div>
+  <p class="zh">Meta 的 Alexandr Wang 用三个表情引用了一条称 <a class="kw" href="https://x.com/alexandr_wang/status/2116653318265291253">Meta Muse 语音</a> 「好用到不行」、10 月 24 日已悄悄上线的帖子（约 460 赞）；12:32 他又发了三张截图，配文 <a class="kw" href="https://x.com/alexandr_wang/status/2116750296735203556">grok might be the most truth-seeking ai after all</a>（约 4100 赞）。</p>
+  <div class="receipts"><a href="https://x.com/alexandr_wang/status/2116653318265291253">原帖</a></div>
+</article>
+
+<article class="entry" id="e-19">
+  <div class="byline">
+    <p class="name">最不过时的人造物接近永恒<span class="src">@paulg</span></p>
+    <p class="time">11-01 22:06</p>
+  </div>
+  <p class="zh">Paul Graham 说有些人造物明显过时，既然能更过时，也就能更不过时，<a class="kw" href="https://x.com/paulg/status/2116894630662807759">最不过时的人造物</a>即使不是永恒也很接近了（约 170 赞）；20:06 他还说如今最时髦的发型，以后在照片里多半会显得可笑。</p>
+  <div class="receipts"><a href="https://x.com/paulg/status/2116894630662807759">原帖</a></div>
+</article>
+
+<p class="grp" id="g-20">follow-builders 精选</p>
+<article class="entry" id="e-21">
+  <div class="byline">
+    <p class="name">检验 AI 用得够不够狠的标准<span class="src">@levie</span></p>
+    <p class="time">11-01 06:02</p>
+  </div>
+  <p class="zh">Box CEO Aaron Levie 说，大约半年前 AI 最多让你把原本能做的事做得快一点，现在和 AI 一起干活的产出应该大大超过以前：原型更完整、架构性能更好、调研覆盖所有事实。他给出的简单标准是：<a class="kw" href="https://x.com/levie/status/2116652002830963114">如果没有 AI 你也能做到，那多半还没把它用到位</a>。约 620 赞。</p>
+  <div class="receipts"><a href="https://x.com/levie/status/2116652002830963114">原帖</a></div>
+</article>
+
+<article class="entry" id="e-22">
+  <div class="byline">
+    <p class="name">Karpathy 用 medium 档跑 Opus 5.5<span class="src">@swyx</span></p>
+    <p class="time">11-01 14:03</p>
+  </div>
+  <p class="zh">swyx 说 <a class="kw" href="https://x.com/swyx/status/2116773135668404286">Karpathy 做 HackerTube 用的是 Opus 5.5 的 medium 档</a>，认为对推理强度档位的争论就像「Tab 还是空格」，按自己口味调就行；05:24 他还主张低强度加批评循环比堆最高档更划算（适合吞吐受限的人）。</p>
+  <div class="receipts"><a href="https://x.com/swyx/status/2116773135668404286">原帖</a></div>
+</article>
+
+<p class="note">说明：X 数据来自 X API，范围是北京时间 11-01 00:00 到 24:00，只收原创帖和引用帖，过滤回复与纯转帖，点赞数为采集时的数字；follow-builders feed（生成于北京时间 11-01 14:26，只覆盖到当天下午）按帖子 id 与 X API 结果去重后合并，没有重叠，只挑了有信息量的。马斯克当天原创和引用帖很多，这里只收了与 X、Neuralink、Starlink 相关的几条。当天没有原创或引用帖（官方号全部如此，回复已过滤）：@AIatMeta、@GoogleDeepMind、@GeminiApp、@GoogleAIStudio、@googledevs、@GoogleAI、@GoogleLabs、@AnthropicAI、@claudeai、@OpenAI、@ChatGPT、@OpenAIDevs、@ManusAI、@SpaceXSI、@grok、@bot，以及 @lexfridman、@OfficialLoganK、@AndrewYNg、@drfeifei、@lijigang、@nagayama_koharu。</p>
+  <footer>
+    <div>AI DIGEST · 2026-11-02 · 时间均为北京时间</div>
+    <div>X 数据来自 X API 与 Follow Builders feed · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+<script>(function(){var ls=[].slice.call(document.querySelectorAll('.toc a[href^="#"]'));var ts=ls.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+function f(){var k=-1;for(var j=0;j<ts.length;j++){if(ts[j]&&ts[j].getBoundingClientRect().top<120)k=j;}ls.forEach(function(a,j){a.classList.toggle('on',j===k);});
+if(k>=0){var a=ls[k],t=a.closest('.toc');var r=a.getBoundingClientRect(),q=t.getBoundingClientRect();if(r.top<q.top||r.bottom>q.bottom)t.scrollTop+=r.top-q.top-q.height/2;}}
+addEventListener('scroll',f,{passive:true});f();})();</script>
+</body>
+</html>
