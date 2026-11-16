@@ -1,0 +1,802 @@
+<title>AI Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- FB_EXTRA --><style>
+  .masthead { margin-top: 8px; }
+  .dateline { font-size: 15px; letter-spacing: .02em; text-transform: none; gap: 8px 22px; }
+  .dateline b { font-size: 17px; color: var(--ink); }
+  .dateline .num { font-size: 17px; }
+  .lead .kicker { font-size: 13px; letter-spacing: .14em; }
+  .lead .lead-p { font-size: 17px; line-height: 1.75; margin: 0; color: var(--ink); text-wrap: pretty; }
+  .lead .lead-p .mark { background: linear-gradient(transparent 62%, var(--accent-wash) 62%); color: var(--accent-ink); font-weight: 600; }
+  .sec-head .lbl .zh-lbl { font-size: 1.7rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); text-transform: none; margin: 0; }
+  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 17px; }
+  .sec-sum p { margin: 0 0 6px; }
+  .sec-sum ol { margin: 4px 0 0; padding-left: 22px; }
+  .sec-sum .k { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 700; color: var(--accent-ink); margin-right: 4px; }
+  .name .src { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-style: normal; font-weight: 500; font-size: 12px; letter-spacing: .04em; color: var(--ink-faint); margin-left: 8px; white-space: nowrap; }
+  .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
+  .receipts { justify-content: flex-end; }
+  .lst { list-style: none; padding: 0; margin: 6px 0 0; }
+  .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
+  .lst li:first-child { border-top: 0; }
+  .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .lst .t:hover { color: var(--accent-ink); }
+  .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .grp { font-family: "Noto Serif SC", serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-ink); letter-spacing: .04em; margin: 30px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
+  .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
+  .sec-head, .grp, .entry { scroll-margin-top: 24px; }
+  .toc { position: fixed; top: 34px; right: max(20px, calc((100vw - 720px) / 2 - 252px)); width: 220px; max-height: calc(100vh - 68px); overflow-y: auto; z-index: 10; font-family: "Noto Serif SC", serif; }
+  .toc-inner { border-left: 2px solid var(--line-strong); padding: 6px 0 6px 14px; }
+  .toc-head { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .2em; color: var(--ink); margin-bottom: 10px; }
+  .toc-head .rail-zh { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc a { text-decoration: none; color: var(--ink-faint); display: block; }
+  .toc a:hover, .toc a.on { color: var(--accent-ink); }
+  .toc .t-sec { margin: 0 0 10px; }
+  .toc .t-sec > a { font-size: 14px; font-weight: 600; color: var(--ink); padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .toc .t-sec > a .n { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-left: 6px; }
+  .toc .t-grp > a { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); padding: 6px 0 2px; }
+  .toc .t-it > a { font-size: 12px; line-height: 1.45; padding: 3px 0 3px 8px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .toc::-webkit-scrollbar { width: 6px; } .toc::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .toc-m { display: none; }
+  @media (max-width: 1179px) {
+    .toc { display: none; }
+    .toc-m { display: block; margin: 18px 0 0; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); padding: 10px 14px; font-family: "Noto Serif SC", serif; }
+    .toc-m summary { cursor: pointer; font-weight: 600; font-size: 15px; color: var(--ink); }
+    .toc-m ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    .toc-m a { text-decoration: none; color: var(--ink-faint); display: block; padding: 3px 0; }
+    .toc-m .t-sec > a { color: var(--ink); font-weight: 600; } .toc-m .t-grp > a { color: var(--accent-ink); padding-left: 8px; }
+    .toc-m .t-it { display: none; }
+    .sec-head, .grp, .entry { scroll-margin-top: 72px; }
+  }
+</style><!-- /FB_EXTRA -->
+<!-- YOHAKU --><style>
+:root{--bg:#f4f1ea;--surface:#f4f1ea;--ink:#23211d;--ink-soft:#23211d;--ink-faint:#8a8478;--line:transparent;--line-strong:transparent;--accent:#23211d;--accent-ink:#23211d;--accent-wash:transparent;--accent-wash-edge:transparent;--shadow:none}
+@media (prefers-color-scheme:dark){:root{--bg:#f4f1ea;--surface:#f4f1ea;--ink:#23211d;--ink-faint:#8a8478}}
+html,body{background:#f4f1ea!important}
+body,body *{font-family:"Noto Serif SC","Noto Serif CJK SC","Songti SC",serif!important;border-color:transparent!important;box-shadow:none!important}
+body{color:#23211d!important;font-size:16px!important;line-height:1.85!important;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px!important}
+/* title: one quiet line */
+.masthead{border:0!important;padding:0!important;margin:56px 0 0!important}
+h1.title{font-family:"Noto Serif SC","Noto Serif CJK SC",serif!important;font-size:30px!important;font-weight:600!important;letter-spacing:.01em!important;line-height:1.2!important}
+h1.title br{display:none}
+h1.title em{font-style:normal!important;color:#23211d!important;font-weight:600!important;margin-left:.25em;font-family:inherit!important}
+.dateline{font-size:13px!important;text-transform:none!important;letter-spacing:.02em!important;color:#8a8478!important;gap:4px 18px!important;padding-top:14px!important}
+.dateline b,.dateline .num{color:#8a8478!important;font-weight:400!important;font-size:13px!important}
+/* summary */
+.lead{background:none!important;border:0!important;padding:0!important;margin:72px 0 0!important}
+.kicker{display:none!important}
+.lead .lead-p,.lead p,.lead h2{font-size:19px!important;line-height:1.95!important;color:#23211d!important;font-weight:400!important}
+.lead .mark{background:none!important;color:#b03a2e!important;font-weight:500!important}
+.lead *{color:#23211d!important;opacity:1!important}.lead .mark{color:#b03a2e!important}
+/* sections */
+.sec-head{margin:120px 0 0!important;display:block!important}
+.sec-head .rule,.sec-head .count{display:none!important}
+.sec-head .lbl .zh-lbl,.sec-head .lbl{font-family:"Noto Serif SC","Noto Serif CJK SC",serif!important;font-size:34px!important;font-weight:600!important;letter-spacing:.12em!important;color:#23211d!important}
+.sec-sum{background:none!important;border:0!important;padding:0!important;margin:24px 0 64px!important;font-size:17px!important;color:#23211d!important}
+.sec-sum .k{display:none!important}
+.sec-sum ol{padding-left:1.2em!important}
+/* entries */
+.entry{padding:0 0 56px!important;border:0!important}
+.name{font-size:17px!important;font-weight:600!important;line-height:1.6!important}
+.name .src{font-size:13px!important;font-weight:400!important;color:#8a8478!important;margin-left:10px!important;letter-spacing:0!important}
+.time{font-size:12px!important;color:#a8a194!important;margin:2px 0 12px!important;font-variant-numeric:tabular-nums}
+.entry p{color:#33302a!important}
+.receipts{gap:14px!important;margin-top:8px!important}
+.receipts a{background:none!important;border:0!important;padding:0!important;color:#23211d!important;font-size:12px!important;text-decoration:none!important}
+.receipts a::before{content:""!important}
+/* rails: lighter, Chinese only */
+.rail-lbl,.toc-head{font-size:0!important}
+.rail-lbl .rail-zh,.toc-head .rail-zh{font-size:12px!important;color:#23211d!important;letter-spacing:.1em!important;font-weight:500!important}
+.rail-count{display:none!important}
+.rail,.toc{font-size:12px!important}
+.a-zh{display:none!important}
+.a-date{color:#8a8478!important;font-size:12px!important;font-weight:400!important;letter-spacing:.02em!important}
+.a-current .a-date{color:#23211d!important}
+.toc-inner{border:0!important;padding:0!important}
+.toc .t-sec>a{font-size:13px!important;font-weight:500!important;border:0!important;color:#23211d!important}
+.toc .t-sec>a .n{display:none!important}
+.toc .t-it>a{color:#8a8478!important;padding-left:0!important}
+.toc a.on{color:#23211d!important}
+a.kw,.zh a.kw{color:inherit!important;text-decoration:none!important;border:0!important;background-image:linear-gradient(rgba(35,33,29,.35),rgba(35,33,29,.35))!important;background-size:100% 1px!important;background-repeat:no-repeat!important;background-position:0 95%!important}a.kw:hover{color:#23211d!important}
+.receipts a:not(:first-child){display:none!important}
+.receipts a:first-child{font-size:0!important}.receipts a:first-child::after{content:"原文";font-size:12px}
+.lead .mark,a.kw:hover{font-weight:600!important}.a-current .a-date{font-weight:600!important}
+.name{font-size:20px!important;font-weight:700!important;color:#1a1814!important;letter-spacing:.02em!important;line-height:1.5!important}
+.name .src{font-size:13px!important;font-weight:400!important}
+.entry p:not(.name):not(.time){font-size:15.5px!important;color:#4a463e!important;font-weight:400!important;line-height:2!important}
+.time{margin:4px 0 16px!important}
+.sec-sum,.sec-sum *{color:#33302a!important}
+.sec-head .lbl .zh-lbl,.sec-head .lbl{font-size:38px!important;font-weight:700!important;color:#1a1814!important}
+h1.title{font-weight:700!important;color:#1a1814!important}
+.mark,.lead .mark{color:#b03a2e!important;background:none!important}
+</style><!-- /YOHAKU -->
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">46 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-11-17.html"><span class="a-date">2026-11-17</span><span class="a-zh">周二 · 2026年11月17日</span></a></li>
+      <li><a href="digest-2026-11-16.html"><span class="a-date">2026-11-16</span><span class="a-zh">周一 · 2026年11月16日</span></a></li>
+      <li><a href="digest-2026-11-15.html"><span class="a-date">2026-11-15</span><span class="a-zh">周日 · 2026年11月15日</span></a></li>
+      <li><a href="digest-2026-11-14.html"><span class="a-date">2026-11-14</span><span class="a-zh">周六 · 2026年11月14日</span></a></li>
+      <li><a href="digest-2026-11-13.html"><span class="a-date">2026-11-13</span><span class="a-zh">周五 · 2026年11月13日</span></a></li>
+      <li><a href="digest-2026-11-12.html"><span class="a-date">2026-11-12</span><span class="a-zh">周四 · 2026年11月12日</span></a></li>
+      <li><a href="digest-2026-11-11.html"><span class="a-date">2026-11-11</span><span class="a-zh">周三 · 2026年11月11日</span></a></li>
+      <li><a href="digest-2026-11-10.html"><span class="a-date">2026-11-10</span><span class="a-zh">周二 · 2026年11月10日</span></a></li>
+      <li><a href="digest-2026-11-09.html"><span class="a-date">2026-11-09</span><span class="a-zh">周一 · 2026年11月9日</span></a></li>
+      <li><a href="digest-2026-11-08.html"><span class="a-date">2026-11-08</span><span class="a-zh">周日 · 2026年11月8日</span></a></li>
+      <li><a href="digest-2026-11-07.html"><span class="a-date">2026-11-07</span><span class="a-zh">周六 · 2026年11月7日</span></a></li>
+      <li><a href="digest-2026-11-06.html"><span class="a-date">2026-11-06</span><span class="a-zh">周五 · 2026年11月6日</span></a></li>
+      <li><a href="digest-2026-11-05.html"><span class="a-date">2026-11-05</span><span class="a-zh">周四 · 2026年11月5日</span></a></li>
+      <li><a href="digest-2026-11-04.html"><span class="a-date">2026-11-04</span><span class="a-zh">周三 · 2026年11月4日</span></a></li>
+      <li><a href="digest-2026-11-03.html"><span class="a-date">2026-11-03</span><span class="a-zh">周二 · 2026年11月3日</span></a></li>
+      <li><a href="digest-2026-11-02.html"><span class="a-date">2026-11-02</span><span class="a-zh">周一 · 2026年11月2日</span></a></li>
+      <li><a href="digest-2026-11-01.html"><span class="a-date">2026-11-01</span><span class="a-zh">周日 · 2026年11月1日</span></a></li>
+      <li><a href="digest-2026-10-31.html"><span class="a-date">2026-10-31</span><span class="a-zh">周六 · 2026年10月31日</span></a></li>
+      <li><a href="digest-2026-10-30.html"><span class="a-date">2026-10-30</span><span class="a-zh">周五 · 2026年10月30日</span></a></li>
+      <li><a href="digest-2026-10-29.html"><span class="a-date">2026-10-29</span><span class="a-zh">周四 · 2026年10月29日</span></a></li>
+      <li><a href="digest-2026-10-28.html"><span class="a-date">2026-10-28</span><span class="a-zh">周三 · 2026年10月28日</span></a></li>
+      <li><a href="digest-2026-10-27.html"><span class="a-date">2026-10-27</span><span class="a-zh">周二 · 2026年10月27日</span></a></li>
+      <li><a href="digest-2026-10-26.html"><span class="a-date">2026-10-26</span><span class="a-zh">周一 · 2026年10月26日</span></a></li>
+      <li><a href="digest-2026-10-25.html"><span class="a-date">2026-10-25</span><span class="a-zh">周日 · 2026年10月25日</span></a></li>
+      <li><a href="digest-2026-10-24.html"><span class="a-date">2026-10-24</span><span class="a-zh">周六 · 2026年10月24日</span></a></li>
+      <li><a href="digest-2026-10-23.html"><span class="a-date">2026-10-23</span><span class="a-zh">周五 · 2026年10月23日</span></a></li>
+      <li><a href="digest-2026-10-22.html"><span class="a-date">2026-10-22</span><span class="a-zh">周四 · 2026年10月22日</span></a></li>
+      <li><a href="digest-2026-10-21.html"><span class="a-date">2026-10-21</span><span class="a-zh">周三 · 2026年10月21日</span></a></li>
+      <li><a href="digest-2026-10-15.html"><span class="a-date">2026-10-15</span><span class="a-zh">周四 · 2026年10月15日</span></a></li>
+      <li><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+<script src="archive.js"></script>
+<nav class="toc" aria-label="本期目录"><div class="toc-inner"><div class="toc-head"><span class="rail-zh">本期目录</span>Contents</div><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">17</span></a><ul><li class="t-it"><a href="#e-2">Our new blog for science / A step toward defining the Standard Model on a lattice</a></li><li class="t-it"><a href="#e-3">More ways to move care forward with ChatGPT for Healthcare</a></li><li class="t-it"><a href="#e-4">Our first phase of embedded assessments</a></li><li class="t-it"><a href="#e-5">LVMH’s Media Division announces strategic partnership with OpenAI</a></li><li class="t-it"><a href="#e-6">Science at the Frontier: How scientists use ChatGPT</a></li><li class="t-it"><a href="#e-7">The King’s Trust and OpenAI launch £1m partnership</a></li><li class="t-it"><a href="#e-8">At Holiday Extras, dots get to work before anyone asks</a></li><li class="t-grp"><a href="#g-9">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-10">新闻与投资<span class="n">30</span></a><ul><li class="t-grp"><a href="#g-11">量子位</a></li><li class="t-grp"><a href="#g-12">机器之心</a></li><li class="t-grp"><a href="#g-13">极客公园</a></li></ul></li><li class="t-sec"><a href="#s-14">X 动态<span class="n">12</span></a><ul><li class="t-grp"><a href="#g-15">个人</a></li><li class="t-it"><a href="#e-16">李飞飞：World Labs 团队加入 AMD</a></li><li class="t-it"><a href="#e-17">Musk：Starship V4 约 70 米长，发动机加到 9 台</a></li><li class="t-it"><a href="#e-18">Musk：Ship 42 热盾看起来很好，数周内可再飞</a></li><li class="t-it"><a href="#e-19">Musk：Grok Bot 几乎什么都能做</a></li><li class="t-it"><a href="#e-20">Alexandr Wang：Muse 可以替你打电话</a></li><li class="t-it"><a href="#e-21">Paul Graham：限制因素不是投资，是创始人能力</a></li><li class="t-it"><a href="#e-22">levelsio：欧洲人最适应后 AGI 时代，因为已经习惯不工作</a></li><li class="t-grp"><a href="#g-23">官方</a></li><li class="t-it"><a href="#e-24">OpenAI：科学博客首篇上线</a></li><li class="t-grp"><a href="#g-25">follow-builders 精选</a></li><li class="t-it"><a href="#e-26">Thibault Sottiaux：Codex 可能已修好「model at capacity」报错</a></li><li class="t-it"><a href="#e-27">Guillermo Rauch：发布 xeet，用 Rust/wasm 渲染 X 帖</a></li><li class="t-it"><a href="#e-28">Peter Yang：Anthropic 设计师谈怎样避免 Claude 默认视觉风格</a></li><li class="t-it"><a href="#e-29">Dan Shipper：会随使用变好的 compounding skills</a></li></ul></li></ul></div></nav>
+<div class="wrap">
+  <style>p.disclaimer{margin:24px 0 0;font-size:13px;line-height:1.7;letter-spacing:.04em;font-weight:400;color:#6f695e;background:none;border:0;padding:0}</style>
+  <p class="disclaimer">以下内容均为 Grok AI 生成，不代表个人政治立场。</p>
+  <header class="plate">
+    <style>.site-switch{display:flex;gap:28px;justify-content:flex-end;margin:0 0 28px}.site-switch a{font:500 13px/1 -apple-system,Helvetica,Arial,sans-serif!important;letter-spacing:.06em!important;text-decoration:none!important;padding:6px 0!important;color:#9a9a9a!important;border-bottom:1.5px solid transparent!important}.site-switch a.on{color:#111!important;border-bottom-color:#111!important}.site-switch a:hover{color:#111!important}</style><nav class="site-switch"><a href="../ai-builders-digest/" class="on">AI Digest</a><a href="../social-digest/">Social Digest</a><a href="../reading-digest/">Reading Digest</a><a href="../pm-digest/">PM Digest</a><a href="../fde-digest/">FDE Digest</a></nav>
+    <div class="masthead">
+      <h1 class="title">AI<br><em>Digest</em></h1>
+    </div>
+
+    <div class="dateline">
+      <span><b>周二 · 2026年11月17日</b></span>
+      <span>收录 2026年11月16日 内容</span>
+      <span><span class="num">47</span> 条网站资讯</span>
+      <span><span class="num">10</span> 个 X 账号有料</span>
+      <span><span class="num">0</span> 期播客</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">Executive Summary</p>
+  <p class="lead-p">周一最重要的产品发布是阿里的<span class="mark">Qwen4-Max</span>：总参数 2.4T，采用稀疏注意力 MoE、激活 71B，具备原生视觉和百万上下文，智能体与编程评测进入领先梯队，已上线千问 API，中小尺寸还将开源；它同时占据 HN 当天热帖榜首，量子位、机器之心和极客公园都做了报道。人事上，英国《金融时报》称<span class="mark">黄仁勋正考虑重返英伟达担任 CEO</span>，盟友在向董事会施压，量子位、机器之心和极客早知道都在跟进；当天晚些时候，AMD CEO 苏姿丰发帖欢迎<span class="mark">李飞飞及 World Labs 团队加入 AMD</span>，李飞飞引用致谢。OpenAI 则新开<span class="mark">科学博客</span>，首篇是物理学家 Nathaniel Craig 与 GPT-6 Astra 合作给出标准模型的格点定义候选，还公布了 1800 多名科学家使用 ChatGPT 的调研、与 LVMH 传媒的合作、四家机构的嵌入式评估，以及 ChatGPT for Healthcare 的 computer-use agent 和 20 多个新插件。此外，量子位报道谷歌加速整柜 TPU 外售；HN 上微软 365 故障与酒店氯气泄漏、uBlock Origin 的通用 XSS 也很高。本期无播客，Anthropic、DeepMind、Meta、a16z、YC 当天无新稿。</p>
+</section>
+<details class="toc-m"><summary>本期目录</summary><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">17</span></a><ul><li class="t-grp"><a href="#g-9">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-10">新闻与投资<span class="n">30</span></a><ul><li class="t-grp"><a href="#g-11">量子位</a></li><li class="t-grp"><a href="#g-12">机器之心</a></li><li class="t-grp"><a href="#g-13">极客公园</a></li></ul></li><li class="t-sec"><a href="#s-14">X 动态<span class="n">12</span></a><ul><li class="t-grp"><a href="#g-15">个人</a></li><li class="t-grp"><a href="#g-23">官方</a></li><li class="t-grp"><a href="#g-25">follow-builders 精选</a></li></ul></li></ul></details>
+<div class="sec-head" id="s-1">
+  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span></span>
+  <span class="rule"></span><span class="count">17 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> OpenAI 在北京时间 11-16 连发多篇：新开科学博客，首篇是物理学家 Nathaniel Craig 与 GPT-6 Astra 把标准模型的格点定义做成候选证明；经济研究团队调研 1800 多名科学家使用 ChatGPT 的方式；LVMH 传媒与 OpenAI 达成合作；与 Apollo Research、METR、Transluce、Goodfire 签署嵌入式评估协议；ChatGPT for Healthcare 更新 computer-use agent 和 20 多个新插件。HN 当天最热帖是阿里发布的 Qwen4-Max（848 分）；微软 365 故障被指导致主题公园酒店氯气泄漏、uBlock Origin 出现通用 XSS、亚马逊黑五「优惠」调查也进入前十。</p><ol><li>OpenAI：科学博客首篇，GPT-6 Astra 协助定义标准模型</li><li>OpenAI：ChatGPT for Healthcare 上线 computer-use agent</li><li>HN：Qwen4-Max 发布（848 分）</li><li>HN：微软 365 故障与酒店氯气泄漏（621 分）</li></ol></div>
+
+<article class="entry" id="e-2">
+  <div class="byline">
+    <p class="name">Our new blog for science / A step toward defining the Standard Model on a lattice<span class="src">OpenAI</span></p>
+    <p class="time">11-16 06:00</p>
+  </div>
+  <p class="zh">OpenAI 新开<a class="kw" href="https://openai.com/index/our-new-blog-for-science">科学博客</a>，用来刊载研究发现、方法和科学家的第一手讲述。首篇客座文章里，加州大学圣塔芭芭拉分校粒子理论组负责人、OpenAI 访问科学家 Nathaniel Craig 写他如何与 <a class="kw" href="https://openai.com/index/step-toward-defining-the-standard-model">GPT-6 Astra</a> 合作，给出标准模型的一个格点（lattice）非微扰定义候选：他已有思路，但未能在所有需要覆盖的情形下完成证明，Astra 帮助把策略做成构造，并在细致证明上起了主导作用。相关预印本已于 10 月发表。</p>
+  <div class="receipts"><a href="https://openai.com/index/our-new-blog-for-science">科学博客</a><a href="https://openai.com/index/step-toward-defining-the-standard-model">标准模型格点定义</a></div>
+</article>
+
+<article class="entry" id="e-3">
+  <div class="byline">
+    <p class="name">More ways to move care forward with ChatGPT for Healthcare<span class="src">OpenAI</span></p>
+    <p class="time">11-16 14:00</p>
+  </div>
+  <p class="zh">OpenAI 更新 <a class="kw" href="https://openai.com/index/more-ways-to-move-care-forward-with-chatgpt-for-healthcare">ChatGPT for Healthcare</a>：computer-use agent 可以在现有医疗软件里读屏、点击、输入并跨应用流转，配有访问控制和审计日志；可信临床检索在医生盲测中、1300 多次评审里，八个维度（含事实正确、安全、可执行性和来源权威性）都获得更高评价；插件生态新增 20 多个，覆盖病历与院内规程、处方准备、患者触达、保险资格和运营分析。文中提到与 Abridge、Ambience、Cigna Healthcare、CVS Health 等合作处理转诊和文书。另有一篇配套文章专讲医疗场景的 computer-use agent。</p>
+  <div class="receipts"><a href="https://openai.com/index/more-ways-to-move-care-forward-with-chatgpt-for-healthcare">原文</a><a href="https://openai.com/index/advancing-computer-use-for-healthcare-teams">computer-use agents</a></div>
+</article>
+
+<article class="entry" id="e-4">
+  <div class="byline">
+    <p class="name">Our first phase of embedded assessments<span class="src">OpenAI</span></p>
+    <p class="time">11-16 16:00</p>
+  </div>
+  <p class="zh">OpenAI 与 <a class="kw" href="https://openai.com/index/our-first-phase-of-embedded-assessments">Apollo Research、METR、Transluce 和 Goodfire</a> 签署协议，启动第一阶段嵌入式评估。评估方可以在较长时间里深入访问内部模型和系统，按需获得检查点、源代码、训练与评估数据、监控系统、技术文档，并与相关研究者交流，重点看训练和内部使用阶段的对齐与防护是否有效。OpenAI 称此举也服务于其在白宫超级智能协议下接受独立评估的承诺。Apollo Research 的试点将评估模型是否可能暗中违背开发者意图、以及现有防护能否发现这类行为。</p>
+  <div class="receipts"><a href="https://openai.com/index/our-first-phase-of-embedded-assessments">原文</a></div>
+</article>
+
+<article class="entry" id="e-5">
+  <div class="byline">
+    <p class="name">LVMH’s Media Division announces strategic partnership with OpenAI<span class="src">OpenAI</span></p>
+    <p class="time">11-16 17:00</p>
+  </div>
+  <p class="zh">LVMH 集团传媒事业部与 OpenAI 签署战略协议，向该事业部各刊团队部署 OpenAI 工具和 <a class="kw" href="https://openai.com/index/lvmh-media-division-partnership">ChatGPT Enterprise</a>，用于文档检索、文档比对和初译等，让记者把时间更多留在调查和一线报道；同时加强其内容在 ChatGPT 里的呈现，提供摘要和节选，并探索面向读者的个性化。</p>
+  <div class="receipts"><a href="https://openai.com/index/lvmh-media-division-partnership">原文</a></div>
+</article>
+
+<article class="entry" id="e-6">
+  <div class="byline">
+    <p class="name">Science at the Frontier: How scientists use ChatGPT<span class="src">OpenAI</span></p>
+    <p class="time">11-16 20:00</p>
+  </div>
+  <p class="zh">OpenAI 经济研究团队基于 ChatGPT 学术研究者夏季试点，分析了 1819 位科学家的超过 58 万条科学相关对话，并调研了其中 251 人。受访科学家估计，同样质量和同样工作如果不用 AI，会多花 1.9 倍时间；在回答发现进度的人里，98% 认为 AI 会加快其所在领域的发现；68% 曾用 ChatGPT 发展研究想法。OpenAI 称默认不用该项目数据训练模型，研究团队只看到用分类器标好的活动类型，不阅读原文。完整发现见 <a class="kw" href="https://openai.com/index/science-at-the-frontier">Science at the Frontier</a> 报告。</p>
+  <div class="receipts"><a href="https://openai.com/index/science-at-the-frontier">原文</a></div>
+</article>
+
+<article class="entry" id="e-7">
+  <div class="byline">
+    <p class="name">The King’s Trust and OpenAI launch £1m partnership<span class="src">OpenAI</span></p>
+    <p class="time">11-16 08:00</p>
+  </div>
+  <p class="zh">英国国王信托基金（The King’s Trust）与 OpenAI 启动一项 100 万英镑合作，帮助英国最多 2.5 万名年轻人掌握面向工作的实用 <a class="kw" href="https://openai.com/index/the-kings-trust-and-openai">AI 技能</a>。</p>
+  <div class="receipts"><a href="https://openai.com/index/the-kings-trust-and-openai">原文</a></div>
+</article>
+
+<article class="entry" id="e-8">
+  <div class="byline">
+    <p class="name">At Holiday Extras, dots get to work before anyone asks<span class="src">OpenAI</span></p>
+    <p class="time">11-16 08:00</p>
+  </div>
+  <p class="zh">OpenAI 客户案例：Holiday Extras 的 <a class="kw" href="https://openai.com/business/customer-stories/holiday-extras-dots">dots</a> 会在没人要求时就交出上线报告、标出可能被忽略的问题，并在通勤路上预告即将开始的会议。（上期已介绍过该公司用 Codex 的另一篇故事，这是关于 dots 的新一篇。）</p>
+  <div class="receipts"><a href="https://openai.com/business/customer-stories/holiday-extras-dots">原文</a></div>
+</article>
+
+<p class="grp" id="g-9">HN 当天热帖 Top 10</p>
+<ul class="lst">
+    <li><a class="t" href="https://qwen.ai/blog?id=qwen4-max">Qwen4-Max / 阿里发布 Qwen4-Max</a><span class="m">11-16 10:14 · 848 分 · 469 评论</span></li>
+    <li><a class="t" href="https://pub.cba.mit.edu/863.26/site/">How to make almost anything / 几乎什么都能做</a><span class="m">11-16 13:50 · 826 分 · 140 评论</span></li>
+    <li><a class="t" href="http://groundworkcollaborative.org/news/amazons-decoy-deals-groundwork-investigation-reveals-nearly-1-in-3-black-friday-and-cyber-monday-deals-advertised-by-amazon-offered-no-savings-to-shoppers-nearly-1-in-10-w/">Many of Amazon’s Black Friday and Cyber Monday “deals” offered no savings / 调查称亚马逊大量黑五、网购周一「优惠」其实没有更便宜</a><span class="m">11-16 21:39 · 798 分 · 484 评论</span></li>
+    <li><a class="t" href="https://www1.wdr.de/nrw/rheinland/rhein-erft-kreis/technischer-defekt-chlor-phantasialand-100.html">Microsoft 365 outage leads to chlorine gas poisoning of 15 hotel guests / 微软 365 故障导致氯气泄漏，15 名酒店客人中毒</a><span class="m">11-16 02:36 · 621 分 · 270 评论</span></li>
+    <li><a class="t" href="https://iter.ca/post/ubo-uxss/">Universal XSS in uBlock Origin from website-driven element picker / uBlock Origin 的网站驱动元素选择器存在通用 XSS</a><span class="m">11-16 10:04 · 593 分 · 172 评论</span></li>
+    <li><a class="t" href="https://steveblank.com/2026/11/15/whats-next-for-nvidia/">What&#x27;s Next for Nvidia? / 史蒂夫·布兰克：英伟达接下来会怎样</a><span class="m">11-16 07:55 · 457 分 · 566 评论</span></li>
+    <li><a class="t" href="https://ductus.sorenblank.com">Handwriting, as a Font / 把字迹做成字体</a><span class="m">11-16 03:42 · 453 分 · 76 评论</span></li>
+    <li><a class="t" href="https://bruceroettgers.eu/blog/protomaps/">Protomaps: Self-hosting map tiles has gotten cheap and easy / Protomaps：自己托管地图瓦片已经又便宜又容易</a><span class="m">11-16 03:26 · 452 分 · 81 评论</span></li>
+    <li><a class="t" href="https://ransomnews.com/burger-king-tweet-bitly-link-hijack-2026/">Old Bitly links are being hijacked / 旧的 Bitly 短链接正在被劫持</a><span class="m">11-16 06:11 · 372 分 · 196 评论</span></li>
+    <li><a class="t" href="https://jack.cab/blog/siterate">What is w2rt6byl5nf1opmc-a.com? / 这个奇怪的域名 w2rt6byl5nf1opmc-a.com 是什么？</a><span class="m">11-16 21:51 · 310 分 · 140 评论</span></li>
+</ul>
+
+<p class="note">说明：DeepMind 北京时间 11-16 无新文章（最新仍是 11-13 的 Gemini 4 Hydrogen）。Anthropic 新闻页「Latest news」标注了 11-16，但各篇 publishedOn 均不在当天（featured 的 Claude Fable 5.2 / Mythos 5.2 发布于 11-09）。Meta 博客最新仍是 11-09 的 Muse Ember，@AIatMeta 当天无原创帖。美团技术团队 RSS 返回空内容，本期无法核对。OpenAI 两篇科学博客 RSS 时间为 11-16 06:00（页面标注 November 15，上期已预告留到本期）。HN 按北京时间 11-16 发帖、按分数取前十，分数与评论数为采集时数字。</p>
+<div class="sec-head" id="s-10">
+  <span class="lbl"><span class="zh-lbl">新闻与投资</span></span>
+  <span class="rule"></span><span class="count">30 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 国内媒体的主线也是 Qwen4-Max 和黄仁勋。量子位和机器之心都报道了阿里发布总参数 2.4T 的 Qwen4-Max，以及金融时报所称黄仁勋考虑重返英伟达 CEO；量子位还写了谷歌加速整柜 TPU 外售、推理每美元性能称领先 GB200 五成。机器之心另外提到书生-S2.1 Flash 登顶机器学习工程基准、豆包工作上线「工作台」、以及 AI 垃圾论文乱加大佬作者的骗局。极客早知道则把黄仁勋回归传闻、苹果计划明年发布首款智能眼镜、OpenAI 撤销独立机器人研究团队写进同一篇。</p><ol><li>量子位 / 机器之心：阿里发布 Qwen4-Max</li><li>量子位 / 机器之心：黄仁勋考虑重返英伟达 CEO</li><li>量子位：谷歌整柜 TPU 外售加速</li><li>极客早知道：苹果传明年出智能眼镜，OpenAI 撤销独立机器人团队</li></ol></div>
+
+<p class="grp" id="g-11">量子位</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510542.html">睿尔曼智能郑随兵：质量、经济性、稳定性是机器人落地三大标准</a><span class="m">11-16 18:57</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510526.html">2026甲子引力年终盛典即将启幕，AI的无限游戏进入「第二序章」｜甲子引力</a><span class="m">11-16 16:45</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510493.html">SuperLink2026开启创投行业超级链接时刻，12月北京见</a><span class="m">11-16 15:58</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510486.html">阿里正式发布Qwen4，智能体及编程能力进阶，迈向真实全场景</a><span class="m">11-16 15:51</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510416.html">龙芯、海光老兵集结，通研院孵化的AGI芯片公司浮出水面！半年连融数亿元</a><span class="m">11-16 13:05</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510404.html">没搞过一天研发的他，50岁以华为董事的身份退休了</a><span class="m">11-16 11:54</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510382.html">今天截止！2026年度AI表彰，错过再等一年！</a><span class="m">11-16 11:19</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510369.html">提速2.48倍且画质不掉线，AI视频“降本增效”有了新解法</a><span class="m">11-16 11:07</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510358.html">黄仁勋筹备重返英伟达</a><span class="m">11-16 08:12</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510349.html">谷歌奇袭英伟达：整柜TPU外售加速交付，推理每美元性能领先GB200五成</a><span class="m">11-16 08:00</span></li>
+    <li><a class="t" href="https://www.qbitai.com/2026/11/510333.html">全球AI音乐榜第一易主！中国黑马首次上榜就干翻Suno</a><span class="m">11-16 07:56</span></li>
+</ul>
+
+<p class="grp" id="g-12">机器之心</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-14">让AI成为自主进化的科学家！书生-S2.1 Flash登顶机器学习工程基准</a><span class="m">11-16 20:45</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-12">物理AI破解装车自动化盲区，安徽「擎天智能」完成数千万元Pre-A轮融资</a><span class="m">11-16 17:32</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-11">豆包工作独家上线“工作台”功能，首批覆盖金融、医疗、教育等21个专业场景</a><span class="m">11-16 16:59</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-10">华为云「行业AI梦工厂」发布并开源昇腾原生具身世界模型CloudRobo-WM1.2</a><span class="m">11-16 16:50</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-9">Weitu AI打造能记忆会思考的流式多模态大脑</a><span class="m">11-16 14:35</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-7">OpenAI为科研开设新博客，首篇解读GPT‑6 Astra粒子物理研究</a><span class="m">11-16 14:25</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-6">自研Agent两场实测均分超过GPT-6，NovaSilicon首提CDK，Fabless之后是Designless？</a><span class="m">11-16 14:22</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-5">恶劣骗局！AI垃圾论文乱加大佬作者，Hinton、李飞飞、LeCun、吴恩达等中招</a><span class="m">11-16 13:26</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-3">阿里正式发布Qwen4，智能体及编程能力进阶，迈向真实全场景</a><span class="m">11-16 11:55</span></li>
+    <li><a class="t" href="https://www.jiqizhixin.com/articles/2026-11-16-2">突发！黄仁勋与盟友商讨重返英伟达CEO之位</a><span class="m">11-16 10:30</span></li>
+</ul>
+
+<p class="grp" id="g-13">极客公园</p>
+<ul class="lst">
+    <li><a class="t" href="https://www.geekpark.net/news/373994">曝黄仁勋考虑重返英伟达担任 CEO；苹果计划明年发布首款智能眼镜；OpenAI 撤销独立机器人研究团队</a><span class="m">11-16 08:47</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374025">阿里正式发布Qwen4，智能体及编程能力进阶，迈向真实全场景</a><span class="m">11-16 11:38</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374029">端侧 AI 迎来「高智能」时刻，比肩云端模型</a><span class="m">11-16 14:09</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374036">斑马AI学发布2027版本，产品体系迈向高阶学习，AI应用持续进阶</a><span class="m">11-16 14:34</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374041">码上 2027，AI Coding 等你一起定义</a><span class="m">11-16 16:04</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374047">定位理论100岁，撞上AI：品牌要同时赢下「两个大脑」</a><span class="m">11-16 16:50</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374053">从厨房电器到AI烹饪科技：老板电器以“食神”智能体重新定义厨房</a><span class="m">11-16 19:28</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374054">华为Mate X8定档11月24日，全系配色正式曝光</a><span class="m">11-16 20:22</span></li>
+    <li><a class="t" href="https://www.geekpark.net/news/374055">无需「打印」随心展示，影石推出一张会更新的 Toast 墨水屏相纸</a><span class="m">11-16 22:15</span></li>
+</ul>
+
+<p class="note">说明：量子位取资讯分类，时间为各篇页面标注；问界 M8 新车在首页出现但不在资讯分类，未收。机器之心取 industry 列表。极客公园 RSS 当天有一篇极客早知道；栏目 304/306/307/308/347 窗口内无新稿，栏目 2（行业资讯）只收 AI、互联网、硬件和机器人相关。虎嗅 RSS 采集时只有 11-17 的稿件，首页和科技频道也没有可核对日期的 11-16 文章，本期无法回溯。晚点官网首页没有可核对日期的 11-16 新稿。a16z 当天无新文章（页面上可见的 American Dynamism 50 发布于 10-29，Big Ideas 2026 更早）。YC 博客窗口内无新文章（最新为 10-31）。</p>
+<div class="sec-head" id="s-14">
+  <span class="lbl"><span class="zh-lbl">X 动态</span></span>
+  <span class="rule"></span><span class="count">12 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 产品和组织消息是当天 X 的重点：AMD CEO 苏姿丰发帖欢迎李飞飞和 World Labs 团队加入 AMD，李飞飞引用致谢；Alexandr Wang 说 Muse 可以替美国付费用户打电话；OpenAI 官方号同步了科学博客首篇。SpaceX 方面，Musk 说 Starship V4 会长到约 70 米、发动机加到 9 台，并在检查 Ship 42 后认为数周内可再飞，但距「像飞机一样即刻复用」还差许多小修复；他还引用用户用 Grok Bot 做出的第 15 次飞行集锦，称 Grok Bot 几乎什么都能做。观点上，Paul Graham 说限制因素不是投资而是创始人能力，levelsio 认为欧洲人最适应后 AGI 时代，因为已经习惯不工作。</p><ol><li>@drfeifei：World Labs 团队加入 AMD</li><li>@elonmusk：Starship V4 加长，Ship 42 数周可再飞</li><li>@alexandr_wang：Muse 可替付费用户打电话</li><li>@OpenAI：科学博客首篇上线</li></ol></div>
+
+<p class="grp" id="g-15">个人</p>
+<article class="entry" id="e-16">
+  <div class="byline">
+    <p class="name">李飞飞：World Labs 团队加入 AMD<span class="src">@drfeifei</span></p>
+    <p class="time">11-16 22:44</p>
+  </div>
+  <p class="zh">AMD CEO 苏姿丰发帖欢迎李飞飞和 <a class="kw" href="https://x.com/drfeifei/status/2122340036645621862">World Labs</a> 团队加入 AMD，说对接下来能一起完成的事感到兴奋。李飞飞引用致谢，并写「还有很多要去创造，做出对所有人都有益的最好技术」，称整个团队非常兴奋。</p>
+  <div class="receipts"><a href="https://x.com/drfeifei/status/2122340036645621862">原帖</a></div>
+</article>
+
+<article class="entry" id="e-17">
+  <div class="byline">
+    <p class="name">Musk：Starship V4 约 70 米长，发动机加到 9 台<span class="src">@elonmusk</span></p>
+    <p class="time">11-16 09:33</p>
+  </div>
+  <p class="zh">引用一张星舰尺度对比图，Musk 说 <a class="kw" href="https://x.com/elonmusk/status/2122141019894383027">Starship V4</a> 将长约 70 米，大致加长 40%，推进剂装载量可增加 60% 以上；发动机数量将加到 9 台，再增加 3 台 Raptor-Vacuum，并且会使用推力更高的 V4 发动机。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2122141019894383027">原帖</a></div>
+</article>
+
+<article class="entry" id="e-18">
+  <div class="byline">
+    <p class="name">Musk：Ship 42 热盾看起来很好，数周内可再飞<span class="src">@elonmusk</span></p>
+    <p class="time">11-16 06:20</p>
+  </div>
+  <p class="zh">有人拍到 Musk 在发射台检查飞船。Musk 回复说当天早些时候看过整套星舰热盾和发动机，整体看起来很好，<a class="kw" href="https://x.com/elonmusk/status/2122092374016806969">Ship 42</a> 大概几周整修后就能再飞；但要达到像飞机那样即刻复用（除定期保养外预期为零整修），还需要许多小修复。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2122092374016806969">原帖</a></div>
+</article>
+
+<article class="entry" id="e-19">
+  <div class="byline">
+    <p class="name">Musk：Grok Bot 几乎什么都能做<span class="src">@elonmusk</span></p>
+    <p class="time">11-16 11:05</p>
+  </div>
+  <p class="zh">一位用户说 <a class="kw" href="https://x.com/elonmusk/status/2122164224382447808">Grok Bot</a> 帮他把 23 小时的星舰第 15 次飞行直播下载下来，剪出精彩片段、加上效果和音乐，做成集锦。Musk 引用并写「Grok @Bot can do almost anything」。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2122164224382447808">原帖</a></div>
+</article>
+
+<article class="entry" id="e-20">
+  <div class="byline">
+    <p class="name">Alexandr Wang：Muse 可以替你打电话<span class="src">@alexandr_wang</span></p>
+    <p class="time">11-16 07:08</p>
+  </div>
+  <p class="zh">Alexandr Wang 发帖问「who you gonna call?」，自答「nobody. <a class="kw" href="https://x.com/alexandr_wang/status/2122104505538121821">muse makes the calls</a>」，并注明目前面向美国的付费订阅用户。</p>
+  <div class="receipts"><a href="https://x.com/alexandr_wang/status/2122104505538121821">原帖</a></div>
+</article>
+
+<article class="entry" id="e-21">
+  <div class="byline">
+    <p class="name">Paul Graham：限制因素不是投资，是创始人能力<span class="src">@paulg</span></p>
+    <p class="time">11-16 02:26</p>
+  </div>
+  <p class="zh">Paul Graham 引用一种「谁都能做到」的说法，写道：你日复一日解决很难的问题几十年，换来的却是这种评价。作为投资人，他认为限制因素不是投资，而是<a class="kw" href="https://x.com/paulg/status/2122033524857589799">创始人能力</a>。随后补充，自己查了发该评论者的成就，主要是倡导（advocacy）。</p>
+  <div class="receipts"><a href="https://x.com/paulg/status/2122033524857589799">原帖</a><a href="https://x.com/paulg/status/2122034614415823291">补充</a></div>
+</article>
+
+<article class="entry" id="e-22">
+  <div class="byline">
+    <p class="name">levelsio：欧洲人最适应后 AGI 时代，因为已经习惯不工作<span class="src">@levelsio</span></p>
+    <p class="time">11-16 07:19</p>
+  </div>
+  <p class="zh">levelsio 说欧洲人是最能适应 <a class="kw" href="https://x.com/levelsio/status/2122107266585460855">后 AGI</a> 时代的一群人，因为他们已经习惯不工作。当天晚些时候他引用自己这条解释：话里有玩笑，但也不是完全在开玩笑——美国人太迷恋工作才这么富；如果后 AGI 世界没有那么多工作可做，一切会变成玩，那时候比的是谁更会休闲、艺术和社交。</p>
+  <div class="receipts"><a href="https://x.com/levelsio/status/2122107266585460855">原帖</a><a href="https://x.com/levelsio/status/2122301324129661310">补充</a></div>
+</article>
+
+<p class="grp" id="g-23">官方</p>
+<article class="entry" id="e-24">
+  <div class="byline">
+    <p class="name">OpenAI：科学博客首篇上线<span class="src">@OpenAI</span></p>
+    <p class="time">11-16 08:23</p>
+  </div>
+  <p class="zh">OpenAI 官方号发帖：物理学家 Nathaniel Craig 分享他如何与 GPT-6 Astra 一起，给出标准模型的格点定义候选；这是<a class="kw" href="https://x.com/OpenAI/status/2122123437141553630">新科学博客</a>的第一篇文章。</p>
+  <div class="receipts"><a href="https://x.com/OpenAI/status/2122123437141553630">原帖</a></div>
+</article>
+
+<p class="grp" id="g-25">follow-builders 精选</p>
+<article class="entry" id="e-26">
+  <div class="byline">
+    <p class="name">Thibault Sottiaux：Codex 可能已修好「model at capacity」报错<span class="src">@thsottiaux</span></p>
+    <p class="time">11-16 13:55</p>
+  </div>
+  <p class="zh">OpenAI Codex 团队的 Thibault Sottiaux 发帖说，团队可能已经修好了一直困扰用户的「<a class="kw" href="https://x.com/thsottiaux/status/2122206990101536852">model at capacity</a>」错误。</p>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2122206990101536852">原帖</a></div>
+</article>
+
+<article class="entry" id="e-27">
+  <div class="byline">
+    <p class="name">Guillermo Rauch：发布 xeet，用 Rust/wasm 渲染 X 帖<span class="src">@rauchg</span></p>
+    <p class="time">11-16 12:27</p>
+  </div>
+  <p class="zh">Vercel CEO Guillermo Rauch 发布 <a class="kw" href="https://x.com/rauchg/status/2122184794209714368">xeet</a>：一个用安全 Rust / wasm 实现的、封闭且像素级精确的 X 帖渲染器，不依赖浏览器、网络、文件系统和系统字体，把一条帖子渲成 PNG 大约只要 1 毫秒。他说 X 是全球广场，发帖前能预览对人和 agent 都有用。</p>
+  <div class="receipts"><a href="https://x.com/rauchg/status/2122184794209714368">原帖</a></div>
+</article>
+
+<article class="entry" id="e-28">
+  <div class="byline">
+    <p class="name">Peter Yang：Anthropic 设计师谈怎样避免 Claude 默认视觉风格<span class="src">@petergyang</span></p>
+    <p class="time">11-16 09:00</p>
+  </div>
+  <p class="zh">Peter Yang 引用 Anthropic 的 Nate Parrott 的话：你让 Claude 做应用时，它处在全新上下文里，往往会发明一套「最出色」的视觉，结果经常是衬线字、米白底、橙色，以及卡片边缘的条。Nate 介绍了怎样避免这种<a class="kw" href="https://x.com/petergyang/status/2122132596352327816">默认设计</a>。</p>
+  <div class="receipts"><a href="https://x.com/petergyang/status/2122132596352327816">原帖</a></div>
+</article>
+
+<article class="entry" id="e-29">
+  <div class="byline">
+    <p class="name">Dan Shipper：会随使用变好的 compounding skills<span class="src">@danshipper</span></p>
+    <p class="time">11-16 06:15</p>
+  </div>
+  <p class="zh">Every 的 Dan Shipper 说他们最近在做会越用越好的 <a class="kw" href="https://x.com/danshipper/status/2122091033001337134">compounding skills</a>。他写了一个帮写上下文窗口摘要的 skill，并用 autoresearch 迭代，直到摘要达到他个人品味的约 80%（对比无 skill 基线），完整写在 Every 的 frontier feed 上。</p>
+  <div class="receipts"><a href="https://x.com/danshipper/status/2122091033001337134">原帖</a></div>
+</article>
+
+<p class="note">说明：只收原创帖和引用帖，回复和纯转发已过滤。名单里 @AndrewYNg @nagayama_koharu 当天无原创帖；@OfficialLoganK 只有一条「Life outside of AI」生活帖、@lexfridman 只发了摩托横穿美国的旅行计划、@nikitabier 一条把政治讨论比作芬太尼的帖、@lijigang 一条短句，均未收。@AIatMeta @GoogleDeepMind @GeminiApp @GoogleAIStudio @googledevs @GoogleAI @GoogleLabs @AnthropicAI @claudeai @ChatGPT @OpenAIDevs @ManusAI @SpaceXSI @grok @bot 当天无原创帖。Musk 的 Starlink 短引用、「Yup」类祝贺和禁毒玩笑、@paulg 的手表与政治帖、@levelsio 的烟雾报警器和创客聚会帖未收。follow-builders 数据采集于北京时间 11-16 14:42，之后的帖子不在该 feed 里；与名单按推文 id 去重。@amasad 只有「Interesting 48 hours」「Good summary」这类缺少实质内容的引用帖，@swyx 的讲座转写和 @zarazhangrui 的生活帖未收。</p>
+  <footer>
+    <div>AI DIGEST · 2026-11-17 · 时间均为北京时间</div>
+    <div>X 数据来自 X API 与 Follow Builders feed · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+<script>(function(){var ls=[].slice.call(document.querySelectorAll('.toc a[href^="#"]'));var ts=ls.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+function f(){var k=-1;for(var j=0;j<ts.length;j++){if(ts[j]&&ts[j].getBoundingClientRect().top<120)k=j;}ls.forEach(function(a,j){a.classList.toggle('on',j===k);});
+if(k>=0){var a=ls[k],t=a.closest('.toc');var r=a.getBoundingClientRect(),q=t.getBoundingClientRect();if(r.top<q.top||r.bottom>q.bottom)t.scrollTop+=r.top-q.top-q.height/2;}}
+addEventListener('scroll',f,{passive:true});f();})();</script>
+</body>
+</html>
