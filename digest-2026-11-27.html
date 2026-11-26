@@ -1,0 +1,833 @@
+<title>AI Digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Libre+Franklin:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    /* cool blue-grey paper, slate ink, single signal-amber accent */
+    --bg: #E9ECF1;
+    --surface: #FBFCFE;
+    --ink: #191C23;
+    --ink-soft: #474E5B;
+    --ink-faint: #79818F;
+    --line: #D2D7E0;
+    --line-strong: #191C23;
+    --accent: #C98A00;
+    --accent-ink: #8A5A00;
+    --accent-wash: #FBF2DC;
+    --accent-wash-edge: #E9B84A;
+    --good: #2E7D57;
+    --shadow: 0 1px 2px rgba(24,28,35,.05), 0 12px 32px -18px rgba(24,28,35,.28);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg: #101319;
+      --surface: #191D25;
+      --ink: #E9EBF0;
+      --ink-soft: #A9B1BE;
+      --ink-faint: #6E7684;
+      --line: #2A2F39;
+      --line-strong: #E9EBF0;
+      --accent: #F0B429;
+      --accent-ink: #F5C556;
+      --accent-wash: rgba(240,180,41,.08);
+      --accent-wash-edge: rgba(240,180,41,.55);
+      --good: #58C08C;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101319;
+    --surface: #191D25;
+    --ink: #E9EBF0;
+    --ink-soft: #A9B1BE;
+    --ink-faint: #6E7684;
+    --line: #2A2F39;
+    --line-strong: #E9EBF0;
+    --accent: #F0B429;
+    --accent-ink: #F5C556;
+    --accent-wash: rgba(240,180,41,.08);
+    --accent-wash-edge: rgba(240,180,41,.55);
+    --good: #58C08C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 18px 44px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Libre Franklin", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 88px; }
+
+  /* ---------- nameplate ---------- */
+  .plate { padding-top: 34px; }
+  .plate-top {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .signal { display: inline-flex; align-items: center; gap: 7px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: pulse 3.4s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%,100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  .toggle {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-soft); background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 5px 12px; cursor: pointer; transition: border-color .18s, color .18s;
+  }
+  .toggle:hover { color: var(--ink); border-color: var(--line-strong); }
+  .toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .masthead {
+    border-top: 3px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    margin-top: 12px; padding: 18px 0 16px;
+  }
+  h1.title {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: clamp(2.9rem, 11vw, 4.4rem); line-height: .96;
+    letter-spacing: -.02em; margin: 0; text-wrap: balance;
+  }
+  .title em { font-style: italic; font-weight: 500; color: var(--accent-ink); }
+  .tagline {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-size: 1.06rem;
+    color: var(--ink-soft); margin: 12px 0 0; letter-spacing: .01em;
+  }
+
+  .dateline {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 11px 0 0;
+  }
+  .dateline b { color: var(--ink-soft); font-weight: 600; }
+  .dateline .num { font-variant-numeric: tabular-nums; color: var(--accent-ink); font-weight: 600; }
+
+  /* ---------- today's signal (thesis lead) ---------- */
+  .lead {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 3px; box-shadow: var(--shadow);
+    padding: 24px 24px 22px; margin: 28px 0 8px;
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent-ink); display: flex; align-items: center; gap: 9px; margin: 0 0 12px;
+  }
+  .kicker::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent-wash-edge), transparent); }
+  .lead h2 {
+    font-family: "Noto Serif SC", "Newsreader", serif; font-weight: 500;
+    font-size: 1.42rem; line-height: 1.5; letter-spacing: 0; margin: 0; text-wrap: pretty;
+  }
+  .lead h2 .mark {
+    background: linear-gradient(180deg, transparent 62%, color-mix(in srgb, var(--accent) 42%, transparent) 62%);
+    padding: 0 1px;
+  }
+
+  /* ---------- section rule ---------- */
+  .sec-head { display: flex; align-items: center; gap: 12px; margin: 46px 0 6px; }
+  .sec-head .lbl {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink); white-space: nowrap;
+  }
+  .sec-head .lbl .zh-lbl { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .sec-head .rule { flex: 1; height: 2px; background: var(--line-strong); }
+  .sec-head .count { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+
+  /* ---------- entry ---------- */
+  .entry { padding: 26px 0 4px; border-bottom: 1px solid var(--line); }
+  .entry:last-of-type { border-bottom: 0; }
+
+  .byline { margin-bottom: 12px; }
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 4px;
+  }
+  .tag .ch { color: var(--accent-ink); }
+  .name {
+    font-family: "Newsreader", Georgia, serif; font-weight: 600;
+    font-size: 1.34rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; text-wrap: balance;
+  }
+  .name span { color: var(--ink-soft); font-weight: 400; font-style: italic; font-size: .96rem; }
+
+  /* zh body is PRIMARY */
+  .zh { margin: 0; }
+  .zh + .zh { margin-top: 12px; }
+
+  /* english-original channel — key quotes only */
+  .en-quote {
+    margin: 15px 0 4px; padding: 12px 16px;
+    background: var(--accent-wash); border-left: 2px solid var(--accent-wash-edge);
+    border-radius: 0 3px 3px 0;
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    color: var(--ink-soft); font-size: 1.02rem; line-height: 1.6;
+  }
+  .en-quote p { margin: 0; }
+  .en-quote p + p { margin-top: 8px; }
+  .en-quote .q-lbl {
+    display: block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 9.5px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px;
+  }
+
+  .receipts { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 2px; }
+  .receipts a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; letter-spacing: .02em; color: var(--accent-ink);
+    text-decoration: none; padding: 3px 9px;
+    border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+  .receipts a::before { content: "↗"; opacity: .7; }
+  .receipts a:hover { border-color: var(--accent-wash-edge); background: var(--accent-wash); transform: translateY(-1px); }
+  .receipts a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* podcast-specific */
+  .takeaway { display: flex; gap: 10px; margin: 4px 0 16px; font-size: 1.02rem; }
+  .takeaway .k {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); white-space: nowrap; padding-top: 6px;
+  }
+  .takeaway .v { margin: 0; font-weight: 600; }
+
+  blockquote {
+    margin: 18px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent);
+    font-family: "Newsreader", Georgia, serif; font-style: italic;
+    font-size: 1.24rem; line-height: 1.42; color: var(--ink); text-wrap: pretty;
+  }
+  blockquote .src {
+    display: block; margin-top: 8px; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-style: normal; font-size: 11px; letter-spacing: .04em; color: var(--ink-faint);
+  }
+
+  footer {
+    margin-top: 54px; padding-top: 20px; border-top: 3px solid var(--line-strong);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .05em; color: var(--ink-faint); line-height: 1.9;
+  }
+  footer a { color: var(--accent-ink); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .88em; background: var(--accent-wash); padding: 1px 5px; border-radius: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(10px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+  }
+</style>
+<!-- FB_RAIL_CSS -->
+
+<style>
+  /* left sidebar rail (index only) */
+  .rail {
+    position: fixed;
+    top: 34px;
+    left: max(20px, calc((100vw - 720px) / 2 - 232px));
+    width: 200px;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    z-index: 10;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .rail-inner {
+    border-left: 2px solid var(--line-strong);
+    padding: 6px 0 6px 14px;
+  }
+  .rail-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .rail-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .rail-lbl .rail-zh {
+    font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px;
+  }
+  .rail-count {
+    font-size: 10.5px; color: var(--ink-faint); font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+  .rail .a-list { list-style: none; padding: 0; margin: 0; }
+  .rail .a-list li { margin: 0; }
+  .rail .a-list a {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 0; text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .16s, border-color .16s, padding-left .16s;
+  }
+  .rail .a-list a:hover {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-date {
+    font-size: 11.5px; letter-spacing: .06em; color: var(--ink);
+    font-variant-numeric: tabular-nums; font-weight: 600;
+  }
+  .rail .a-list .a-zh {
+    font-family: "Noto Serif SC", serif; font-size: 12px; color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .rail .a-list .a-current > a {
+    color: var(--accent-ink); border-color: var(--accent-wash-edge);
+    padding-left: 4px;
+  }
+  .rail .a-list .a-current .a-date { color: var(--accent-ink); }
+  .rail .a-list a:hover .a-date,
+  .rail .a-list a:hover .a-zh { color: var(--accent-ink); }
+
+  /* rail scrollbar: subtle */
+  .rail::-webkit-scrollbar { width: 6px; }
+  .rail::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .rail::-webkit-scrollbar-thumb:hover { background: var(--line-strong); }
+
+  /* narrow viewport: rail becomes a top strip that scrolls horizontally */
+  @media (max-width: 1179px) {
+    .rail {
+      position: sticky; top: 0; left: 0; width: 100%; max-height: none;
+      background: var(--bg);
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto; overflow-y: hidden;
+    }
+    .rail-inner {
+      border-left: 0; padding: 0;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .rail-head {
+      margin: 0; flex-shrink: 0; flex-direction: column;
+      align-items: flex-start; gap: 1px;
+    }
+    .rail .a-list {
+      display: flex; gap: 4px; flex-wrap: nowrap;
+    }
+    .rail .a-list li { flex-shrink: 0; }
+    .rail .a-list a {
+      flex-direction: row; align-items: baseline; gap: 6px;
+      padding: 6px 10px; border-bottom: 0;
+      border: 1px solid var(--line); border-radius: 999px;
+      background: var(--surface); white-space: nowrap;
+    }
+    .rail .a-list a:hover { padding-left: 10px; }
+    .rail .a-list .a-current > a {
+      padding-left: 10px; background: var(--accent-wash);
+      border-color: var(--accent-wash-edge);
+    }
+    .rail .a-list .a-zh { font-size: 11px; }
+  }
+</style>
+
+<!-- FB_EXTRA --><style>
+  .masthead { margin-top: 8px; }
+  .dateline { font-size: 15px; letter-spacing: .02em; text-transform: none; gap: 8px 22px; }
+  .dateline b { font-size: 17px; color: var(--ink); }
+  .dateline .num { font-size: 17px; }
+  .lead .kicker { font-size: 13px; letter-spacing: .14em; }
+  .lead .lead-p { font-size: 17px; line-height: 1.75; margin: 0; color: var(--ink); text-wrap: pretty; }
+  .lead .lead-p .mark { background: linear-gradient(transparent 62%, var(--accent-wash) 62%); color: var(--accent-ink); font-weight: 600; }
+  .sec-head .lbl .zh-lbl { font-size: 1.7rem; font-weight: 700; letter-spacing: .04em; color: var(--ink); text-transform: none; margin: 0; }
+  .sec-sum { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 3px; padding: 14px 18px; margin: 14px 0 6px; font-size: 17px; }
+  .sec-sum p { margin: 0 0 6px; }
+  .sec-sum ol { margin: 4px 0 0; padding-left: 22px; }
+  .sec-sum .k { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 700; color: var(--accent-ink); margin-right: 4px; }
+  .name .src { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-style: normal; font-weight: 500; font-size: 12px; letter-spacing: .04em; color: var(--ink-faint); margin-left: 8px; white-space: nowrap; }
+  .time { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); margin: 4px 0 0; }
+  .receipts { justify-content: flex-end; }
+  .lst { list-style: none; padding: 0; margin: 6px 0 0; }
+  .lst li { padding: 9px 0; border-top: 1px dashed var(--line); }
+  .lst li:first-child { border-top: 0; }
+  .lst .t { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .lst .t:hover { color: var(--accent-ink); }
+  .lst .m { display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-faint); }
+  .grp { font-family: "Noto Serif SC", serif; font-size: 1.2rem; font-weight: 600; color: var(--accent-ink); letter-spacing: .04em; margin: 30px 0 0; padding-bottom: 4px; border-bottom: 1px solid var(--accent-wash-edge); }
+  .note { font-family: "IBM Plex Mono", "Noto Serif SC", monospace; font-size: 12px; color: var(--ink-faint); margin: 14px 0 0; line-height: 1.7; }
+  .sec-head, .grp, .entry { scroll-margin-top: 24px; }
+  .toc { position: fixed; top: 34px; right: max(20px, calc((100vw - 720px) / 2 - 252px)); width: 220px; max-height: calc(100vh - 68px); overflow-y: auto; z-index: 10; font-family: "Noto Serif SC", serif; }
+  .toc-inner { border-left: 2px solid var(--line-strong); padding: 6px 0 6px 14px; }
+  .toc-head { font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600; letter-spacing: .2em; color: var(--ink); margin-bottom: 10px; }
+  .toc-head .rail-zh { font-family: "Noto Serif SC", serif; letter-spacing: .08em; margin-right: 6px; }
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc a { text-decoration: none; color: var(--ink-faint); display: block; }
+  .toc a:hover, .toc a.on { color: var(--accent-ink); }
+  .toc .t-sec { margin: 0 0 10px; }
+  .toc .t-sec > a { font-size: 14px; font-weight: 600; color: var(--ink); padding: 4px 0; border-bottom: 1px solid var(--line); }
+  .toc .t-sec > a .n { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--ink-faint); font-weight: 400; margin-left: 6px; }
+  .toc .t-grp > a { font-size: 12.5px; font-weight: 600; color: var(--accent-ink); padding: 6px 0 2px; }
+  .toc .t-it > a { font-size: 12px; line-height: 1.45; padding: 3px 0 3px 8px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .toc::-webkit-scrollbar { width: 6px; } .toc::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .toc-m { display: none; }
+  @media (max-width: 1179px) {
+    .toc { display: none; }
+    .toc-m { display: block; margin: 18px 0 0; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); padding: 10px 14px; font-family: "Noto Serif SC", serif; }
+    .toc-m summary { cursor: pointer; font-weight: 600; font-size: 15px; color: var(--ink); }
+    .toc-m ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    .toc-m a { text-decoration: none; color: var(--ink-faint); display: block; padding: 3px 0; }
+    .toc-m .t-sec > a { color: var(--ink); font-weight: 600; } .toc-m .t-grp > a { color: var(--accent-ink); padding-left: 8px; }
+    .toc-m .t-it { display: none; }
+    .sec-head, .grp, .entry { scroll-margin-top: 72px; }
+  }
+</style><!-- /FB_EXTRA -->
+<!-- YOHAKU --><style>
+:root{--bg:#f4f1ea;--surface:#f4f1ea;--ink:#23211d;--ink-soft:#23211d;--ink-faint:#8a8478;--line:transparent;--line-strong:transparent;--accent:#23211d;--accent-ink:#23211d;--accent-wash:transparent;--accent-wash-edge:transparent;--shadow:none}
+@media (prefers-color-scheme:dark){:root{--bg:#f4f1ea;--surface:#f4f1ea;--ink:#23211d;--ink-faint:#8a8478}}
+html,body{background:#f4f1ea!important}
+body,body *{font-family:"Noto Serif SC","Noto Serif CJK SC","Songti SC",serif!important;border-color:transparent!important;box-shadow:none!important}
+body{color:#23211d!important;font-size:16px!important;line-height:1.85!important;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px!important}
+/* title: one quiet line */
+.masthead{border:0!important;padding:0!important;margin:56px 0 0!important}
+h1.title{font-family:"Noto Serif SC","Noto Serif CJK SC",serif!important;font-size:30px!important;font-weight:600!important;letter-spacing:.01em!important;line-height:1.2!important}
+h1.title br{display:none}
+h1.title em{font-style:normal!important;color:#23211d!important;font-weight:600!important;margin-left:.25em;font-family:inherit!important}
+.dateline{font-size:13px!important;text-transform:none!important;letter-spacing:.02em!important;color:#8a8478!important;gap:4px 18px!important;padding-top:14px!important}
+.dateline b,.dateline .num{color:#8a8478!important;font-weight:400!important;font-size:13px!important}
+/* summary */
+.lead{background:none!important;border:0!important;padding:0!important;margin:72px 0 0!important}
+.kicker{display:none!important}
+.lead .lead-p,.lead p,.lead h2{font-size:19px!important;line-height:1.95!important;color:#23211d!important;font-weight:400!important}
+.lead .mark{background:none!important;color:#b03a2e!important;font-weight:500!important}
+.lead *{color:#23211d!important;opacity:1!important}.lead .mark{color:#b03a2e!important}
+/* sections */
+.sec-head{margin:120px 0 0!important;display:block!important}
+.sec-head .rule,.sec-head .count{display:none!important}
+.sec-head .lbl .zh-lbl,.sec-head .lbl{font-family:"Noto Serif SC","Noto Serif CJK SC",serif!important;font-size:34px!important;font-weight:600!important;letter-spacing:.12em!important;color:#23211d!important}
+.sec-sum{background:none!important;border:0!important;padding:0!important;margin:24px 0 64px!important;font-size:17px!important;color:#23211d!important}
+.sec-sum .k{display:none!important}
+.sec-sum ol{padding-left:1.2em!important}
+/* entries */
+.entry{padding:0 0 56px!important;border:0!important}
+.name{font-size:17px!important;font-weight:600!important;line-height:1.6!important}
+.name .src{font-size:13px!important;font-weight:400!important;color:#8a8478!important;margin-left:10px!important;letter-spacing:0!important}
+.time{font-size:12px!important;color:#a8a194!important;margin:2px 0 12px!important;font-variant-numeric:tabular-nums}
+.entry p{color:#33302a!important}
+.receipts{gap:14px!important;margin-top:8px!important}
+.receipts a{background:none!important;border:0!important;padding:0!important;color:#23211d!important;font-size:12px!important;text-decoration:none!important}
+.receipts a::before{content:""!important}
+/* rails: lighter, Chinese only */
+.rail-lbl,.toc-head{font-size:0!important}
+.rail-lbl .rail-zh,.toc-head .rail-zh{font-size:12px!important;color:#23211d!important;letter-spacing:.1em!important;font-weight:500!important}
+.rail-count{display:none!important}
+.rail,.toc{font-size:12px!important}
+.a-zh{display:none!important}
+.a-date{color:#8a8478!important;font-size:12px!important;font-weight:400!important;letter-spacing:.02em!important}
+.a-current .a-date{color:#23211d!important}
+.toc-inner{border:0!important;padding:0!important}
+.toc .t-sec>a{font-size:13px!important;font-weight:500!important;border:0!important;color:#23211d!important}
+.toc .t-sec>a .n{display:none!important}
+.toc .t-it>a{color:#8a8478!important;padding-left:0!important}
+.toc a.on{color:#23211d!important}
+a.kw,.zh a.kw{color:inherit!important;text-decoration:none!important;border:0!important;background-image:linear-gradient(rgba(35,33,29,.35),rgba(35,33,29,.35))!important;background-size:100% 1px!important;background-repeat:no-repeat!important;background-position:0 95%!important}a.kw:hover{color:#23211d!important}
+.receipts a:not(:first-child){display:none!important}
+.receipts a:first-child{font-size:0!important}.receipts a:first-child::after{content:"原文";font-size:12px}
+.lead .mark,a.kw:hover{font-weight:600!important}.a-current .a-date{font-weight:600!important}
+.name{font-size:20px!important;font-weight:700!important;color:#1a1814!important;letter-spacing:.02em!important;line-height:1.5!important}
+.name .src{font-size:13px!important;font-weight:400!important}
+.entry p:not(.name):not(.time){font-size:15.5px!important;color:#4a463e!important;font-weight:400!important;line-height:2!important}
+.time{margin:4px 0 16px!important}
+.sec-sum,.sec-sum *{color:#33302a!important}
+.sec-head .lbl .zh-lbl,.sec-head .lbl{font-size:38px!important;font-weight:700!important;color:#1a1814!important}
+h1.title{font-weight:700!important;color:#1a1814!important}
+.mark,.lead .mark{color:#b03a2e!important;background:none!important}
+</style><!-- /YOHAKU -->
+<!-- /FB_RAIL_CSS -->
+
+
+
+<aside class="rail" aria-label="往期归档">
+  <div class="rail-inner">
+    <div class="rail-head">
+      <span class="rail-lbl"><span class="rail-zh">往期</span>Archive</span>
+      <span class="rail-count">56 期</span>
+    </div>
+    <ul class="a-list">
+      <li class="a-current"><a href="digest-2026-11-27.html"><span class="a-date">2026-11-27</span><span class="a-zh">周五 · 2026年11月27日</span></a></li>
+      <li><a href="digest-2026-11-26.html"><span class="a-date">2026-11-26</span><span class="a-zh">周四 · 2026年11月26日</span></a></li>
+      <li><a href="digest-2026-11-25.html"><span class="a-date">2026-11-25</span><span class="a-zh">周三 · 2026年11月25日</span></a></li>
+      <li><a href="digest-2026-11-24.html"><span class="a-date">2026-11-24</span><span class="a-zh">周二 · 2026年11月24日</span></a></li>
+      <li><a href="digest-2026-11-23.html"><span class="a-date">2026-11-23</span><span class="a-zh">周一 · 2026年11月23日</span></a></li>
+      <li><a href="digest-2026-11-22.html"><span class="a-date">2026-11-22</span><span class="a-zh">周日 · 2026年11月22日</span></a></li>
+      <li><a href="digest-2026-11-21.html"><span class="a-date">2026-11-21</span><span class="a-zh">周六 · 2026年11月21日</span></a></li>
+      <li><a href="digest-2026-11-20.html"><span class="a-date">2026-11-20</span><span class="a-zh">周五 · 2026年11月20日</span></a></li>
+      <li><a href="digest-2026-11-19.html"><span class="a-date">2026-11-19</span><span class="a-zh">周四 · 2026年11月19日</span></a></li>
+      <li><a href="digest-2026-11-18.html"><span class="a-date">2026-11-18</span><span class="a-zh">周三 · 2026年11月18日</span></a></li>
+      <li><a href="digest-2026-11-17.html"><span class="a-date">2026-11-17</span><span class="a-zh">周二 · 2026年11月17日</span></a></li>
+      <li><a href="digest-2026-11-16.html"><span class="a-date">2026-11-16</span><span class="a-zh">周一 · 2026年11月16日</span></a></li>
+      <li><a href="digest-2026-11-15.html"><span class="a-date">2026-11-15</span><span class="a-zh">周日 · 2026年11月15日</span></a></li>
+      <li><a href="digest-2026-11-14.html"><span class="a-date">2026-11-14</span><span class="a-zh">周六 · 2026年11月14日</span></a></li>
+      <li><a href="digest-2026-11-13.html"><span class="a-date">2026-11-13</span><span class="a-zh">周五 · 2026年11月13日</span></a></li>
+      <li><a href="digest-2026-11-12.html"><span class="a-date">2026-11-12</span><span class="a-zh">周四 · 2026年11月12日</span></a></li>
+      <li><a href="digest-2026-11-11.html"><span class="a-date">2026-11-11</span><span class="a-zh">周三 · 2026年11月11日</span></a></li>
+      <li><a href="digest-2026-11-10.html"><span class="a-date">2026-11-10</span><span class="a-zh">周二 · 2026年11月10日</span></a></li>
+      <li><a href="digest-2026-11-09.html"><span class="a-date">2026-11-09</span><span class="a-zh">周一 · 2026年11月9日</span></a></li>
+      <li><a href="digest-2026-11-08.html"><span class="a-date">2026-11-08</span><span class="a-zh">周日 · 2026年11月8日</span></a></li>
+      <li><a href="digest-2026-11-07.html"><span class="a-date">2026-11-07</span><span class="a-zh">周六 · 2026年11月7日</span></a></li>
+      <li><a href="digest-2026-11-06.html"><span class="a-date">2026-11-06</span><span class="a-zh">周五 · 2026年11月6日</span></a></li>
+      <li><a href="digest-2026-11-05.html"><span class="a-date">2026-11-05</span><span class="a-zh">周四 · 2026年11月5日</span></a></li>
+      <li><a href="digest-2026-11-04.html"><span class="a-date">2026-11-04</span><span class="a-zh">周三 · 2026年11月4日</span></a></li>
+      <li><a href="digest-2026-11-03.html"><span class="a-date">2026-11-03</span><span class="a-zh">周二 · 2026年11月3日</span></a></li>
+      <li><a href="digest-2026-11-02.html"><span class="a-date">2026-11-02</span><span class="a-zh">周一 · 2026年11月2日</span></a></li>
+      <li><a href="digest-2026-11-01.html"><span class="a-date">2026-11-01</span><span class="a-zh">周日 · 2026年11月1日</span></a></li>
+      <li><a href="digest-2026-10-31.html"><span class="a-date">2026-10-31</span><span class="a-zh">周六 · 2026年10月31日</span></a></li>
+      <li><a href="digest-2026-10-30.html"><span class="a-date">2026-10-30</span><span class="a-zh">周五 · 2026年10月30日</span></a></li>
+      <li><a href="digest-2026-10-29.html"><span class="a-date">2026-10-29</span><span class="a-zh">周四 · 2026年10月29日</span></a></li>
+      <li><a href="digest-2026-10-28.html"><span class="a-date">2026-10-28</span><span class="a-zh">周三 · 2026年10月28日</span></a></li>
+      <li><a href="digest-2026-10-27.html"><span class="a-date">2026-10-27</span><span class="a-zh">周二 · 2026年10月27日</span></a></li>
+      <li><a href="digest-2026-10-26.html"><span class="a-date">2026-10-26</span><span class="a-zh">周一 · 2026年10月26日</span></a></li>
+      <li><a href="digest-2026-10-25.html"><span class="a-date">2026-10-25</span><span class="a-zh">周日 · 2026年10月25日</span></a></li>
+      <li><a href="digest-2026-10-24.html"><span class="a-date">2026-10-24</span><span class="a-zh">周六 · 2026年10月24日</span></a></li>
+      <li><a href="digest-2026-10-23.html"><span class="a-date">2026-10-23</span><span class="a-zh">周五 · 2026年10月23日</span></a></li>
+      <li><a href="digest-2026-10-22.html"><span class="a-date">2026-10-22</span><span class="a-zh">周四 · 2026年10月22日</span></a></li>
+      <li><a href="digest-2026-10-21.html"><span class="a-date">2026-10-21</span><span class="a-zh">周三 · 2026年10月21日</span></a></li>
+      <li><a href="digest-2026-10-15.html"><span class="a-date">2026-10-15</span><span class="a-zh">周四 · 2026年10月15日</span></a></li>
+      <li><a href="digest-2026-10-14.html"><span class="a-date">2026-10-14</span><span class="a-zh">周三 · 2026年10月14日</span></a></li>
+      <li><a href="digest-2026-10-13.html"><span class="a-date">2026-10-13</span><span class="a-zh">周二 · 2026年10月13日</span></a></li>
+      <li><a href="digest-2026-10-12.html"><span class="a-date">2026-10-12</span><span class="a-zh">周一 · 2026年10月12日</span></a></li>
+      <li><a href="digest-2026-10-10.html"><span class="a-date">2026-10-10</span><span class="a-zh">周六 · 2026年10月10日</span></a></li>
+      <li><a href="digest-2026-09-19.html"><span class="a-date">2026-09-19</span><span class="a-zh">周六 · 2026年9月19日</span></a></li>
+      <li><a href="digest-2026-09-17.html"><span class="a-date">2026-09-17</span><span class="a-zh">周四 · 2026年9月17日</span></a></li>
+      <li><a href="digest-2026-09-15.html"><span class="a-date">2026-09-15</span><span class="a-zh">周二 · 2026年9月15日</span></a></li>
+      <li><a href="digest-2026-09-14.html"><span class="a-date">2026-09-14</span><span class="a-zh">周一 · 2026年9月14日</span></a></li>
+      <li><a href="digest-2026-09-13.html"><span class="a-date">2026-09-13</span><span class="a-zh">周日 · 2026年9月13日</span></a></li>
+      <li><a href="digest-2026-09-12.html"><span class="a-date">2026-09-12</span><span class="a-zh">周六 · 2026年9月12日</span></a></li>
+      <li><a href="digest-2026-09-10.html"><span class="a-date">2026-09-10</span><span class="a-zh">周四 · 2026年9月10日</span></a></li>
+      <li><a href="digest-2026-09-08.html"><span class="a-date">2026-09-08</span><span class="a-zh">周二 · 2026年9月8日</span></a></li>
+      <li><a href="digest-2026-09-07.html"><span class="a-date">2026-09-07</span><span class="a-zh">周一 · 2026年9月7日</span></a></li>
+      <li><a href="digest-2026-09-04.html"><span class="a-date">2026-09-04</span><span class="a-zh">周五 · 2026年9月4日</span></a></li>
+      <li><a href="digest-2026-08-20.html"><span class="a-date">2026-08-20</span><span class="a-zh">周四 · 2026年8月20日</span></a></li>
+      <li><a href="digest-2026-08-19.html"><span class="a-date">2026-08-19</span><span class="a-zh">周三 · 2026年8月19日</span></a></li>
+      <li><a href="digest-2026-08-18.html"><span class="a-date">2026-08-18</span><span class="a-zh">周二 · 2026年8月18日</span></a></li>
+    </ul>
+  </div>
+</aside>
+<script src="archive.js"></script>
+<nav class="toc" aria-label="本期目录"><div class="toc-inner"><div class="toc-head"><span class="rail-zh">本期目录</span>Contents</div><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">10</span></a><ul><li class="t-grp"><a href="#g-2">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-3">新闻与投资<span class="n">14</span></a><ul><li class="t-it"><a href="#e-4">顶尖商用级AI视频每秒只要5毛！中国开源新势力拿下全球第一</a></li><li class="t-it"><a href="#e-5">我以为这是摄影作品，你告诉我这是最新的国产AI？！</a></li><li class="t-it"><a href="#e-6">任少卿带着世界模型3.0来了！蔚来智驾训练提效5倍，座舱也用上强化学习</a></li><li class="t-it"><a href="#e-7">刚刚，黎曼猜想证明代码暴砍了99.5%！只剩7.6万行</a></li><li class="t-it"><a href="#e-8">AI 3D界的“X光”来了！一图直出巴洛克雕塑，3D打印开箱即用</a></li><li class="t-it"><a href="#e-9">381个AI直播冲刺证明P=NP！把GitHub干崩了</a></li><li class="t-it"><a href="#e-10">沈向洋刚讲了好多AI非共识啊</a></li><li class="t-it"><a href="#e-11">90 秒自动换装补能，具微科技“潘多拉”支撑机器人无人化值守</a></li><li class="t-it"><a href="#e-12">好消息，AI 可以替你打客服电话了；坏消息，电话那头也是 AI</a></li><li class="t-it"><a href="#e-13">黄仁勋复职后首次主持全员大会：向员工道歉；iPhone Duo 零部件成本创历代 iPhone 新高；Anthropic 跌破发行价｜极客早知道</a></li><li class="t-it"><a href="#e-14">七项第一！大晓ACE-ViDiHand2再进化：单卡57FPS重建双手真实运动，3D误差暴降42%</a></li><li class="t-it"><a href="#e-15">物理AI｜智源REAL物理AI开放日，构建适合真实世界的物理AI</a></li><li class="t-it"><a href="#e-16">思特威子公司威云创达亮相三款本地算力硬件，推出 AI 影视工具「织影」</a></li><li class="t-it"><a href="#e-17">鸿蒙小折叠：折叠形态往前一步，生态体验跟上一步</a></li></ul></li><li class="t-sec"><a href="#s-18">X 动态<span class="n">12</span></a><ul><li class="t-grp"><a href="#g-19">个人</a></li><li class="t-it"><a href="#e-20">Elon Musk：美国每个孩子将获得两股 SpaceX 股份</a></li><li class="t-it"><a href="#e-21">Logan Kilpatrick：用开源 Gemini API CLI 把 Neon 接到任意编程代理</a></li><li class="t-it"><a href="#e-22">Pieter Levels：X 上的 AI 垃圾回复正在减少；并称 Zapier 或适合被模型公司收购</a></li><li class="t-grp"><a href="#g-23">官方</a></li><li class="t-it"><a href="#e-24">Google DeepMind：Gemini 4 Neon 在 1980 年代街机里做了一台鲁布·戈德堡装置</a></li><li class="t-it"><a href="#e-25">Gemini：Guided Vision 登陆 iOS；并新增多组本地口音语音</a></li><li class="t-it"><a href="#e-26">Google for Developers：Antigravity 11 月最常用的 10 条斜杠命令，以及 /swarm 社区作品</a></li><li class="t-it"><a href="#e-27">SpaceX Super Intelligence：Innovaccer 用 Grok Voice 做医疗语音，称已有超 500 万次患者交互</a></li><li class="t-it"><a href="#e-28">OpenAI：Make a Day Do Anything with ChatGPT；Grok Bot 推销黑五购物</a></li><li class="t-grp"><a href="#g-29">follow-builders 精选</a></li><li class="t-it"><a href="#e-30">Thibault Sottiaux：GPT-6.2 发布时计费有误，修复后 Astra 将更早约 40% 触达限额</a></li><li class="t-it"><a href="#e-31">Sam Altman：正在与一小部分客户测试 Private Inference</a></li><li class="t-it"><a href="#e-32">Andrej Karpathy：用 Claude Opus 5.5 做了一张美国真实数据的文明风格地图</a></li><li class="t-it"><a href="#e-33">Thariq：已加入 OpenAI，并向 Anthropic 前同事致意</a></li></ul></li></ul></div></nav>
+<div class="wrap">
+  <style>p.disclaimer{margin:24px 0 0;font-size:13px;line-height:1.7;letter-spacing:.04em;font-weight:400;color:#6f695e;background:none;border:0;padding:0}</style>
+  <p class="disclaimer">以下内容均为 Grok AI 生成，不代表个人政治立场。</p>
+  <header class="plate">
+    <style>.site-switch{display:flex;gap:28px;justify-content:flex-end;margin:0 0 28px}.site-switch a{font:500 13px/1 -apple-system,Helvetica,Arial,sans-serif!important;letter-spacing:.06em!important;text-decoration:none!important;padding:6px 0!important;color:#9a9a9a!important;border-bottom:1.5px solid transparent!important}.site-switch a.on{color:#111!important;border-bottom-color:#111!important}.site-switch a:hover{color:#111!important}</style><nav class="site-switch"><a href="../ai-builders-digest/" class="on">AI Digest</a><a href="../social-digest/">Social Digest</a><a href="../reading-digest/">Reading Digest</a><a href="../pm-digest/">PM Digest</a><a href="../fde-digest/">FDE Digest</a></nav>
+    <div class="masthead">
+      <h1 class="title">AI<br><em>Digest</em></h1>
+    </div>
+
+    <div class="dateline">
+      <span><b>周五 · 2026年11月27日</b></span>
+      <span>收录 2026年11月26日 内容</span>
+      <span><span class="num">24</span> 条网站资讯</span>
+      <span><span class="num">12</span> 个 X 账号有料</span>
+      <span><span class="num">0</span> 期播客</span>
+    </div>
+  </header>
+
+<section class="lead reveal">
+  <p class="kicker">Executive Summary</p>
+  <p class="lead-p">OpenAI 应用侧负责人 Thibault Sottiaux 称，GPT-6.2 发布时的计费错误让多数用户的 Astra 与 Sol 用量被低估；现已修复，同样工作会占用更多套餐额度，与上周相比，<span class="mark">GPT-6.2 Astra</span> 会更早约 40% 触达限额。开源视频模型方面，Sand.ai 放出总参数约 4800 亿的 <span class="mark">MAGI-2</span>，量子位写到 1080P 成片定价约每秒 0.5 元，并称其在 Artificial Analysis 视频对战榜上的平均 Elo 较预览版提升超过 150 分。Elon Musk 宣布，美国每个孩子将获得两股 <span class="mark">SpaceX</span> 股份，一股来自公司、一股来自他本人。Hacker News 当天热帖由计算机科学家 Scott Aaronson 的长文领衔，讨论近期人工智能在复杂度理论与数学证明上的一连串结果；Anthropic 研究员则把广义黎曼猜想的 Lean 证明压缩到约 7.6 万行的精简版。1Password 披露后端系统安全事件，称客户保险库未被访问。</p>
+</section>
+<details class="toc-m"><summary>本期目录</summary><ul><li class="t-sec"><a href="#s-1">科技公司与技术博客<span class="n">10</span></a><ul><li class="t-grp"><a href="#g-2">HN 当天热帖 Top 10</a></li></ul></li><li class="t-sec"><a href="#s-3">新闻与投资<span class="n">14</span></a><ul></ul></li><li class="t-sec"><a href="#s-18">X 动态<span class="n">12</span></a><ul><li class="t-grp"><a href="#g-19">个人</a></li><li class="t-grp"><a href="#g-23">官方</a></li><li class="t-grp"><a href="#g-29">follow-builders 精选</a></li></ul></li></ul></details>
+<div class="sec-head" id="s-1">
+  <span class="lbl"><span class="zh-lbl">科技公司与技术博客</span></span>
+  <span class="rule"></span><span class="count">10 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 当天几乎没有新的官方博客：OpenAI、DeepMind 的 RSS 窗口内无新文，Anthropic 新闻页与 Meta 博客也无新稿。技术社区的主线落在 Hacker News。热帖由 Scott Aaronson 的长文领衔，他把近一周人工智能在复杂度与数学证明上的结果（包括矩阵乘法指数、VP≠VNP、黎曼猜想相关 Lean 证明等）比作一场正在展开的剧变，并写到自己第一次从直感上觉得 P≠NP 的证明已不再遥远。并列靠前的是 1Password 关于后端系统遭入侵的公告，以及《纽约时报》要求摄影记者不要更新 Photoshop 的报道。另一条热帖指向 Anthropic 同事将广义黎曼猜想 Lean 证明压缩后的仓库；OpenAI 工程负责人关于 GPT-6.2 计费修复的推文也进入了榜单。</p><ol><li>HN：Scott Aaronson 长文称，必须重新估量 AI 在数学与复杂度证明上正在发生的事</li><li>HN：1Password 称后端遭入侵，保险库未被访问；攻击者拿到部分用户姓名与邮箱等</li><li>HN / GitHub：Anthropic 同事将广义黎曼猜想 Lean 证明压缩到约 7.6 万行</li><li>HN：OpenAI 的 Thibault Sottiaux 称 GPT-6.2 计费已修复，Astra 将早约 40% 触达限额</li></ol></div>
+
+<p class="grp" id="g-2">HN 当天热帖 Top 10</p>
+<ul class="lst">
+    <li><a class="t" href="https://scottaaronson.blog/?p=10379">Holy shit holy shit holy shit holy shit: The magnitude of what’s now happening / Scott Aaronson：必须重新估量眼下正在发生的事</a><span class="m">11-26 03:11 · 1968 分 · 1797 评论</span></li>
+    <li><a class="t" href="https://1password.com/blog/update-on-nov-2026-security-incident">1Password Security Incident / 1Password 后端系统安全事件</a><span class="m">11-26 01:18 · 1626 分 · 702 评论</span></li>
+    <li><a class="t" href="https://www.theverge.com/ai-artificial-intelligence/1041227/the-new-york-times-warns-photographers-not-to-update-photoshop-over-ai-features">The New York Times warns photographers not to update Photoshop over AI features / 《纽约时报》提醒摄影记者不要因 AI 功能更新 Photoshop</a><span class="m">11-26 05:18 · 647 分 · 515 评论</span></li>
+    <li><a class="t" href="https://news.ycombinator.com/item?id=50655664">Tell HN: Happy Thanksgiving / 祝 HN 感恩节快乐</a><span class="m">11-26 22:26 · 559 分 · 132 评论</span></li>
+    <li><a class="t" href="https://github.com/lsernau/grh-lean">Much shorter version of GRH Lean verification from Anthropic / Anthropic 放出广义黎曼猜想 Lean 证明的精简版</a><span class="m">11-26 05:48 · 545 分 · 346 评论</span></li>
+    <li><a class="t" href="https://twitter.com/thsottiaux/status/2125784147889393806">OpenAI cuts GPT-6.2 usage: Astra hits limits 40% faster, Sol 25% faster / OpenAI 修复 GPT-6.2 计费错误，Astra 将早约 40% 触达限额</a><span class="m">11-26 11:36 · 458 分 · 259 评论</span></li>
+    <li><a class="t" href="https://github.com/intel/intel-one-mono">Intel One Mono font (2023) / Intel One Mono 等宽字体（2023）</a><span class="m">11-26 18:11 · 448 分 · 234 评论</span></li>
+    <li><a class="t" href="https://www.openwall.com/lists/oss-security/2026/11/25/9">Slow Ubuntu security response times / 有人批评 Ubuntu 安全响应偏慢</a><span class="m">11-26 04:38 · 407 分 · 259 评论</span></li>
+    <li><a class="t" href="https://aresluna.org/ui-style-guides/">Collection of preserved UI style guides / 一份保存下来的 UI 设计规范合集</a><span class="m">11-26 08:40 · 402 分 · 93 评论</span></li>
+    <li><a class="t" href="https://news.ycombinator.com/item?id=50649864">Tell HN: Lots of Ask HNs again / 有人发现 Ask HN 又变多了</a><span class="m">11-26 08:43 · 394 分 · 154 评论</span></li>
+</ul>
+
+<p class="note">说明：OpenAI、DeepMind 官方 RSS 窗口内无新文。Anthropic 新闻页采集时未见窗口内新的新闻稿；研究页仍能看到此前已报道的 Messages API 迁至 Rust 等条目，官方 X 于北京时间 11-26 00:26 再次发布该文，内容与上一期重复，本期不单列。Meta 博客最新仍是 11-09 的 Muse Ember，@AIatMeta 窗口内无原创或引用帖可交叉核对。美团技术团队 RSS 抓取结果为空（未解析到条目），窗口内无法确认是否有新文。</p>
+<div class="sec-head" id="s-3">
+  <span class="lbl"><span class="zh-lbl">新闻与投资</span></span>
+  <span class="rule"></span><span class="count">14 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 国内报道的主线落在开源视频生成、国产图像模型，以及汽车与具身侧的世界模型。量子位写到，Sand.ai 正式发布开源视频模型 MAGI-2：总参数约 4800 亿、激活约 280 亿，1080P 成片定价约每秒 0.5 元，支持最长约 2 万字符提示词与单次 30 秒一镜到底；同一天还介绍了商汤开源的 SenseNova U1.6，称其人像与风景生成已接近实拍质感。汽车方面，蔚来在创新科技日发布世界模型 NWM 3.0 与 NOMI Intelligence 4.0，称综合训练效率提升 5 倍、整车控制时延平均降低 50%。数学方向，量子位跟进了 Anthropic 将广义黎曼猜想 Lean 证明压缩到约 7.6 万行一事。极客公园则写到消费者端 AI 客服对垒，以及黄仁勋复职后首次全员大会上的道歉。</p><ol><li>量子位：Sand.ai 发布开源视频模型 MAGI-2，称 1080P 成片约每秒 0.5 元</li><li>量子位：商汤开源 SenseNova U1.6，实测称人像与风景已接近实拍</li><li>量子位：蔚来发布世界模型 NWM 3.0，称训练效率提升 5 倍</li><li>极客公园：黄仁勋复职后首次全员大会向员工道歉</li></ol></div>
+
+<article class="entry" id="e-4">
+  <div class="byline">
+    <p class="name">顶尖商用级AI视频每秒只要5毛！中国开源新势力拿下全球第一<span class="src">量子位</span></p>
+    <p class="time">11-26 14:41</p>
+  </div>
+  <p class="zh">量子位报道，Sand.ai 正式发布开源视频模型 <a class="kw" href="https://www.qbitai.com/2026/11/512916.html">MAGI-2</a>：总参数约 4800 亿、激活约 280 亿，较 8 月预览版（1140 亿总参数）扩大四倍以上。稿件称，1080P 成片定价约每秒 0.5 元；在 Artificial Analysis Video Arena v2.1 上，四项任务平均 Elo 从预览版的 998.5 升至 1150.3。文中写到，模型支持最长约 2 万字符提示词，可精细定义站位、动作、运镜与事件时机，并展示了单次生成 30 秒、串联多幅名画风格的一镜到底示例；单次最多支持 20 份媒体参考（10 张图、5 段视频、5 段音频）。架构方面，报道称其沿用单流统一 Transformer 与多头潜空间 MoE。极客公园同日亦有专文，强调开源权重与成本较闭源标杆下降约九成。公告日期在稿件中写为 11 月 25 日，量子位与极客公园的报道均发布于 11-26。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512916.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-5">
+  <div class="byline">
+    <p class="name">我以为这是摄影作品，你告诉我这是最新的国产AI？！<span class="src">量子位</span></p>
+    <p class="time">11-26 00:34</p>
+  </div>
+  <p class="zh">量子位对商汤新开源的图像模型 <a class="kw" href="https://www.qbitai.com/2026/11/512748.html">SenseNova U1.6</a> 做了实测。作者写到，部分人像与风景生成结果猛一看会以为是实拍或摄影作品，并称生成速度很快，内容准确性与审美较此前版本有提升。稿件称，模型已在商汤小浣熊、Seko 等平台上线，并同步提供 ComfyUI。实测示例包括极低机位仰拍群像、鱼眼视角，以及毛毡玩偶等风格化主体在表情与物种之间的替换，作者认为其能在保持风格的同时稳住主体一致性。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512748.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-6">
+  <div class="byline">
+    <p class="name">任少卿带着世界模型3.0来了！蔚来智驾训练提效5倍，座舱也用上强化学习<span class="src">量子位</span></p>
+    <p class="time">11-26 11:23</p>
+  </div>
+  <p class="zh">量子位报道，蔚来在公司 12 周年的创新科技日上发布 <a class="kw" href="https://www.qbitai.com/2026/11/512897.html">世界模型 NWM 3.0</a> 与 NOMI Intelligence 4.0。李斌在会上提出，智能电动汽车是最具价值的 Physical AI，汽车产业将是最大的 AI 应用产业；他并坦言，「不做 AI 变革可能活不下去」。稿件称，蔚来删除了 NOMI 积累九年的代码，重构底层架构，引入超千亿参数大模型，打通整车数千项能力，目标是让整辆车成为一个原生智能体。NWM 3.0 引入隐式世界模型、构建双闭环强化学习体系，官方称综合训练效率提升 5 倍、整车控制时延平均降低 50%。今年 8 月宣布做具身智能创业的任少卿，此次仍担纲蔚来智驾技术发布。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512897.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-7">
+  <div class="byline">
+    <p class="name">刚刚，黎曼猜想证明代码暴砍了99.5%！只剩7.6万行<span class="src">量子位</span></p>
+    <p class="time">11-26 08:40</p>
+  </div>
+  <p class="zh">量子位跟进了数学家 Levent Alpöge 与 Claude 合作、此前约 1740 万行的黎曼猜想与广义黎曼猜想 Lean 证明。Anthropic 研究员 Luke Sernau 与同事、Claude 将其重写为仓库 <a class="kw" href="https://www.qbitai.com/2026/11/512819.html">grh-lean</a>：可读版约 30 万行（801 个文件），紧凑版约 7.6 万行纯代码（792 个文件）。报道称，原版超过 17.5 万个文件、在高配机器上编译约需 21 小时；精简后在 12 核、24GB 内存且已有 Mathlib 缓存的机器上，约 1 到 2 小时可构建完毕。仓库说明与稿件都强调：证明只通过了机器检查，尚无数学家完整通读，也没有配套论文；未使用 sorry，只依赖 Lean 的 propext、Classical.choice 与 Quot.sound 三条公理。作者写到，全部 Lean 代码和文档均由 Claude 编写。Hacker News 同日亦有该仓库的讨论帖。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512819.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-8">
+  <div class="byline">
+    <p class="name">AI 3D界的“X光”来了！一图直出巴洛克雕塑，3D打印开箱即用<span class="src">量子位</span></p>
+    <p class="time">11-26 20:39</p>
+  </div>
+  <p class="zh">量子位介绍 VAST 新一代高精度 AI 3D 基座模型 <a class="kw" href="https://www.qbitai.com/2026/11/512981.html">Tripo H3.5 Preview</a>，称其已上线 Tripo Studio 国际版。文章以巴洛克群像雕塑为压力测试：GPT-6.2 Astra 在被禁止调用外部模型、只准用 Blender 自行建模时，细节明显下滑；换用 H3.5 Preview 后，复杂结构与不可见部位的推断更完整。稿件援引 VAST 的评测称，在资深 3D 美术师对 192 组素模的盲评中，H3.5 Preview 拿下 82 次第一（42.8%），胜率是第二名的 2.3 倍；去掉贴图后，对 3D 浮雕文字的识别率约 90.7%，高于上一代 H3.1 的 46.1%。文中把升级概括为「真实保真」与「细节有序」，并批评只靠堆高面数或用贴图假装几何细节的做法，在 3D 打印与资产管线里往往露出非流形、自相交等问题。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512981.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-9">
+  <div class="byline">
+    <p class="name">381个AI直播冲刺证明P=NP！把GitHub干崩了<span class="src">量子位</span></p>
+    <p class="time">11-26 21:56</p>
+  </div>
+  <p class="zh">量子位报道，设计软件公司 Brilliant（并非数学学习平台 Brilliant.org）联合创始人 Amichai Mantinband 等人上线直播站点 pequalnp.com，把一批 AI 智能体放进同一公开仓库，直播攻关 <a class="kw" href="https://www.qbitai.com/2026/11/513021.html">P vs NP</a>。稿件写到，项目于 11 月 22 日启动，至 25 日早 9 点已跑超过一万次会话，在 Lean 4 里验证通过 2400 多条引理；高峰时同时在线智能体达 381 个，另有 465 个外部智能体提交证明，触发了 GitHub 并发限制。发起人在 X 上公开向 GitHub 求助。需要强调的是，报道写的是一场公开冲刺实验，并未声称 P=NP 或 P≠NP 已被证明。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/513021.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-10">
+  <div class="byline">
+    <p class="name">沈向洋刚讲了好多AI非共识啊<span class="src">量子位</span></p>
+    <p class="time">11-26 11:13</p>
+  </div>
+  <p class="zh">量子位梳理了沈向洋在相关论坛上的一组「非共识」判断，其中一句被广泛引用的是「灵巧手是人类最后的尊严」。同一篇报道还写到 IDEA 研究院张宏波团队发布通用编程语言 <a class="kw" href="https://www.qbitai.com/2026/11/512840.html">MoonBit 1.0</a>：面向智能体编程提供基于 Wasm 的语言级沙箱、原生形式化验证，并称在涉及数百个包的编译测试中，耗时约为 Rust 的十分之一、也快于 Go。团队让 Opus 5.5 分别用 MoonBit 与 Rust 开发数据库引擎，在通过率接近的情况下，MoonBit 消耗的 token 比 Rust 少约 12%；而模型中与 MoonBit 相关的语料规模据称为 Rust 的约 1%。稿件还称，近半年 MoonBit 包下载量接近 1000 万次，生态库由年初约 2500 个增至 3.6 万量级。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512840.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-11">
+  <div class="byline">
+    <p class="name">90 秒自动换装补能，具微科技“潘多拉”支撑机器人无人化值守<span class="src">量子位</span></p>
+    <p class="time">11-26 18:07</p>
+  </div>
+  <p class="zh">量子位报道，具微科技在深圳高交会首展工业特种作业移动底座 MOVENEW P3S，并首发模块化换装补能基站 <a class="kw" href="https://www.qbitai.com/2026/11/512972.html">MICBOT PANDORA</a>。P3S 采用宽体短腿、四轮足构型，铺装路面以轮式巡航、复杂地形切到足式越障，官方给出 100 kg 连续行走与爬楼、最高 600 kg 静态极限负载等档位，防护等级为本体 IP67、轮部 IP68。PANDORA 定位为户外非结构化场景的后勤枢纽与边缘算力节点，现场演示中机械臂云台自动拆装换装用时控制在 90 秒内，机器人可自行返航补能后再出发。稿件称，P3S 运动控制器闭环频率在 1000Hz 以上，并写到液冷版本是行业内首个落地具身本体的整机液冷方案。上述性能与「首个」表述均来自厂商与报道，本期未能独立复核。</p>
+  <div class="receipts"><a href="https://www.qbitai.com/2026/11/512972.html">原文</a></div>
+</article>
+
+<article class="entry" id="e-12">
+  <div class="byline">
+    <p class="name">好消息，AI 可以替你打客服电话了；坏消息，电话那头也是 AI<span class="src">极客公园</span></p>
+    <p class="time">11-26 17:04</p>
+  </div>
+  <p class="zh">极客公园观察，Personal AI 让消费者可以把退款、取消自动续费等琐事交给代理去邮件往来、在 App 里申诉，甚至代打电话；但企业一侧同样在上 <a class="kw" href="https://www.geekpark.net/news/374536">AI 客服</a>，于是可能出现「两边都是 AI、真正的用户早已离开」的对垒。文章认为，过去企业拥有完整客服系统、个人却只有碎片时间，这种不对称正被代理能力改写，同时也会带来新的耗时与推诿。</p>
+  <div class="receipts"><a href="https://www.geekpark.net/news/374536">原文</a></div>
+</article>
+
+<article class="entry" id="e-13">
+  <div class="byline">
+    <p class="name">黄仁勋复职后首次主持全员大会：向员工道歉；iPhone Duo 零部件成本创历代 iPhone 新高；Anthropic 跌破发行价｜极客早知道<span class="src">极客公园</span></p>
+    <p class="time">11-26 08:19</p>
+  </div>
+  <p class="zh">极客公园「早知道」汇编称，英伟达 CEO 黄仁勋在复职后首次全员大会上向员工道歉，承认违反公司行为准则，并表示已开始接受每日一个半小时的心理治疗；他称这是「非常严重的个人错误」，伤害了家人，也辜负了员工，今后将征求同事反馈并接受 360 度绩效评估。稿件还写到，他不认同传统接班人计划，认为董事会可在需要时从管理团队中选择人选；英伟达此前公告披露，董事会决策时听取了美国政府高级官员的意见，针对相关事件的独立调查仍将继续。同日条目还提到，iPhone Duo 零部件成本率达 64%、创下历代 iPhone 新高，以及 Anthropic 股价跌破发行价。上述消息该栏注明转引自 IT 之家、CNMO 等，本期未逐条回对原始公告。</p>
+  <div class="receipts"><a href="https://www.geekpark.net/news/374500">原文</a></div>
+</article>
+
+<article class="entry" id="e-14">
+  <div class="byline">
+    <p class="name">七项第一！大晓ACE-ViDiHand2再进化：单卡57FPS重建双手真实运动，3D误差暴降42%<span class="src">极客公园</span></p>
+    <p class="time">11-26 15:33</p>
+  </div>
+  <p class="zh">极客公园报道，大晓机器人发布 <a class="kw" href="https://www.geekpark.net/news/374525">ACE-ViDiHand2</a>，称在真实场景第一人称 4D 手部运动重建上，把视频扩散模型的时空先验与手部几何约束结合起来，用 2D 关节点、相机内参和 MANO 手部结构做几何求解，而不是只靠外观回归深度。稿件称，模型在 ARCTIC、H2O、HOT3D 等七个公开数据集上全面超过 18 种代表性方法；在完全未参与训练的真实场景 Gen-HumanEgo 上，绝对 3D 关节误差降低 42%，并在单张 A100 上达到 57 FPS。上述榜首与误差数字均来自该报道与厂商表述。</p>
+  <div class="receipts"><a href="https://www.geekpark.net/news/374525">原文</a></div>
+</article>
+
+<article class="entry" id="e-15">
+  <div class="byline">
+    <p class="name">物理AI｜智源REAL物理AI开放日，构建适合真实世界的物理AI<span class="src">极客公园</span></p>
+    <p class="time">11-26 12:33</p>
+  </div>
+  <p class="zh">极客公园报道，北京智源人工智能研究院于 11 月 24 日举办 REAL 物理 AI 开放日，并于 11-26 发出稿件。活动推出 <a class="kw" href="https://www.geekpark.net/news/374515">REAL 开放创新平台</a>，发布物理 AI 评测体系、悟界·Innata-0、悟界·Physis-v1.0-preview、HumanCOIN 开源数据集，以及具身智能「人感安全」白皮书。院长王仲远在报道中表示，行业目前更关注模型能力上限与泛化，而智源希望建立衡量真实世界胜任力的标尺，推动物理 AI 从「能表演」走向「真干活」。稿件写到，当天有 60 余家企业、产业伙伴与高校参与。</p>
+  <div class="receipts"><a href="https://www.geekpark.net/news/374515">原文</a></div>
+</article>
+
+<article class="entry" id="e-16">
+  <div class="byline">
+    <p class="name">思特威子公司威云创达亮相三款本地算力硬件，推出 AI 影视工具「织影」<span class="src">极客公园</span></p>
+    <p class="time">11-26 15:33</p>
+  </div>
+  <p class="zh">极客公园行业资讯称，思特威子公司威云创达发布三款本地算力硬件，并推出 AI 影视工具 <a class="kw" href="https://www.geekpark.net/news/374529">织影</a>，产品线覆盖企业机房到桌面端，意图从图像芯片延伸到本地推理与影视制作。对该工具的能力边界，稿件着墨不多，细节以厂商发布为准。</p>
+  <div class="receipts"><a href="https://www.geekpark.net/news/374529">原文</a></div>
+</article>
+
+<article class="entry" id="e-17">
+  <div class="byline">
+    <p class="name">鸿蒙小折叠：折叠形态往前一步，生态体验跟上一步<span class="src">极客公园</span></p>
+    <p class="time">11-26 13:33</p>
+  </div>
+  <p class="zh">极客公园报道，华为于 11 月 24 日发布首款鸿蒙小折叠电脑 <a class="kw" href="https://www.geekpark.net/news/374516">MateBook Fold S</a>，机身外侧新增一块外屏；稿件发布于 11-26。文章认为，折叠电脑好不好用，关键不在屏幕能否弯折，而在应用是否愿意随形态重排。文中举例：腾讯会议在合盖后可将画面与语音转到外侧 Live 小方屏、通话不中断，腾讯文档、QQ 音乐、微信读书等也被列为可随形态流转的应用，用来说明鸿蒙电脑生态正从「应用变多」走向「场景做深」。</p>
+  <div class="receipts"><a href="https://www.geekpark.net/news/374516">原文</a></div>
+</article>
+
+<p class="note">说明：机器之心行业页抓取仍只返回数据服务推广页（约 3KB），窗口内无法核对该站是否有新稿。虎嗅 RSS 窗口内无条目，最新一批集中出现在 11-27 早间，故本期不收录。晚点首页主要为脚本渲染，采集到的可见条目日期为 11-20、11-17 等，窗口内无经核对的新稿。a16z news-content 页上仍排在前面的稿件，经与上一期已核对日期对照：Investing in Embo、Welcome to the B2A Economy 等均为 11-23 及更早，窗口内无新文。YC 博客 RSS 窗口内无新文，最新两条发布于 11-25，已收入上一期。极客公园创新大会 2027 议程、WAIC 活动报名等预告稿未单列。MAGI-2 极客公园亦有专文，本期以材料更完整的量子位稿为主，不重复罗列。</p>
+<div class="sec-head" id="s-18">
+  <span class="lbl"><span class="zh-lbl">X 动态</span></span>
+  <span class="rule"></span><span class="count">12 条</span>
+</div>
+<div class="sec-sum"><p><span class="k">本章小结</span> 个人名单里，当天最受关注的是 Elon Musk 宣布美国每个孩子将获得两股 SpaceX 股份，并补充公司那一股将于下月过户、他本人那一股要等到明年 6 月锁定期结束。Pieter Levels 则持续更新他在 X 上清理 AI 垃圾回复的进展，并提到 Zapier 或可成为 Anthropic 或 OpenAI 的收购对象。官方账号方面，Google 系较为活跃：DeepMind 展示 Gemini 4 Neon 在 Antigravity 里做的弹球机关装置，Gemini 宣布 Guided Vision 登陆 iOS，并新增多组本地口音语音；Google for Developers 汇总了 Antigravity 的 /swarm 作品与常用斜杠命令。follow-builders 里，OpenAI 的 Thibault Sottiaux 说明了 GPT-6.2 计费修复，Sam Altman 称正在小范围测试 Private Inference；Andrej Karpathy 用 Claude Opus 5.5 做了一张美国真实数据的文明风格地图；前 Anthropic 的 Thariq 发帖确认加入 OpenAI。</p><ol><li>Elon Musk：美国每个孩子将获得两股 SpaceX 股份</li><li>Thibault Sottiaux：GPT-6.2 计费修复，Astra 将更早约 40% 触达限额</li><li>Sam Altman：正在小范围测试 Private Inference</li><li>Gemini：Guided Vision 登陆 iOS，并新增多组本地口音语音</li></ol></div>
+
+<p class="grp" id="g-19">个人</p>
+<article class="entry" id="e-20">
+  <div class="byline">
+    <p class="name">Elon Musk：美国每个孩子将获得两股 SpaceX 股份<span class="src">@elonmusk</span></p>
+    <p class="time">11-26 11:43</p>
+  </div>
+  <p class="zh">Elon Musk 写道：「Every child in America will receive two SpaceX shares, one from the company and one from me personally。」稍后他在回复中补充：公司那一股将于下月过户，他本人那一股要等到明年 6 月锁定期结束。同一窗口内，他还引用 SpaceX 的说明称 <a class="kw" href="https://x.com/elonmusk/status/2125797463047258119">Colossus 3</a> 超算选址亚利桑那州科奇斯县，宣称不建燃气电厂、不使用工业用水，并采用干式冷却闭式循环，同时写到将向当地投资 500 亿美元以上、带来就业。其他引用帖还涉及 Tesla FSD v15 在大雨中的可视化，以及 Boring Company 在拉斯维加斯已修建的隧道。过户安排、投资与用水等细节均来自他本人或被引用账号的表述，本期未看到监管或公司正式文件。</p>
+  <div class="receipts"><a href="https://x.com/elonmusk/status/2125797463047258119">原帖</a></div>
+</article>
+
+<article class="entry" id="e-21">
+  <div class="byline">
+    <p class="name">Logan Kilpatrick：用开源 Gemini API CLI 把 Neon 接到任意编程代理<span class="src">@OfficialLoganK</span></p>
+    <p class="time">11-26 04:01</p>
+  </div>
+  <p class="zh">Google AI Studio 的 Logan Kilpatrick 发帖称，几个月前推出的开源 <a class="kw" href="https://x.com/OfficialLoganK/status/2125681386388422775">Gemini API CLI</a> 是为了让各种编程代理都能调用 Gemini Neon 及 Gemini API 上的其他模型，只需一把 API 密钥即可开始。仓库地址为 github.com/google-gemini/gemini-api-cli。他在随后的回复里感谢团队，并称采用速度很快；稍早他还单独写了一句「Neon usage is 📈📈📈」。</p>
+  <div class="receipts"><a href="https://x.com/OfficialLoganK/status/2125681386388422775">原帖</a></div>
+</article>
+
+<article class="entry" id="e-22">
+  <div class="byline">
+    <p class="name">Pieter Levels：X 上的 AI 垃圾回复正在减少；并称 Zapier 或适合被模型公司收购<span class="src">@levelsio</span></p>
+    <p class="time">11-26 20:03</p>
+  </div>
+  <p class="zh">Pieter Levels 更新他做的 X 屏蔽列表，称自几天前启用以来，自己和不少人时间线上的 <a class="kw" href="https://x.com/levelsio/status/2125923307002470407">AI 回复</a> 明显减少：已有 500 多个被确认的 AI 垃圾账号被停用，约 4000 个账号里误伤 4 个，约合 0.1%。他后来说，这类账号在他这种体量的账户下只占约 0.2%，但把回复区挤得很满。稍早他还引用 Zapier「重新创立」的帖子称，Zapier 会是 Anthropic 或 OpenAI 很好的收购对象，因为可以立刻把上万个带 API 的服务接到聊天与代理里。屏蔽与停用数字来自他本人统计，停用操作为 X 平台行为，本期无法逐条复核。</p>
+  <div class="receipts"><a href="https://x.com/levelsio/status/2125923307002470407">原帖</a></div>
+</article>
+
+<p class="grp" id="g-23">官方</p>
+<article class="entry" id="e-24">
+  <div class="byline">
+    <p class="name">Google DeepMind：Gemini 4 Neon 在 1980 年代街机里做了一台鲁布·戈德堡装置<span class="src">@GoogleDeepMind</span></p>
+    <p class="time">11-26 04:52</p>
+  </div>
+  <p class="zh">Google DeepMind 展示 <a class="kw" href="https://x.com/GoogleDeepMind/status/2125694207197110560">Gemini 4 Neon</a> 在 Antigravity 里编写的装置：一台放进 1980 年代街机的鲁布·戈德堡机械，带有模拟物理，配上 Lyria 3.5 合成的音轨，弹球撞过保险杠后再点亮玻璃管。</p>
+  <div class="receipts"><a href="https://x.com/GoogleDeepMind/status/2125694207197110560">原帖</a></div>
+</article>
+
+<article class="entry" id="e-25">
+  <div class="byline">
+    <p class="name">Gemini：Guided Vision 登陆 iOS；并新增多组本地口音语音<span class="src">@GeminiApp</span></p>
+    <p class="time">11-26 04:19</p>
+  </div>
+  <p class="zh">Gemini 官方账号宣布，<a class="kw" href="https://x.com/GeminiApp/status/2125685936344236471">Guided Vision</a> 已在 iOS 的 Gemini Live 中可用：打开 Live、对准镜头，即可在屏幕上获得实时指引。被引用的介绍帖写到，该功能与视障社区共同打造，可提供动态语音描述与调整取景的提示。稍早（北京时间 00:33）同一账号还称，Gemini 新增大约 60 种更具表现力的语音，覆盖美国、英国、印度、印度尼西亚、韩国和巴西的本地口音，可在设置中选取。</p>
+  <div class="receipts"><a href="https://x.com/GeminiApp/status/2125685936344236471">原帖</a></div>
+</article>
+
+<article class="entry" id="e-26">
+  <div class="byline">
+    <p class="name">Google for Developers：Antigravity 11 月最常用的 10 条斜杠命令，以及 /swarm 社区作品<span class="src">@googledevs</span></p>
+    <p class="time">11-26 06:00</p>
+  </div>
+  <p class="zh">Google for Developers 汇总了 11 月最常用的 10 条 <a class="kw" href="https://x.com/googledevs/status/2125711135311610119">Antigravity 斜杠命令</a>，包括写代码前的 /plan、/grill-me，实施过程中的 /browser、/compact，以及用于较长目标与并行代理的 /goal、/swarm。稍早该账号还发了一组社区用 /swarm 做的例子：墨西哥城的 Blender 场景、旧金山渡轮大楼、光线追踪修道院等，并称这是 Gemini 4 Neon 发布后的社区热潮。Google AI Studio 同日也发了一支假期里用 Gemini 4 的最佳实践视频，邀请 Genevieve 与 Patrick 出镜。</p>
+  <div class="receipts"><a href="https://x.com/googledevs/status/2125711135311610119">原帖</a></div>
+</article>
+
+<article class="entry" id="e-27">
+  <div class="byline">
+    <p class="name">SpaceX Super Intelligence：Innovaccer 用 Grok Voice 做医疗语音，称已有超 500 万次患者交互<span class="src">@SpaceXSI</span></p>
+    <p class="time">11-26 02:26</p>
+  </div>
+  <p class="zh">xAI 现用官方号引用一条合作说明称，Innovaccer 正用 <a class="kw" href="https://x.com/SpaceXSI/status/2125657481971966009">Grok Voice</a> 梳理医疗运营，患者语音交互超过 500 万次，处理时间减少 90%。被引用帖还写到，六个月内从约 25 万次增至 500 万次以上，转诊接收量约 3 倍，记录时间减少 90%，并支持 25 种以上语言、宣称符合 HIPAA 相关要求。这些数字来自被引用的合作宣传，本期未看到独立审计。</p>
+  <div class="receipts"><a href="https://x.com/SpaceXSI/status/2125657481971966009">原帖</a></div>
+</article>
+
+<article class="entry" id="e-28">
+  <div class="byline">
+    <p class="name">OpenAI：Make a Day Do Anything with ChatGPT；Grok Bot 推销黑五购物<span class="src">@OpenAI</span></p>
+    <p class="time">11-26 01:00</p>
+  </div>
+  <p class="zh">OpenAI 官方账号发了一则节庆向的产品推广：「For ordinary days that feel like a movie. Make a Day Do Anything with ChatGPT。」窗口内没有新的研究或产品说明长文。<a class="kw" href="https://x.com/bot/status/2125711676003766718">Grok Bot</a> 官方号则在感恩节前宣传，让用户把购物清单发给 Bot 来处理黑五优惠。</p>
+  <div class="receipts"><a href="https://x.com/OpenAI/status/2125635627341561995">原帖</a></div>
+</article>
+
+<p class="grp" id="g-29">follow-builders 精选</p>
+<article class="entry" id="e-30">
+  <div class="byline">
+    <p class="name">Thibault Sottiaux：GPT-6.2 发布时计费有误，修复后 Astra 将更早约 40% 触达限额<span class="src">@thsottiaux</span></p>
+    <p class="time">11-26 10:50</p>
+  </div>
+  <p class="zh">OpenAI 应用负责人 Thibault Sottiaux 发帖称，GPT-6.2 发布时的计费错误，让多数用户的 GPT-6.2 Astra 与 Sol 用量被错误地打了折扣；「We’ve fixed this now, so the same work will use more of your plan’s usage allowance。」他写到，与上周相比，同样工作会让用户更早约 40% 触达 <a class="kw" href="https://x.com/thsottiaux/status/2125784147889393806">GPT-6.2</a> 的套餐限额。Hacker News 将该帖标题写为 Astra 早约 40%、Sol 早约 25%；公开可见的帖文在「40% faster on GPT-6.2」处被截断，Sol 的 25% 这一数字未能在原帖全文中直接核对，故以帖文已写明的 Astra/Sol 被低估、以及「约 40%」为准。</p>
+  <div class="receipts"><a href="https://x.com/thsottiaux/status/2125784147889393806">原帖</a></div>
+</article>
+
+<article class="entry" id="e-31">
+  <div class="byline">
+    <p class="name">Sam Altman：正在与一小部分客户测试 Private Inference<span class="src">@sama</span></p>
+    <p class="time">11-26 01:12</p>
+  </div>
+  <p class="zh">Sam Altman 发帖称，OpenAI 正在与一小部分客户测试 <a class="kw" href="https://x.com/sama/status/2125638790593274259">Private Inference</a>，这是 OpenAI Private Intelligence 下的最新一项服务。「Stronger privacy protections will make frontier AI useful for a lot more work, and business privacy is important for a healthy ecosystem. Reach out」帖文在「Reach out」处结束，未见更具体的技术或定价说明。同一时段他还引用一条关于「hyperstitioning」的讨论，说自己此前没听过这个词，但觉得很贴切；被引用帖转述前 OpenAI 研究员 Will Depue 对 Anthropic 内部氛围的评论，并非 Altman 本人的原话。</p>
+  <div class="receipts"><a href="https://x.com/sama/status/2125638790593274259">原帖</a></div>
+</article>
+
+<article class="entry" id="e-32">
+  <div class="byline">
+    <p class="name">Andrej Karpathy：用 Claude Opus 5.5 做了一张美国真实数据的文明风格地图<span class="src">@karpathy</span></p>
+    <p class="time">11-26 10:31</p>
+  </div>
+  <p class="zh">Andrej Karpathy 发帖并配视频称，他让 Claude 用美国真实数据填充一张文明风格的游戏地图。<a class="kw" href="https://x.com/karpathy/status/2125779541952246039">Opus 5.5</a> 下载并解析了大量公开数据，7 小时、约 4.5 万行代码之后「it works :)」。他列举了 31 个真实数据源，包括 Census、BEA、BLS、EIA、NOAA、USGS、DoD、NPS、FAA、FEMA 等。帖文在数据源列表处被截断，更完整的实现细节以视频为准。</p>
+  <div class="receipts"><a href="https://x.com/karpathy/status/2125779541952246039">原帖</a></div>
+</article>
+
+<article class="entry" id="e-33">
+  <div class="byline">
+    <p class="name">Thariq：已加入 OpenAI，并向 Anthropic 前同事致意<span class="src">@trq212</span></p>
+    <p class="time">11-26 03:38</p>
+  </div>
+  <p class="zh">Thariq（@trq212）发帖确认：<a class="kw" href="https://x.com/trq212/status/2125675533761671405">I’ve joined OpenAI!</a> 他写到为自己在 Anthropic 的时光感到自豪，会继续为前同事加油，并认为两家公司在未来都有重要角色。上一期国内报道曾转述 Claude Code 成员被曝加入 OpenAI，这条是他本人的确认。帖文后半关于「把 AI 带给……」的工作陈述在接口返回中被截断。</p>
+  <div class="receipts"><a href="https://x.com/trq212/status/2125675533761671405">原帖</a></div>
+</article>
+
+<p class="note">说明：个人与官方名单只收原创与引用帖，回复与纯转发已过滤。窗口内无新帖的个人账号：@alexandr_wang、@lexfridman、@paulg、@nikitabier、@AndrewYNg、@drfeifei、@lijigang、@nagayama_koharu。官方账号中 @AIatMeta、@GoogleLabs、@claudeai、@ChatGPT、@OpenAIDevs、@ManusAI、@grok 窗口内无符合条件的原创或引用帖。@AnthropicAI 窗口内只有一条介绍 Messages API 迁至 Rust 的帖子，内容与上一期已收录的工程博文重复，不单列。@GoogleAI 窗口内有一条仅含一篇 X Article 链接的帖子，该文章地址返回 404，正文无法核对，故未收入。follow-builders 的 feed-x.json 生成于 2026-11-26 14:30（北京时间）左右，只覆盖此前约 24 小时，已与名单去重（同一条推文只保留一次）；名单账号在完整窗口内的帖子另用 X 接口补全。播客 feed 在窗口内无新节目；唯一一条为 11-24 18:00 的 Training Data《OpenAI’s Noam Brown: Why Game Theory Didn’t Lead to General Intelligence》，不在本期窗口。</p>
+  <footer>
+    <div>AI DIGEST · 2026-11-27 · 时间均为北京时间</div>
+    <div>X 数据来自 X API 与 Follow Builders feed · <a href="https://github.com/zarazhangrui/follow-builders">github.com/zarazhangrui/follow-builders</a></div>
+  </footer>
+
+</div>
+<script>(function(){var ls=[].slice.call(document.querySelectorAll('.toc a[href^="#"]'));var ts=ls.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+function f(){var k=-1;for(var j=0;j<ts.length;j++){if(ts[j]&&ts[j].getBoundingClientRect().top<120)k=j;}ls.forEach(function(a,j){a.classList.toggle('on',j===k);});
+if(k>=0){var a=ls[k],t=a.closest('.toc');var r=a.getBoundingClientRect(),q=t.getBoundingClientRect();if(r.top<q.top||r.bottom>q.bottom)t.scrollTop+=r.top-q.top-q.height/2;}}
+addEventListener('scroll',f,{passive:true});f();})();</script>
+</body>
+</html>
